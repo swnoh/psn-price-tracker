@@ -15,7 +15,7 @@ export default class App extends React.Component {
           className="main-feature"
           style={{
             backgroundImage: `url(
-              "https://apollo2.dl.playstation.net/cdn/UP0001/CUSA02902_00/FREE_CONTENTVOymPFjjncAWFcbYEbIP/PREVIEW_SCREENSHOT2_133731.jpg"
+              "https://apollo2.dl.playstation.net/cdn/UP9000/CUSA02299_00/FREE_CONTENTaF5vcf6gJ2FyFca5zoIj/PREVIEW_SCREENSHOT6_164001.jpg"
             )`
           }}
         >

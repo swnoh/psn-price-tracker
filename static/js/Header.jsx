@@ -11,9 +11,43 @@ import {
 } from "react-bootstrap";
 
 class Header extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      navbarTransparent: true
+    };
+  }
+
+  listenScrollEvent = e => {
+    e.preventDefault();
+    if (window.scrollY >= 100) {
+      this.setState({
+        navbarTransparent: false
+      });
+    } else {
+      this.setState({
+        navbarTransparent: true
+      });
+    }
+  };
+
+  componentWillUnmount(newProps) {
+    window.removeEventListener("scroll", this.listenScrollEvent);
+  }
+
+  componentDidMount() {
+    window.addEventListener("scroll", this.listenScrollEvent);
+  }
+
   render() {
     return (
-      <Navbar inverse collapseOnSelect fixedTop>
+      <Navbar
+        inverse
+        collapseOnSelect
+        fixedTop
+        navbar-transparent
+        className={this.state.navbarTransparent ? "navbar-transparent" : null}
+      >
         <Navbar.Header>
           <Navbar.Brand>
             <a href="#brand" style={{ "padding-top": "8px" }}>

@@ -4,6 +4,10 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import TitleRow from "./TitleRow";
 import TitleExpansion from "./TitleExpansion";
 import mockData from "./mockData";
+import mockData2 from "./mockData2";
+
+const API_URL =
+  "https://store.playstation.com/store/api/chihiro/00_09_000/container/CA/en/19/";
 
 class MainWrapper extends React.Component {
   constructor(prop) {
@@ -12,7 +16,8 @@ class MainWrapper extends React.Component {
       isDetailExpansion: false,
       selectedRowID: "",
       selectedTitleID: "",
-      isInitialTransition: false
+      isInitialTransition: false,
+      titleItemData: {}
     };
   }
   componentDidMount() {
@@ -33,6 +38,9 @@ class MainWrapper extends React.Component {
       isDetailExpansion:
         this.state.selectedTitleID !== id ? true : !this.state.isDetailExpansion
     });
+    fetch(API_URL + id)
+      .then(response => response.json())
+      .then(data => this.setState({ titleItemData: data }));
   };
 
   render() {
@@ -45,7 +53,7 @@ class MainWrapper extends React.Component {
 
     return (
       <Grid fluid>
-        {mockData.map(({ id, category_name, titleItem }) => (
+        {mockData2.map(({ id, category_name, titleItem }) => (
           <div>
             <CSSTransition
               in={isInitialTransition}
@@ -72,10 +80,11 @@ class MainWrapper extends React.Component {
                 >
                   <TitleExpansion
                     titleItem={
-                      mockData.filter(
+                      mockData2.filter(
                         categoryItem => categoryItem.id === selectedRowID
                       )[0]
                     }
+                    titleItemData={this.state.titleItemData}
                     selectedRowID={selectedRowID}
                     selectedTitleID={selectedTitleID}
                     isDetailExpansion={isDetailExpansion}

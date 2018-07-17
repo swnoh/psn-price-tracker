@@ -77,7 +77,7 @@ class PriceChart extends React.Component {
   }
 
   render() {
-    return <canvas id="priceChart" width="300" height="100" />;
+    return <canvas id="priceChart" width="450" height="100" />;
   }
 }
 

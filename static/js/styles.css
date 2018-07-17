@@ -20,10 +20,28 @@ html {
   width: 100%;
 }
 
+.btn-default {
+  font-size: 1.1em;
+  color: rgb(233, 233, 233);
+  background-color: rgb(27, 27, 27);
+  border-color: rgb(27, 27, 27);
+}
+
+.navbar-transparent {
+  background-color: transparent;
+  border-color: transparent;
+}
+
 .carousel {
   margin-top: 100px;
-  margin-left: 20%;
-  margin-right: 20%;
+  /* margin-left: 20%;
+  margin-right: 20%; */
+}
+
+.carousel-control {
+  display: none;
+  width: 20%;
+  height: 100%;
 }
 
 .carousel-inner img {
@@ -56,6 +74,7 @@ a:hover {
 
 .container-expansion {
   position: relative;
+  z-index: 5;
 }
 
 .close-button {
@@ -119,35 +138,75 @@ a:hover {
   margin: auto;
   width: 80%;
 }
+.expansion-background:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: linear-gradient(to bottom right, #002f4b, #dc4225);
+  opacity: 0.2;
+  z-index: 6;
+}
 
 /* .container {
   width: 100vw;
 } */
 
+.tile__img {
+  transition: 400ms;
+  transition-timing-function: cubic-bezier(0.5, 0, 0.1, 1);
+}
+
+.tile_transform {
+  transform: scale(1.5) translate3d(0px, 0px, 0px);
+  opacity: 0.99;
+  transition: 400ms;
+  transition-timing-function: cubic-bezier(0.5, 0, 0.1, 1);
+  transition-delay: 80ms;
+}
+.tile_next_transform {
+  transform: translate3d(50px, 0px, 0px);
+  transition-duration: 400ms;
+  transition-timing-function: cubic-bezier(0.5, 0, 0.1, 1);
+  transition-delay: 80ms;
+}
+.tile_prev_transform {
+  transform: translate3d(-50px, 0px, 0px);
+  transition-duration: 400ms;
+  transition-timing-function: cubic-bezier(0.5, 0, 0.1, 1);
+  transition-delay: 80ms;
+}
+
 .tile {
   position: relative;
   cursor: pointer;
-  display: block;
-  /* width: 180px;
-  height: 180px;
-  margin-right: 10px;
-  font-size: 20px;
-  transition: 450ms all;
-  transform-origin: center left; */
+  outline: none;
 }
 
 /* .title-row {
   height: 100%;
 } */
 
-.slick-slide {
-  width: 100%;
-  height: auto;
-}
-
 .slick-slide img {
   width: 98%;
   height: auto;
+}
+
+/* .slick-slide {
+  width: 100%;
+} */
+
+.slick-track {
+  display: flex;
+}
+
+.slick-track .slick-slide {
+  display: flex;
+  height: 300px;
+  align-items: center;
+  justify-content: center;
 }
 
 /* .tile__img {
@@ -169,6 +228,7 @@ a:hover {
     rgba(0, 0, 0, 0) 100%
   );
   transition: 150ms opacity;
+  outline: none;
 }
 
 .tile__details:after,
@@ -187,7 +247,7 @@ a:hover {
   margin-left: 7px;
   margin-top: -18px;
   text-align: center;
-  z-index: 2;
+  z-index: 12;
 }
 
 /* .tile:hover .tile__details {
@@ -220,6 +280,7 @@ a:hover {
   -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+  transition-delay: 400ms;
 }
 
 .tile__focus.focus-box::before {
@@ -234,6 +295,7 @@ a:hover {
   border-width: 8px 13px 0 13px;
   border-color: rgba(0, 0, 0, 0.15) transparent transparent transparent;
   margin-top: 5px;
+  transition-delay: 400ms;
 }
 
 .tile__focus.focus-box::after {
@@ -248,13 +310,14 @@ a:hover {
   border-width: 8px 13px 0 13px;
   margin-top: 4px;
   border-color: #fff transparent transparent transparent;
+  transition-delay: 400ms;
 }
 
-.tile__title {
+/* .tile__title {
   position: absolute;
   bottom: 0;
   padding: 10px;
-}
+} */
 
 .wrapper-title-row h3 {
   margin-bottom: -15px;
@@ -266,12 +329,12 @@ a:hover {
 }
 
 .col-expansion-panel {
-  height: 55vh;
+  height: 45vh;
   padding-left: 50px;
 }
 
 .col-title-info {
-  height: 55vh;
+  height: 45vh;
   padding-left: 50px;
 }
 
@@ -336,6 +399,7 @@ a:hover {
   font-weight: 700;
   text-align: center;
   pointer-events: auto;
+  z-index: 10;
 }
 
 .expansion-menu li.current {
@@ -405,22 +469,28 @@ transition-group setting
 
 .titleinfo-enter {
   opacity: 1;
-  transform: scale(0.8) translateX(-10%) translateY(-13%);
+  transform: scale(1) translateX(-10%);
 }
 
 .titleinfo-enter-active {
   opacity: 1;
-  transform: scale(1) translateX(0%) translateY(0%);
+  transform: scale(1) translateX(0%);
   transition: all 500ms;
 }
 
 .titleinfo-exit {
-  opacity: 1;
+  opacity: 0.01;
 }
+
+/* .titleinfo-exit-done {
+  opacity: 1;
+  transform: scale(0.8);
+} */
 
 .titleinfo-exit-active {
   position: absolute;
   opacity: 0.01;
+  transition: all 500ms;
 }
 
 .titleinfopanel-enter {
@@ -440,7 +510,7 @@ transition-group setting
 }
 
 .titleinfopanel-exit {
-  opacity: 1;
+  opacity: 0.01;
 }
 
 .titleinfopanel-exit-active {
@@ -528,4 +598,16 @@ transition-group setting
   opacity: 0.01;
   transform: scale(1) translateY(30%);
   transition: all 500ms ease-in;
+}
+
+@media (min-width: 1500px) {
+  .container {
+    width: 1450px;
+  }
+}
+
+@media (min-width: 1800px) {
+  .container {
+    width: 1750px;
+  }
 }

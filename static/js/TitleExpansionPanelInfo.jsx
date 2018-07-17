@@ -9,19 +9,33 @@ class TitleExpansionPanelInfo extends React.Component {
   }
 
   render() {
-    const { titleItem, selectedTitleID } = this.props;
+    const { titleItem, titleItemData, selectedTitleItem } = this.props;
 
-    const selectedTitleItem = titleItem.titleItem.filter(
-      item => item.id === selectedTitleID
-    )[0];
+    // const selectedTitleItem = titleItem.titleItem.filter(
+    //   item => item.id === selectedTitleID
+    // )[0];
 
+    const discount_price =
+      titleItemData.default_sku &&
+      titleItemData.default_sku.rewards[0] &&
+      titleItemData.default_sku.rewards[0].display_price;
+
+    const regular_price =
+      titleItemData.default_sku && titleItemData.default_sku.display_price;
+
+    const plus_price =
+      titleItemData.default_sku &&
+      titleItemData.default_sku.rewards &&
+      titleItemData.default_sku.rewards.bonus_display_price;
+
+    const release_date = titleItemData.release_date;
     return (
       <TransitionGroup>
         <CSSTransition
           key={
             this.props.isPanelMedia || this.props.isPanelDescription
-              ? selectedTitleID + 50
-              : selectedTitleID
+              ? titleItemData.id + 50
+              : titleItemData.id
           }
           timeout={300}
           classNames={
@@ -29,24 +43,27 @@ class TitleExpansionPanelInfo extends React.Component {
               ? "titleinfopanel"
               : "titleinfo"
           }
-          unmountOnExit
         >
           <Col className="col-title-info" xs={12} md={4} lg={3}>
             <div>
               <img
-                src={selectedTitleItem.url}
-                style={{ width: "300px", paddingTop: "30px" }}
+                src={selectedTitleItem.thumb_img_url}
+                style={{ width: "200px", paddingTop: "30px" }}
               />
               <h2>
                 <span
-                  style={{
-                    textDecoration: "line-through",
-                    color: "grey"
-                  }}
+                  style={
+                    discount_price
+                      ? {
+                          textDecoration: "line-through",
+                          color: "grey"
+                        }
+                      : null
+                  }
                 >
-                  $59.99
-                </span>{" "}
-                <span>$39.99</span>
+                  {regular_price}
+                </span>
+                <span>{discount_price && " " + discount_price}</span>
               </h2>
               <h2
                 style={{
@@ -54,25 +71,39 @@ class TitleExpansionPanelInfo extends React.Component {
                   marginTop: "0"
                 }}
               >
-                $29.99<img
-                  style={{
-                    width: "20px",
-                    marginLeft: "5px"
-                  }}
-                  src="https://image.ibb.co/jOncz8/playstation_plus_plus_icon.png"
-                  alt="playstation_plus_plus_icon"
-                />
+                {plus_price}
+                {plus_price ? (
+                  <img
+                    style={{
+                      width: "20px",
+                      marginLeft: "5px"
+                    }}
+                    src="https://image.ibb.co/jOncz8/playstation_plus_plus_icon.png"
+                    alt="playstation_plus_plus_icon"
+                  />
+                ) : null}
               </h2>
               <Rating
-                initialRating={3.6}
+                initialRating={
+                  titleItemData.star_rating && titleItemData.star_rating.score
+                }
                 readonly
                 emptySymbol="fa fa-star-o"
                 fullSymbol="fa fa-star"
               />
-              <h4> Electronic Arts Inc </h4>
-              <h4> Released Dec 31, 2019 </h4>
-              <Button style={{ width: "300px" }}>
-                Buy at Playstation Store
+              <h4> {titleItemData.provider_name} </h4>
+              <h4>
+                {release_date
+                  ? "Release date: " + release_date.slice(0, 10)
+                  : null}
+              </h4>
+              <Button style={{ width: "250px" }}>
+                <span>
+                  <img
+                    src="https://thumb.ibb.co/eWAJzJ/psn_store_icon.png"
+                    width="30px"
+                  />
+                </span>Buy at Playstation Store
               </Button>
             </div>
           </Col>

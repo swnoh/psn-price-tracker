@@ -14,7 +14,8 @@ class TitleExpansion extends React.Component {
     this.state = {
       isPanelPriceHistory: true,
       isPanelMedia: false,
-      isPanelDescription: false
+      isPanelDescription: false,
+      titleItemData: {}
     };
   }
 
@@ -35,7 +36,6 @@ class TitleExpansion extends React.Component {
   };
 
   handlePanel = event => {
-    console.log(event.target.text);
     switch (event.target.text) {
       case "Price History":
         this.setState({
@@ -69,12 +69,16 @@ class TitleExpansion extends React.Component {
         isPanelDescription: false
       });
     }
+    // fetch(API_URL + this.props.selectedTitleID)
+    //   .then(response => response.json())
+    //   .then(data => this.setState({ titleItemData: data }));
   }
 
   render() {
     const {
       handleExpansion,
       titleItem,
+      titleItemData,
       selectedRowID,
       selectedTitleID
     } = this.props;
@@ -83,9 +87,33 @@ class TitleExpansion extends React.Component {
       item => item.id === selectedTitleID
     )[0];
 
+    const mediaPreview =
+      titleItemData.mediaList && titleItemData.mediaList.previews;
+    const mediaScreenshot =
+      titleItemData.mediaList && titleItemData.mediaList.screenshots;
+
     return (
       <div className="container-expansion">
-        <Grid style={this.detailBackgroundStyle.overlay}>
+        <Grid>
+          <div
+            className="expansion-background"
+            style={
+              mediaScreenshot !== undefined
+                ? {
+                    backgroundImage: `url(
+                ${mediaScreenshot[0].url}
+              )`,
+                    // backgroundPosition: "right",
+                    // backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    width: "100%",
+                    height: "100%",
+                    position: "absolute",
+                    opacity: "0.1"
+                  }
+                : null
+            }
+          />
           <Row>
             {" "}
             <TransitionGroup>
@@ -117,28 +145,33 @@ class TitleExpansion extends React.Component {
             &times;
           </a>
           <Row>
-            <TitleExpansionPanelInfo
-              titleItem={titleItem}
-              selectedTitleID={selectedTitleID}
-              isPanelMedia={this.state.isPanelMedia}
-              isPanelDescription={this.state.isPanelDescription}
-            />
-
-            {this.state.isPanelPriceHistory ? (
-              <TransitionGroup>
-                <CSSTransition
-                  key={selectedTitleID + 1}
-                  timeout={300}
-                  classNames="titleinfodetail"
-                  unmountOnExit
-                >
-                  <TitleExpansionPanelPriceHistory
-                    titleItem={titleItem}
+            <TransitionGroup>
+              <CSSTransition
+                key={selectedTitleID + 1}
+                timeout={300}
+                classNames="titleinfodetail"
+                unmountOnExit
+              >
+                <div>
+                  <TitleExpansionPanelInfo
                     selectedTitleID={selectedTitleID}
+                    titleItem={titleItem}
+                    titleItemData={titleItemData}
+                    selectedTitleItem={selectedTitleItem}
+                    isPanelMedia={this.state.isPanelMedia}
+                    isPanelDescription={this.state.isPanelDescription}
                   />
-                </CSSTransition>
-              </TransitionGroup>
-            ) : null}
+
+                  {this.state.isPanelPriceHistory ? (
+                    <TitleExpansionPanelPriceHistory
+                      titleItem={titleItem}
+                      titleItemData={titleItemData}
+                      selectedTitleID={selectedTitleID}
+                    />
+                  ) : null}
+                </div>
+              </CSSTransition>
+            </TransitionGroup>
             <CSSTransition
               in={this.state.isPanelMedia}
               timeout={300}
@@ -147,6 +180,7 @@ class TitleExpansion extends React.Component {
             >
               <TitleExpansionPanelMedia
                 titleItem={titleItem}
+                titleItemData={titleItemData}
                 selectedTitleID={selectedTitleID}
               />
             </CSSTransition>
@@ -158,6 +192,7 @@ class TitleExpansion extends React.Component {
             >
               <TitleExpansionPanelDescription
                 titleItem={titleItem}
+                titleItemData={titleItemData}
                 selectedTitleID={selectedTitleID}
               />
             </CSSTransition>
@@ -168,10 +203,13 @@ class TitleExpansion extends React.Component {
                 <a onClick={this.handlePanel}>Price History</a>
                 <span />
               </li>
-              <li className={this.state.isPanelMedia ? "current" : ""}>
-                <a onClick={this.handlePanel}>Media</a>
-                <span />
-              </li>
+              {mediaPreview !== undefined && mediaScreenshot !== undefined ? (
+                <li className={this.state.isPanelMedia ? "current" : ""}>
+                  <a onClick={this.handlePanel}>Media</a>
+                  <span />
+                </li>
+              ) : null}
+
               <li className={this.state.isPanelDescription ? "current" : ""}>
                 <a onClick={this.handlePanel}>Description</a>
                 <span />

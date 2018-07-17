@@ -11,4 +11,6 @@ import scrapy
 class PsnscrapyItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
+    # category_name = scrapy.Field()
+    # title_name = scrapy.Field()
     pass

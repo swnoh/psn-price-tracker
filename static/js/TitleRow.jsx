@@ -16,31 +16,27 @@ class TitleRow extends React.Component {
   mouseHoverStyle = {
     default: {
       position: "relative",
-      transition: "400ms"
-    },
-
-    transform: {
-      transform: "scale(1.5) translate3d(0px, 0px, 0px)",
-      opacity: ".99",
-      transition: "400ms all",
-      transitionDelay: "50ms",
-      position: "absolute",
-      left: "0px",
-      top: "0px",
-      zIndex: "1000"
-    },
-    tile_next_transform: {
-      transform: "translate3d(50px, 0px, 0px)",
-      transitionDuration: "400ms",
-      transitionTimingFunction: "cubic-bezier(0.5, 0, 0.1, 1)",
-      transitionDelay: "50ms"
-    },
-    tile_prev_transform: {
-      transform: "translate3d(-50px, 0px, 0px)",
-      transitionDuration: "400ms",
-      transitionTimingFunction: "cubic-bezier(0.5, 0, 0.1, 1)",
-      transitionDelay: "50ms"
+      transition: "350ms"
     }
+
+    // transform: {
+    //   transform: "scale(1.5) translate3d(0px, 0px, 0px)",
+    //   opacity: ".99",
+    //   transition: "350ms all"
+    //   // transitionDelay: "30ms"
+    // },
+    // tile_next_transform: {
+    //   transform: "translate3d(50px, 0px, 0px)",
+    //   transitionDuration: "350ms",
+    //   transitionTimingFunction: "cubic-bezier(0.5, 0, 0.1, 1)"
+    //   // transitionDelay: "30ms"
+    // },
+    // tile_prev_transform: {
+    //   transform: "translate3d(-50px, 0px, 0px)",
+    //   transitionDuration: "350ms",
+    //   transitionTimingFunction: "cubic-bezier(0.5, 0, 0.1, 1)"
+    //   // transitionDelay: "30ms"
+    // }
   };
 
   handleHoverOn = (rowid, id, index) => {
@@ -63,7 +59,7 @@ class TitleRow extends React.Component {
       selectedTitleID
     } = this.props;
 
-    var settings = {
+    const slick_settings = {
       infinite: true,
       speed: 500,
       slidesToShow: 9,
@@ -107,17 +103,14 @@ class TitleRow extends React.Component {
             slidesToScroll: 1
           }
         }
-        // You can unslick at a given breakpoint now by adding:
-        // settings: "unslick"
-        // instead of a settings object
       ]
     };
 
     return (
       <TransitionGroup className="title-row">
-        <Grid fluid>
-          <Slider {...settings}>
-            {titleItem.map(({ id, title_name, url }, index) => (
+        <Grid fluid onMouseOut={this.handleHoverOff}>
+          <Slider {...slick_settings}>
+            {titleItem.map(({ id, title_name, thumb_img_url }, index) => (
               <CSSTransition key={id} timeout={500} classNames="fade">
                 <div
                   className="tile"
@@ -125,33 +118,30 @@ class TitleRow extends React.Component {
                     handleExpansion(rowid, id);
                     this.handleHoverOff();
                   }}
-                  onMouseOver={() => {
-                    if (isDetailExpansion) {
-                      this.handleHoverOff();
-                      selectedTitleID !== id && selectedRowID === rowid
-                        ? handleExpansion(rowid, id)
-                        : null;
-                    } else {
-                      this.handleHoverOn(rowid, id, index);
-                    }
-                  }}
-                  onMouseOut={this.handleHoverOff}
                 >
                   <div>
-                    <div className={"tile__media"}>
+                    <div className="tile__media">
                       <img
-                        className="tile__img"
-                        src={url}
-                        alt={title_name}
-                        style={
+                        className={
                           this.state.isHoverOn
                             ? selectedTitleID === id
-                              ? this.mouseHoverStyle.transform
+                              ? "tile__img tile_transform"
                               : this.state.currentIdx > index
-                                ? this.mouseHoverStyle.tile_prev_transform
-                                : this.mouseHoverStyle.tile_next_transform
-                            : this.mouseHoverStyle.default
+                                ? "tile__img tile_prev_transform"
+                                : "tile__img tile_next_transform"
+                            : "tile__img"
                         }
+                        src={thumb_img_url}
+                        alt={title_name}
+                        // style={
+                        //   this.state.isHoverOn
+                        //     ? selectedTitleID === id
+                        //       ? this.mouseHoverStyle.transform
+                        //       : this.state.currentIdx > index
+                        //         ? this.mouseHoverStyle.tile_prev_transform
+                        //         : this.mouseHoverStyle.tile_next_transform
+                        //     : this.mouseHoverStyle.default
+                        // }
                       />
                       <div
                         className={
@@ -162,12 +152,21 @@ class TitleRow extends React.Component {
                       />
                     </div>
                     <div
-                      className="tile__details"
-                      style={
+                      className={
                         this.state.isHoverOn && selectedTitleID === id
-                          ? { transform: "scale(1.5)" }
-                          : null
+                          ? "tile__details tile_transform"
+                          : "tile__details"
                       }
+                      onMouseOver={() => {
+                        if (isDetailExpansion) {
+                          this.handleHoverOff();
+                          selectedTitleID !== id && selectedRowID === rowid
+                            ? handleExpansion(rowid, id)
+                            : null;
+                        } else {
+                          this.handleHoverOn(rowid, id, index);
+                        }
+                      }}
                     >
                       <div className="tile__title">{title_name}</div>
                     </div>
