@@ -11,22 +11,18 @@ class TitleExpansionPanelInfo extends React.Component {
   render() {
     const { titleItem, titleItemData, selectedTitleItem } = this.props;
 
-    // const selectedTitleItem = titleItem.titleItem.filter(
-    //   item => item.id === selectedTitleID
-    // )[0];
-
-    const discount_price =
-      titleItemData.default_sku &&
-      titleItemData.default_sku.rewards[0] &&
-      titleItemData.default_sku.rewards[0].display_price;
-
     const regular_price =
       titleItemData.default_sku && titleItemData.default_sku.display_price;
 
-    const plus_price =
-      titleItemData.default_sku &&
-      titleItemData.default_sku.rewards &&
-      titleItemData.default_sku.rewards.bonus_display_price;
+    const rewards =
+      titleItemData.default_sku && titleItemData.default_sku.rewards[0];
+
+    const discount_price = rewards && rewards.display_price;
+    const discount_price_percentage = rewards && rewards.discount;
+
+    const plus_price = rewards && rewards.bonus_display_price;
+    const plus_price_percentage = rewards && rewards.bonus_discount;
+    const is_plus_price = rewards && rewards.isPlus;
 
     const release_date = titleItemData.release_date;
     return (
@@ -37,19 +33,21 @@ class TitleExpansionPanelInfo extends React.Component {
               ? titleItemData.id + 50
               : titleItemData.id
           }
-          timeout={300}
+          timeout={500}
           classNames={
             this.props.isPanelMedia || this.props.isPanelDescription
               ? "titleinfopanel"
               : "titleinfo"
           }
         >
-          <Col className="col-title-info" xs={12} md={4} lg={3}>
-            <div>
+          <Row>
+            <Col xs={5} md={12} lg={12}>
               <img
                 src={selectedTitleItem.thumb_img_url}
                 style={{ width: "200px", paddingTop: "30px" }}
               />
+            </Col>
+            <Col xs={7} md={12} lg={12}>
               <h2>
                 <span
                   style={
@@ -61,9 +59,21 @@ class TitleExpansionPanelInfo extends React.Component {
                       : null
                   }
                 >
-                  {regular_price}
+                  {!is_plus_price && regular_price}
                 </span>
-                <span>{discount_price && " " + discount_price}</span>
+                <span style={is_plus_price ? { color: "yellow" } : null}>
+                  {discount_price && " " + discount_price}
+                  {is_plus_price ? (
+                    <img
+                      style={{
+                        width: "20px",
+                        marginLeft: "5px"
+                      }}
+                      src="https://image.ibb.co/jOncz8/playstation_plus_plus_icon.png"
+                      alt="playstation_plus_plus_icon"
+                    />
+                  ) : null}
+                </span>
               </h2>
               <h2
                 style={{
@@ -97,7 +107,11 @@ class TitleExpansionPanelInfo extends React.Component {
                   ? "Release date: " + release_date.slice(0, 10)
                   : null}
               </h4>
-              <Button style={{ width: "250px" }}>
+              <Button
+                className="button-playstation-store"
+                href={selectedTitleItem.title_url}
+                target="_blank"
+              >
                 <span>
                   <img
                     src="https://thumb.ibb.co/eWAJzJ/psn_store_icon.png"
@@ -105,8 +119,8 @@ class TitleExpansionPanelInfo extends React.Component {
                   />
                 </span>Buy at Playstation Store
               </Button>
-            </div>
-          </Col>
+            </Col>
+          </Row>
         </CSSTransition>
       </TransitionGroup>
     );

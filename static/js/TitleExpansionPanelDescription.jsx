@@ -18,24 +18,17 @@ class TitleExpansionPanelDescription extends React.Component {
     const description = titleItemData.long_desc;
 
     return (
-      <TransitionGroup>
-        <CSSTransition
-          key={selectedTitleID + 2}
-          timeout={300}
-          classNames="titleinfodetail"
-          unmountOnExit
-        >
-          <Col
-            xs={12}
-            md={4}
-            lg={8}
-            className="col-expansion-panel col-expansion-description"
-          >
-            {" "}
-            <h4>{ReactHtmlParser(description)}</h4>
-          </Col>
-        </CSSTransition>
-      </TransitionGroup>
+      // <TransitionGroup>
+      //   <CSSTransition
+      //     key={selectedTitleID + 2}
+      //     timeout={300}
+      //     classNames="titleinfodetail"
+      //     unmountOnExit
+      //   >
+
+      <h4>{ReactHtmlParser(description)}</h4>
+      //   </CSSTransition>
+      // </TransitionGroup>
     );
   }
 }

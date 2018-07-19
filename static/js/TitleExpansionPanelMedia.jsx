@@ -40,41 +40,27 @@ class TitleExpansionPanelMedia extends React.Component {
       //     classNames="titleinfodetail"
       //     unmountOnExit
       //   >
-      <Col
-        xs={12}
-        md={4}
-        lg={8}
-        className="col-expansion-panel col-expansion-media"
-      >
-        <ErrorBoundary>
-          <Slider {...settings}>
-            {mediaPreview.map(preview => (
-              <div className="media-content">
-                <Video
-                  loop
-                  muted
-                  height="900px"
-                  controls={[
-                    "PlayPause",
-                    "Seek",
-                    "Time",
-                    "Volume",
-                    "Fullscreen"
-                  ]}
-                  // poster="https://apollo2.dl.playstation.net/cdn/UP0006/CUSA05364_00/FREE_CONTENTwKwLcUWWv7nfz9gQId0Z/PREVIEW_SCREENSHOT7_165873.jpg"
-                >
-                  <source src={preview.url} type="video/mp4" />
-                </Video>
-              </div>
-            ))}
-            {mediaScreenshot.map(screenshot => (
-              <div className="media-content">
-                <img width={700} height={400} src={screenshot.url} />
-              </div>
-            ))}
-          </Slider>
-        </ErrorBoundary>
-      </Col>
+
+      <Slider {...settings}>
+        {mediaPreview.map(preview => (
+          <div className="media-content">
+            <Video
+              loop
+              muted
+              height="900px"
+              controls={["PlayPause", "Seek", "Time", "Volume", "Fullscreen"]}
+              // poster="https://apollo2.dl.playstation.net/cdn/UP0006/CUSA05364_00/FREE_CONTENTwKwLcUWWv7nfz9gQId0Z/PREVIEW_SCREENSHOT7_165873.jpg"
+            >
+              <source src={preview.url} type="video/mp4" />
+            </Video>
+          </div>
+        ))}
+        {mediaScreenshot.map(screenshot => (
+          <div className="media-content">
+            <img width={700} height={400} src={screenshot.url} />
+          </div>
+        ))}
+      </Slider>
       //   </CSSTransition>
       // </TransitionGroup>
     );

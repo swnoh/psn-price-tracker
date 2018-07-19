@@ -12,12 +12,7 @@ class TitleExpansionPanelPriceHistory extends React.Component {
     )[0];
 
     return (
-      <Col
-        xs={12}
-        md={4}
-        lg={8}
-        className="col-expansion-panel col-price-chart"
-      >
+      <React.Fragment>
         <Row>
           <PriceChart priceData={selectedTitleItem.priceData} />
         </Row>
@@ -35,7 +30,7 @@ class TitleExpansionPanelPriceHistory extends React.Component {
             <h2 className="lowest-plus-price">$39.99</h2>
           </Col>
         </Row>
-      </Col>
+      </React.Fragment>
     );
   }
 }

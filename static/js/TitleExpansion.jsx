@@ -1,12 +1,15 @@
 import React from "react";
+import ReactDOM from "react-dom";
 import { Grid, Row, Col, Button } from "react-bootstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import PriceChart from "./PriceChart";
 import Rating from "react-rating";
+import TitleExpansionHeader from "./TitleExpansionHeader";
 import TitleExpansionPanelInfo from "./TitleExpansionPanelInfo";
 import TitleExpansionPanelPriceHistory from "./TitleExpansionPanelPriceHistory";
 import TitleExpansionPanelMedia from "./TitleExpansionPanelMedia";
 import TitleExpansionPanelDescription from "./TitleExpansionPanelDescription";
+import { Element } from "react-scroll";
 
 class TitleExpansion extends React.Component {
   constructor(prop) {
@@ -69,9 +72,6 @@ class TitleExpansion extends React.Component {
         isPanelDescription: false
       });
     }
-    // fetch(API_URL + this.props.selectedTitleID)
-    //   .then(response => response.json())
-    //   .then(data => this.setState({ titleItemData: data }));
   }
 
   render() {
@@ -82,6 +82,12 @@ class TitleExpansion extends React.Component {
       selectedRowID,
       selectedTitleID
     } = this.props;
+
+    const {
+      isPanelPriceHistory,
+      isPanelMedia,
+      isPanelDescription
+    } = this.state;
 
     const selectedTitleItem = titleItem.titleItem.filter(
       item => item.id === selectedTitleID
@@ -99,118 +105,122 @@ class TitleExpansion extends React.Component {
             className="expansion-background"
             style={
               mediaScreenshot !== undefined
-                ? {
-                    backgroundImage: `url(
-                ${mediaScreenshot[0].url}
-              )`,
-                    // backgroundPosition: "right",
-                    // backgroundRepeat: "no-repeat",
-                    backgroundSize: "cover",
-                    width: "100%",
-                    height: "100%",
-                    position: "absolute",
-                    opacity: "0.1"
-                  }
+                ? { backgroundImage: `url(${mediaScreenshot[0].url}) ` }
                 : null
             }
+            ref="scrollToExpansion"
           />
-          <Row>
-            {" "}
-            <TransitionGroup>
-              <CSSTransition
-                key={
-                  this.state.isPanelMedia || this.state.isPanelDescription
-                    ? selectedTitleID + 50
-                    : selectedTitleID
-                }
-                timeout={300}
-                classNames={
-                  this.state.isPanelMedia || this.state.isPanelDescription
-                    ? "titlename"
-                    : "titlenamepanel"
-                }
-                unmountOnExit
-              >
-                <Col xs={12} className="col-expansion-title">
-                  <h2>{selectedTitleItem.title_name}</h2>
-                </Col>
-              </CSSTransition>
-            </TransitionGroup>
-          </Row>
-          <a
-            className="close-button icon-close"
-            aria-label="close"
-            onClick={() => handleExpansion(selectedRowID, selectedTitleID)}
-          >
-            &times;
-          </a>
+          <TransitionGroup>
+            <CSSTransition
+              key={selectedTitleID}
+              timeout={300}
+              classNames="titleinfodetail"
+              unmountOnExit
+            >
+              <React.Fragment>
+                <TitleExpansionHeader
+                  title_name={selectedTitleItem.title_name}
+                  isPanelMedia={isPanelMedia}
+                  isPanelDescription={isPanelDescription}
+                  handleExpansion={handleExpansion}
+                  selectedRowID={selectedRowID}
+                  selectedTitleID={selectedTitleID}
+                />
+              </React.Fragment>
+            </CSSTransition>
+          </TransitionGroup>
           <Row>
             <TransitionGroup>
               <CSSTransition
                 key={selectedTitleID + 1}
                 timeout={300}
-                classNames="titleinfodetail"
+                classNames="titleinfo"
                 unmountOnExit
               >
-                <div>
+                <Col className="col-title-info" xs={12} md={4} lg={3}>
                   <TitleExpansionPanelInfo
                     selectedTitleID={selectedTitleID}
                     titleItem={titleItem}
                     titleItemData={titleItemData}
                     selectedTitleItem={selectedTitleItem}
-                    isPanelMedia={this.state.isPanelMedia}
-                    isPanelDescription={this.state.isPanelDescription}
+                    isPanelMedia={isPanelMedia}
+                    isPanelDescription={isPanelDescription}
                   />
-
-                  {this.state.isPanelPriceHistory ? (
-                    <TitleExpansionPanelPriceHistory
-                      titleItem={titleItem}
-                      titleItemData={titleItemData}
-                      selectedTitleID={selectedTitleID}
-                    />
-                  ) : null}
-                </div>
+                </Col>
               </CSSTransition>
             </TransitionGroup>
             <CSSTransition
-              in={this.state.isPanelMedia}
+              in={isPanelPriceHistory}
               timeout={300}
               classNames="titleinfodetail"
               unmountOnExit
             >
-              <TitleExpansionPanelMedia
-                titleItem={titleItem}
-                titleItemData={titleItemData}
-                selectedTitleID={selectedTitleID}
-              />
+              <Col
+                xs={12}
+                md={8}
+                lg={8}
+                className="col-expansion-panel col-expansion-price"
+              >
+                <TitleExpansionPanelPriceHistory
+                  titleItem={titleItem}
+                  titleItemData={titleItemData}
+                  selectedTitleID={selectedTitleID}
+                />
+              </Col>
             </CSSTransition>
             <CSSTransition
-              in={this.state.isPanelDescription}
+              in={isPanelMedia}
               timeout={300}
               classNames="titleinfodetail"
               unmountOnExit
             >
-              <TitleExpansionPanelDescription
-                titleItem={titleItem}
-                titleItemData={titleItemData}
-                selectedTitleID={selectedTitleID}
-              />
+              <Col
+                xs={12}
+                md={8}
+                lg={8}
+                className="col-expansion-panel col-expansion-media"
+              >
+                <TitleExpansionPanelMedia
+                  titleItem={titleItem}
+                  titleItemData={titleItemData}
+                  selectedTitleID={selectedTitleID}
+                />
+              </Col>
+            </CSSTransition>
+            <CSSTransition
+              in={isPanelDescription}
+              timeout={300}
+              classNames="titleinfodetail"
+              unmountOnExit
+            >
+              <Col
+                xs={12}
+                md={8}
+                lg={8}
+                className="col-expansion-panel col-expansion-description"
+              >
+                <TitleExpansionPanelDescription
+                  titleItem={titleItem}
+                  titleItemData={titleItemData}
+                  selectedTitleID={selectedTitleID}
+                />
+              </Col>
             </CSSTransition>
           </Row>
           <Row className="expansion-menu">
             <ul>
-              <li className={this.state.isPanelPriceHistory ? "current" : ""}>
+              <li className={isPanelPriceHistory ? "current" : ""}>
                 <a onClick={this.handlePanel}>Price History</a>
                 <span />
               </li>
               {mediaPreview !== undefined && mediaScreenshot !== undefined ? (
-                <li className={this.state.isPanelMedia ? "current" : ""}>
+                <li className={isPanelMedia ? "current" : ""}>
                   <a onClick={this.handlePanel}>Media</a>
                   <span />
                 </li>
               ) : null}
 
-              <li className={this.state.isPanelDescription ? "current" : ""}>
+              <li className={isPanelDescription ? "current" : ""}>
                 <a onClick={this.handlePanel}>Description</a>
                 <span />
               </li>

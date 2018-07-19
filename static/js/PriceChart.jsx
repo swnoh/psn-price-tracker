@@ -63,11 +63,21 @@ class PriceChart extends React.Component {
         ]
       },
       options: {
+        responsive: true,
+        maintainAspectRatio: false,
         scales: {
           yAxes: [
             {
               ticks: {
-                beginAtZero: true
+                beginAtZero: true,
+                fontColor: "white"
+              }
+            }
+          ],
+          xAxes: [
+            {
+              ticks: {
+                fontColor: "white"
               }
             }
           ]
@@ -77,7 +87,14 @@ class PriceChart extends React.Component {
   }
 
   render() {
-    return <canvas id="priceChart" width="450" height="100" />;
+    return (
+      <div
+        class="chart-container"
+        style={{ position: "relative", height: "30vh", width: "100%" }}
+      >
+        <canvas id="priceChart" />
+      </div>
+    );
   }
 }
 

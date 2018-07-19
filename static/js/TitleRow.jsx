@@ -9,7 +9,8 @@ class TitleRow extends React.Component {
     super(prop);
     this.state = {
       isHoverOn: false,
-      currentIdx: 0
+      currentIdx: 0,
+      discount_price_percentage: ""
     };
   }
 
@@ -18,25 +19,6 @@ class TitleRow extends React.Component {
       position: "relative",
       transition: "350ms"
     }
-
-    // transform: {
-    //   transform: "scale(1.5) translate3d(0px, 0px, 0px)",
-    //   opacity: ".99",
-    //   transition: "350ms all"
-    //   // transitionDelay: "30ms"
-    // },
-    // tile_next_transform: {
-    //   transform: "translate3d(50px, 0px, 0px)",
-    //   transitionDuration: "350ms",
-    //   transitionTimingFunction: "cubic-bezier(0.5, 0, 0.1, 1)"
-    //   // transitionDelay: "30ms"
-    // },
-    // tile_prev_transform: {
-    //   transform: "translate3d(-50px, 0px, 0px)",
-    //   transitionDuration: "350ms",
-    //   transitionTimingFunction: "cubic-bezier(0.5, 0, 0.1, 1)"
-    //   // transitionDelay: "30ms"
-    // }
   };
 
   handleHoverOn = (rowid, id, index) => {
@@ -47,6 +29,27 @@ class TitleRow extends React.Component {
   handleHoverOff = () => {
     this.setState({ isHoverOn: false, currentIdx: 0 });
   };
+
+  componentDidMount() {
+    // this.props.titleItem.map(({ id }) => {
+    //   fetch(
+    //     "https://store.playstation.com/store/api/chihiro/00_09_000/container/CA/en/19/" +
+    //       id
+    //   )
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       const titleItemData = data;
+    //       const rewards =
+    //         titleItemData.default_sku && titleItemData.default_sku.rewards[0];
+    //       const discount_price_percentage = rewards && rewards.discount;
+    //       const plus_price_percentage = rewards && rewards.bonus_discount;
+    //       const is_plus_price = rewards && rewards.isPlus;
+    //       this.setState({
+    //         discount_price_percentage: discount_price_percentage
+    //       });
+    //     });
+    // });
+  }
 
   render() {
     const {
@@ -109,40 +112,47 @@ class TitleRow extends React.Component {
     return (
       <TransitionGroup className="title-row">
         <Grid fluid onMouseOut={this.handleHoverOff}>
-          <Slider {...slick_settings}>
+          <Slider {...slick_settings} style={{ height: "500px" }}>
             {titleItem.map(({ id, title_name, thumb_img_url }, index) => (
               <CSSTransition key={id} timeout={500} classNames="fade">
                 <div
-                  className="tile"
+                  className={
+                    isDetailExpansion
+                      ? selectedTitleID === id || selectedRowID !== rowid
+                        ? "tile"
+                        : "tile overlay"
+                      : "tile"
+                  }
                   onClick={() => {
                     handleExpansion(rowid, id);
                     this.handleHoverOff();
                   }}
                 >
                   <div>
-                    <div className="tile__media">
+                    <div
+                      className={
+                        this.state.isHoverOn
+                          ? selectedTitleID === id
+                            ? "tile__media tile_transform"
+                            : this.state.currentIdx > index
+                              ? "tile__media tile_prev_transform"
+                              : "tile__media tile_next_transform"
+                          : "tile__media"
+                      }
+                    >
                       <img
-                        className={
-                          this.state.isHoverOn
-                            ? selectedTitleID === id
-                              ? "tile__img tile_transform"
-                              : this.state.currentIdx > index
-                                ? "tile__img tile_prev_transform"
-                                : "tile__img tile_next_transform"
-                            : "tile__img"
-                        }
+                        className="tile__img"
                         src={thumb_img_url}
                         alt={title_name}
-                        // style={
-                        //   this.state.isHoverOn
-                        //     ? selectedTitleID === id
-                        //       ? this.mouseHoverStyle.transform
-                        //       : this.state.currentIdx > index
-                        //         ? this.mouseHoverStyle.tile_prev_transform
-                        //         : this.mouseHoverStyle.tile_next_transform
-                        //     : this.mouseHoverStyle.default
-                        // }
                       />
+                      <div className="tile__discount tile__plus_discount">
+                        {/* <span> SAVE {discount_price_percentage}%</span> */}
+                        <span>
+                          {this.state.discount_price_percentage
+                            ? `SAVE ${this.state.discount_price_percentage} %`
+                            : null}
+                        </span>
+                      </div>
                       <div
                         className={
                           isDetailExpansion && selectedTitleID === id
@@ -168,7 +178,7 @@ class TitleRow extends React.Component {
                         }
                       }}
                     >
-                      <div className="tile__title">{title_name}</div>
+                      {/* <div className="tile__title">{title_name}</div> */}
                     </div>
                   </div>
                 </div>
