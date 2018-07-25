@@ -4,20 +4,33 @@ html {
   margin: 0;
   background: #141414;
   color: #ecf0f1;
+  /* background: #d6d6d6;
+  color: #111111; */
   font-family: "Open Sans", sans-serif;
   min-height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: row;
-  align-items: center;
-  width: 100%;
+  /* align-items: center; */
 }
 
+/* 
 * {
   box-sizing: border-box;
-}
+} */
 
 #content {
   width: 100%;
+}
+
+.main-feature.row {
+  position: relative;
+  margin-bottom: 80px;
+}
+
+.row-category h3 {
+  font-weight: bold;
+  margin: 0 0 -20px 30px;
 }
 
 .navbar-transparent {
@@ -68,7 +81,7 @@ a:hover {
 .container-expansion {
   position: relative;
   z-index: 5;
-  top: -50px;
+  top: -40px;
 }
 
 .close-button {
@@ -167,21 +180,21 @@ a:hover {
   /* opacity: 0.99; */
   transition: 400ms;
   transition-timing-function: cubic-bezier(0.5, 0, 0.1, 1);
-  transition-delay: 280ms;
+  transition-delay: 250ms;
 }
 
 .tile_next_transform {
-  transform: translate3d(50px, 0px, 0px);
+  transform: translate3d(42px, 0px, 0px);
   transition-duration: 400ms;
   transition-timing-function: cubic-bezier(0.5, 0, 0.1, 1);
-  transition-delay: 280ms;
+  transition-delay: 250ms;
 }
 
 .tile_prev_transform {
-  transform: translate3d(-50px, 0px, 0px);
+  transform: translate3d(-42px, 0px, 0px);
   transition-duration: 400ms;
   transition-timing-function: cubic-bezier(0.5, 0, 0.1, 1);
-  transition-delay: 280ms;
+  transition-delay: 250ms;
 }
 
 .tile {
@@ -193,10 +206,6 @@ a:hover {
 .tile.overlay {
   opacity: 0.5;
 }
-
-/* .title-row {
-  height: 100%;
-} */
 
 .slick-slide img {
   width: 98%;
@@ -216,6 +225,10 @@ a:hover {
   align-items: center;
   justify-content: center;
   height: 300px;
+}
+
+.col-expansion-media .slick-track .slick-slide {
+  height: 450px;
 }
 
 .slick-next:before,
@@ -290,11 +303,29 @@ a:hover {
   transition-delay: 200ms;
 }
 
-.tile__discount.tile__plus_discount {
+.tile__discount {
   position: absolute;
   left: 0;
-  bottom: 20px;
+  bottom: 10px;
+  color: white;
+  font-weight: bold;
   background-color: #006cff;
+}
+
+.tile__discount.tile__plus_discount {
+  color: black;
+  background-color: #ffe312;
+}
+
+.tile__discount span {
+  padding: 10px;
+}
+
+img.plus_exclusive_price_icon {
+  margin: 1px -8px 0 2px;
+  width: 16px;
+  height: 16px;
+  float: left;
 }
 
 .tile__focus.focus-box {
@@ -361,10 +392,28 @@ a:hover {
   padding-left: 50px;
 }
 
+.price-history-chart {
+  margin-top: 30px;
+}
+
 .col-expansion-description {
-  color: rgb(192, 192, 192);
+  /* color: rgb(192, 192, 192); */
+  color: rgb(228, 228, 228);
   padding: 20px 0 0 30px;
   overflow: auto;
+}
+
+.col-expansion-description::-webkit-scrollbar {
+  width: 10px;
+}
+
+.col-expansion-description::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 16px rgba(80, 80, 80, 0.25);
+  -webkit-box-shadow: inset 0 0 16px rgba(80, 80, 80, 0.25);
+}
+.col-expansion-description::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 15px rgba(170, 170, 170, 0.2);
+  -webkit-box-shadow: inset 0 0 15px rgba(170, 170, 170, 0.2);
 }
 
 .expansion-menu ul {
@@ -488,25 +537,25 @@ transition-group setting
 }
 
 .titleinfo-enter {
-  opacity: 0.8;
-  transform: scale(1) translateX(-7%);
-  transition: all 500ms;
+  opacity: 0.5;
+  transform: scale(1) translateY(5%);
+  transition: all 700ms;
 }
 
 .titleinfo-enter-active {
   opacity: 1;
-  transform: scale(1) translateX(0%);
-  transition: all 500ms;
+  transform: scale(1) translateY(0%);
+  transition: all 700ms;
 }
 
 .titleinfo-exit {
+  position: absolute;
   opacity: 0.01;
 }
 
 .titleinfo-exit-active {
   position: absolute;
   opacity: 0.01;
-  transition: all 500ms;
 }
 
 .titleinfopanel-enter {
@@ -550,6 +599,26 @@ transition-group setting
 }
 
 .titleinfodetail-exit-active {
+  position: absolute;
+  opacity: 0.01;
+}
+
+.titlepanelmenu-enter {
+  opacity: 0.1;
+  transform: scale(1) translateY(20%);
+}
+
+.titlepanelmenu-enter-active {
+  opacity: 1;
+  transform: scale(1) translateY(0%);
+  transition: all 900ms;
+}
+
+.titlepanelmenu-exit {
+  opacity: 0.01;
+}
+
+.titlepanelmenu-exit-active {
   position: absolute;
   opacity: 0.01;
 }

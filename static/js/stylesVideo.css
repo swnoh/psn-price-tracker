@@ -220,8 +220,6 @@
 .rh5v-Captions_activeTrackItem {
   text-decoration: underline;
 }
-.rh5v-PlayPause_component {
-}
 
 .rh5v-PlayPause_component:hover {
   background-color: #000;
@@ -329,6 +327,6 @@
   right: -80px;
 }
 
-.col-expansion-panel.col-expansion-media .media-content {
+/* .col-expansion-panel.col-expansion-media .media-content {
   padding-right: 30px;
-}
+} */

@@ -18,7 +18,9 @@ class TitleExpansion extends React.Component {
       isPanelPriceHistory: true,
       isPanelMedia: false,
       isPanelDescription: false,
-      titleItemData: {}
+      gameItemData: {},
+      itemPrice: {},
+      isLoading: true
     };
   }
 
@@ -64,23 +66,42 @@ class TitleExpansion extends React.Component {
     }
   };
 
+  componentDidMount() {
+    fetch(`http://127.0.0.1:5000/db/psn/price/${this.props.selectedGameID}`)
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ itemPrice: data, isLoading: false });
+      })
+      .catch(function(error) {
+        console.log("Fetch failed");
+      });
+  }
+
   componentDidUpdate(prevProps) {
-    if (this.props.selectedTitleID !== prevProps.selectedTitleID) {
+    if (this.props.selectedGameID !== prevProps.selectedGameID) {
       this.setState({
         isPanelPriceHistory: true,
         isPanelMedia: false,
         isPanelDescription: false
       });
+      fetch(`http://127.0.0.1:5000/db/psn/price/${this.props.selectedGameID}`)
+        .then(response => response.json())
+        .then(data => {
+          this.setState({ itemPrice: data, isLoading: false });
+        })
+        .catch(function(error) {
+          console.log("Fetch failed");
+        });
     }
   }
 
   render() {
     const {
       handleExpansion,
-      titleItem,
-      titleItemData,
+      gameItem,
+      gameItemData,
       selectedRowID,
-      selectedTitleID
+      selectedGameID
     } = this.props;
 
     const {
@@ -89,14 +110,14 @@ class TitleExpansion extends React.Component {
       isPanelDescription
     } = this.state;
 
-    const selectedTitleItem = titleItem.titleItem.filter(
-      item => item.id === selectedTitleID
+    const selectedGameItem = gameItem.gameItem.filter(
+      item => item.game_id === selectedGameID
     )[0];
 
     const mediaPreview =
-      titleItemData.mediaList && titleItemData.mediaList.previews;
+      gameItemData.mediaList && gameItemData.mediaList.previews;
     const mediaScreenshot =
-      titleItemData.mediaList && titleItemData.mediaList.screenshots;
+      gameItemData.mediaList && gameItemData.mediaList.screenshots;
 
     return (
       <div className="container-expansion">
@@ -112,19 +133,19 @@ class TitleExpansion extends React.Component {
           />
           <TransitionGroup>
             <CSSTransition
-              key={selectedTitleID}
+              key={selectedGameID}
               timeout={300}
               classNames="titleinfodetail"
               unmountOnExit
             >
               <React.Fragment>
                 <TitleExpansionHeader
-                  title_name={selectedTitleItem.title_name}
+                  game_title={selectedGameItem.game_title}
                   isPanelMedia={isPanelMedia}
                   isPanelDescription={isPanelDescription}
                   handleExpansion={handleExpansion}
                   selectedRowID={selectedRowID}
-                  selectedTitleID={selectedTitleID}
+                  selectedGameID={selectedGameID}
                 />
               </React.Fragment>
             </CSSTransition>
@@ -132,17 +153,17 @@ class TitleExpansion extends React.Component {
           <Row>
             <TransitionGroup>
               <CSSTransition
-                key={selectedTitleID + 1}
-                timeout={300}
+                key={selectedGameID + 1}
+                timeout={500}
                 classNames="titleinfo"
                 unmountOnExit
               >
                 <Col className="col-title-info" xs={12} md={4} lg={3}>
                   <TitleExpansionPanelInfo
-                    selectedTitleID={selectedTitleID}
-                    titleItem={titleItem}
-                    titleItemData={titleItemData}
-                    selectedTitleItem={selectedTitleItem}
+                    selectedGameID={selectedGameID}
+                    gameItem={gameItem}
+                    gameItemData={gameItemData}
+                    selectedGameItem={selectedGameItem}
                     isPanelMedia={isPanelMedia}
                     isPanelDescription={isPanelDescription}
                   />
@@ -161,11 +182,15 @@ class TitleExpansion extends React.Component {
                 lg={8}
                 className="col-expansion-panel col-expansion-price"
               >
-                <TitleExpansionPanelPriceHistory
-                  titleItem={titleItem}
-                  titleItemData={titleItemData}
-                  selectedTitleID={selectedTitleID}
-                />
+                {!this.state.isLoading ? (
+                  <TitleExpansionPanelPriceHistory
+                    gameItem={gameItem}
+                    gameItemData={gameItemData}
+                    selectedGameItem={selectedGameItem}
+                    itemPrice={this.state.itemPrice}
+                    selectedGameID={selectedGameID}
+                  />
+                ) : null}
               </Col>
             </CSSTransition>
             <CSSTransition
@@ -180,11 +205,13 @@ class TitleExpansion extends React.Component {
                 lg={8}
                 className="col-expansion-panel col-expansion-media"
               >
-                <TitleExpansionPanelMedia
-                  titleItem={titleItem}
-                  titleItemData={titleItemData}
-                  selectedTitleID={selectedTitleID}
-                />
+                {isPanelMedia ? (
+                  <TitleExpansionPanelMedia
+                    gameItem={gameItem}
+                    gameItemData={gameItemData}
+                    selectedGameID={selectedGameID}
+                  />
+                ) : null}
               </Col>
             </CSSTransition>
             <CSSTransition
@@ -200,31 +227,41 @@ class TitleExpansion extends React.Component {
                 className="col-expansion-panel col-expansion-description"
               >
                 <TitleExpansionPanelDescription
-                  titleItem={titleItem}
-                  titleItemData={titleItemData}
-                  selectedTitleID={selectedTitleID}
+                  gameItem={gameItem}
+                  gameItemData={gameItemData}
+                  selectedGameID={selectedGameID}
                 />
               </Col>
             </CSSTransition>
           </Row>
           <Row className="expansion-menu">
-            <ul>
-              <li className={isPanelPriceHistory ? "current" : ""}>
-                <a onClick={this.handlePanel}>Price History</a>
-                <span />
-              </li>
-              {mediaPreview !== undefined && mediaScreenshot !== undefined ? (
-                <li className={isPanelMedia ? "current" : ""}>
-                  <a onClick={this.handlePanel}>Media</a>
-                  <span />
-                </li>
-              ) : null}
+            <TransitionGroup>
+              <CSSTransition
+                key={selectedGameID + 111}
+                timeout={700}
+                classNames="titlepanelmenu"
+                unmountOnExit
+              >
+                <ul>
+                  <li className={isPanelPriceHistory ? "current" : ""}>
+                    <a onClick={this.handlePanel}>Price History</a>
+                    <span />
+                  </li>
+                  {mediaPreview !== undefined &&
+                  mediaScreenshot !== undefined ? (
+                    <li className={isPanelMedia ? "current" : ""}>
+                      <a onClick={this.handlePanel}>Media</a>
+                      <span />
+                    </li>
+                  ) : null}
 
-              <li className={isPanelDescription ? "current" : ""}>
-                <a onClick={this.handlePanel}>Description</a>
-                <span />
-              </li>
-            </ul>
+                  <li className={isPanelDescription ? "current" : ""}>
+                    <a onClick={this.handlePanel}>Description</a>
+                    <span />
+                  </li>
+                </ul>
+              </CSSTransition>
+            </TransitionGroup>
           </Row>
         </Grid>
       </div>

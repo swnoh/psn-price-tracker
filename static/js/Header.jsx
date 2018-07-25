@@ -50,7 +50,7 @@ class Header extends React.Component {
       >
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="#brand" style={{ "padding-top": "8px" }}>
+            <a href="#brand" style={{ paddingTop: "8px" }}>
               <img
                 src="https://store.playstation.com//img/store-logo.svg"
                 style={{ height: "35px" }}
@@ -81,9 +81,9 @@ class Header extends React.Component {
             </FormGroup>{" "}
             <Button type="submit" bsStyle="link">
               <i
-                class="fa fa-search"
+                className="fa fa-search"
                 aria-hidden="true"
-                style={{ "font-size": "1.5em" }}
+                style={{ fontSize: "1.5em" }}
               />
             </Button>
           </Navbar.Form>

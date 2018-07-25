@@ -3,12 +3,12 @@ import { Row, Col } from "react-bootstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 const TitleExpansionHeader = ({
-  title_name,
+  game_title,
   isPanelMedia,
   isPanelDescription,
   handleExpansion,
   selectedRowID,
-  selectedTitleID
+  selectedGameID
 }) => {
   return (
     <React.Fragment>
@@ -17,8 +17,8 @@ const TitleExpansionHeader = ({
           <CSSTransition
             key={
               isPanelMedia || isPanelDescription
-                ? selectedTitleID + 50
-                : selectedTitleID
+                ? selectedGameID + 50
+                : selectedGameID
             }
             timeout={300}
             classNames={
@@ -29,7 +29,7 @@ const TitleExpansionHeader = ({
             unmountOnExit
           >
             <Col xs={12} className="col-expansion-title">
-              <h2>{title_name}</h2>
+              <h2>{game_title}</h2>
             </Col>
           </CSSTransition>
         </TransitionGroup>
@@ -37,7 +37,7 @@ const TitleExpansionHeader = ({
       <a
         className="close-button icon-close"
         aria-label="close"
-        onClick={() => handleExpansion(selectedRowID, selectedTitleID)}
+        onClick={() => handleExpansion(selectedRowID, selectedGameID)}
       >
         &times;
       </a>

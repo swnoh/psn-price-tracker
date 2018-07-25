@@ -1,95 +1,141 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import { Carousel } from "react-bootstrap";
 import Chart from "chart.js";
 
+var priceCharts;
+
 class PriceChart extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      price_data: [],
+      data_loading: true
+    };
+  }
+
   componentDidMount() {
     var ctx = document.getElementById("priceChart");
-    var priceCharts = new Chart(ctx, {
+    var config = {
       type: "line",
       data: {
-        labels: [
-          "Jul 2, 2017",
-          "Aug 2, 2017",
-          "Aug 23, 2017",
-          "Sep 10, 2017",
-          "Oct 1, 2017",
-          "Oct 20, 2017",
-          "Nov 5, 2017",
-          "Dec 25, 2017",
-          "Jan 10, 2018",
-          "Feb 13, 2018"
-        ],
         datasets: [
           {
-            label: "Price $",
-            data: [
-              70.5,
-              101.99,
-              99.99,
-              99.98,
-              35.99,
-              99.99,
-              49.98,
-              79.99,
-              19.99,
-              29.99
-            ],
-            borderColor: "rgba(54, 162, 235, 1)",
-            steppedLine: true,
+            backgroundColor: "rgba(252,252,252,0.4)",
             borderWidth: 2,
-            pointBorderWidth: 7
+            borderColor: "rgba(9, 150, 230, 1)",
+            pointRadius: 5,
+            pointBorderWidth: 2,
+            pointBorderColor: "rgba(72, 198, 200, 1.00)",
+            pointBackgroundColor: "rgba(255, 255, 255, 1.00)",
+            pointHoverBackgroundColor: "rgba(72, 198, 200, 1.00)",
+            pointHoverBorderColor: "rgba(72, 198, 200, 1.00)",
+            label: "Price $",
+            fill: false,
+            data: this.props.chartPrices,
+            steppedLine: true
           },
           {
-            label: "PS+ $",
-            data: [
-              49.99,
-              99.99,
-              99.99,
-              99.98,
-              29.97,
-              99.99,
-              29.98,
-              79.79,
-              18.75,
-              25.79
-            ],
-            borderColor: "rgba(255, 159, 64, 1)",
-            steppedLine: true,
+            backgroundColor: "rgba(252,252,252,0.4)",
             borderWidth: 2,
-            pointBorderWidth: 7
+            borderColor: "rgba(237, 198, 44, 1.00)",
+            pointRadius: 5,
+            pointBorderWidth: 2,
+            pointBorderColor: "rgba(237, 198, 44, 1.00)",
+            pointBackgroundColor: "rgba(255, 255, 255, 1.00)",
+            pointHoverBackgroundColor: "rgba(237, 198, 44, 1.00)",
+            pointHoverBorderColor: "rgba(237, 198, 44, 1.00)",
+            label: "PS+ $",
+            fill: false,
+            data: this.props.chartBonusPrices,
+            steppedLine: true
           }
         ]
       },
       options: {
-        responsive: true,
-        maintainAspectRatio: false,
         scales: {
-          yAxes: [
+          xAxes: [
             {
-              ticks: {
-                beginAtZero: true,
-                fontColor: "white"
+              type: "time",
+              unit: "day",
+              unitStepSize: 1,
+              time: {
+                tooltipFormat: "ll",
+                displayFormats: {
+                  millisecond: "MMM DD",
+                  second: "MMM DD",
+                  minute: "MMM DD",
+                  hour: "MMM DD"
+                }
+              },
+              scaleLabel: {
+                display: false,
+                labelString: "Date"
+              },
+              gridLines: {
+                display: false
               }
             }
           ],
-          xAxes: [
+          yAxes: [
             {
+              scaleLabel: {
+                display: false,
+                labelString: "value"
+              },
               ticks: {
-                fontColor: "white"
+                beginAtZero: true
               }
             }
           ]
-        }
+        },
+        responsiveAnimationDuration: 100,
+        legend: {
+          position: "bottom",
+          labels: {
+            boxWidth: 12
+          }
+        },
+        tooltips: {
+          backgroundColor: "rgba(30,30,30, 1.00)",
+          titleFontSize: 13,
+          bodyFontSize: 15
+        },
+        elements: {
+          line: {
+            tension: 0,
+            borderWidth: 2,
+            borderCapStyle: "butt",
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: "miter"
+          },
+          point: {
+            backgroundColor: "#fff",
+            borderWidth: 5,
+            hoverRadius: 4,
+            hoverBorderWidth: 1,
+            radius: 2,
+            hitRadius: 10
+          }
+        },
+        responsive: true,
+        maintainAspectRatio: false
       }
-    });
+    };
+    priceCharts = new Chart(ctx, config);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.game_id !== prevProps.game_id) {
+      priceCharts.data.datasets[0].data = this.props.chartPrices;
+      priceCharts.data.datasets[1].data = this.props.chartBonusPrices;
+      priceCharts.update();
+    }
   }
 
   render() {
     return (
       <div
-        class="chart-container"
+        className="chart-container"
         style={{ position: "relative", height: "30vh", width: "100%" }}
       >
         <canvas id="priceChart" />

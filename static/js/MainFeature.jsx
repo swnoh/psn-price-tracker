@@ -16,8 +16,8 @@ class MainFeature extends React.Component {
   render() {
     return (
       <Carousel>
-        {homeImgs.map(img => (
-          <Carousel.Item>
+        {homeImgs.map((img, index) => (
+          <Carousel.Item key={index}>
             <img width={800} src={img} />
           </Carousel.Item>
         ))}

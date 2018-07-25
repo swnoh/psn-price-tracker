@@ -9,8 +9,7 @@ class TitleRow extends React.Component {
     super(prop);
     this.state = {
       isHoverOn: false,
-      currentIdx: 0,
-      discount_price_percentage: ""
+      currentIdx: 0
     };
   }
 
@@ -30,43 +29,22 @@ class TitleRow extends React.Component {
     this.setState({ isHoverOn: false, currentIdx: 0 });
   };
 
-  componentDidMount() {
-    // this.props.titleItem.map(({ id }) => {
-    //   fetch(
-    //     "https://store.playstation.com/store/api/chihiro/00_09_000/container/CA/en/19/" +
-    //       id
-    //   )
-    //     .then(response => response.json())
-    //     .then(data => {
-    //       const titleItemData = data;
-    //       const rewards =
-    //         titleItemData.default_sku && titleItemData.default_sku.rewards[0];
-    //       const discount_price_percentage = rewards && rewards.discount;
-    //       const plus_price_percentage = rewards && rewards.bonus_discount;
-    //       const is_plus_price = rewards && rewards.isPlus;
-    //       this.setState({
-    //         discount_price_percentage: discount_price_percentage
-    //       });
-    //     });
-    // });
-  }
-
   render() {
     const {
-      titleItem,
+      gameItem,
       rowid,
       isDetailExpansion,
       handleSelectTitle,
       handleExpansion,
       selectedRowID,
-      selectedTitleID
+      selectedGameID
     } = this.props;
 
     const slick_settings = {
       infinite: true,
       speed: 500,
-      slidesToShow: 9,
-      slidesToScroll: 9,
+      slidesToShow: 10,
+      slidesToScroll: 10,
       responsive: [
         {
           breakpoint: 1600,
@@ -113,77 +91,105 @@ class TitleRow extends React.Component {
       <TransitionGroup className="title-row">
         <Grid fluid onMouseOut={this.handleHoverOff}>
           <Slider {...slick_settings} style={{ height: "500px" }}>
-            {titleItem.map(({ id, title_name, thumb_img_url }, index) => (
-              <CSSTransition key={id} timeout={500} classNames="fade">
-                <div
-                  className={
-                    isDetailExpansion
-                      ? selectedTitleID === id || selectedRowID !== rowid
-                        ? "tile"
-                        : "tile overlay"
-                      : "tile"
-                  }
-                  onClick={() => {
-                    handleExpansion(rowid, id);
-                    this.handleHoverOff();
-                  }}
-                >
-                  <div>
-                    <div
-                      className={
-                        this.state.isHoverOn
-                          ? selectedTitleID === id
-                            ? "tile__media tile_transform"
-                            : this.state.currentIdx > index
-                              ? "tile__media tile_prev_transform"
-                              : "tile__media tile_next_transform"
-                          : "tile__media"
-                      }
-                    >
-                      <img
-                        className="tile__img"
-                        src={thumb_img_url}
-                        alt={title_name}
-                      />
-                      <div className="tile__discount tile__plus_discount">
-                        {/* <span> SAVE {discount_price_percentage}%</span> */}
-                        <span>
-                          {this.state.discount_price_percentage
-                            ? `SAVE ${this.state.discount_price_percentage} %`
-                            : null}
-                        </span>
+            {gameItem.map(
+              (
+                {
+                  game_id,
+                  game_title,
+                  thumb_img_url,
+                  regular_price,
+                  display_price,
+                  discount_message,
+                  plus_price,
+                  plus_exclusive_price
+                },
+                index
+              ) => (
+                <CSSTransition key={game_id} timeout={500} classNames="fade">
+                  <div
+                    className={
+                      isDetailExpansion
+                        ? selectedGameID === game_id || selectedRowID !== rowid
+                          ? "tile"
+                          : "tile overlay"
+                        : "tile"
+                    }
+                    onClick={() => {
+                      handleExpansion(rowid, game_id);
+                      this.handleHoverOff();
+                    }}
+                  >
+                    <div>
+                      <div
+                        className={
+                          this.state.isHoverOn
+                            ? selectedGameID === game_id
+                              ? "tile__media tile_transform"
+                              : this.state.currentIdx > index
+                                ? "tile__media tile_prev_transform"
+                                : "tile__media tile_next_transform"
+                            : "tile__media"
+                        }
+                      >
+                        <img
+                          className="tile__img"
+                          src={thumb_img_url}
+                          alt={game_title}
+                        />
+                        <div
+                          className={
+                            plus_price || plus_exclusive_price
+                              ? "tile__discount tile__plus_discount"
+                              : "tile__discount"
+                          }
+                        >
+                          {discount_message ? (
+                            plus_exclusive_price ? (
+                              <React.Fragment>
+                                <img
+                                  className="plus_exclusive_price_icon"
+                                  src="https://store.playstation.com/img/pluslogo-16-9dfb3755863c364a2ffcbebf7e19d7e6.png"
+                                />{" "}
+                                <span>{discount_message}</span>
+                              </React.Fragment>
+                            ) : (
+                              <span>{discount_message}</span>
+                            )
+                          ) : null}
+                        </div>
+                        <div
+                          className={
+                            isDetailExpansion && selectedGameID === game_id
+                              ? "tile__focus focus-box"
+                              : "tile__focus"
+                          }
+                        />
                       </div>
                       <div
                         className={
-                          isDetailExpansion && selectedTitleID === id
-                            ? "tile__focus focus-box"
-                            : "tile__focus"
+                          this.state.isHoverOn && selectedGameID === game_id
+                            ? "tile__details tile_transform"
+                            : "tile__details"
                         }
-                      />
-                    </div>
-                    <div
-                      className={
-                        this.state.isHoverOn && selectedTitleID === id
-                          ? "tile__details tile_transform"
-                          : "tile__details"
-                      }
-                      onMouseOver={() => {
-                        if (isDetailExpansion) {
-                          this.handleHoverOff();
-                          selectedTitleID !== id && selectedRowID === rowid
-                            ? handleExpansion(rowid, id)
-                            : null;
-                        } else {
-                          this.handleHoverOn(rowid, id, index);
-                        }
-                      }}
-                    >
-                      {/* <div className="tile__title">{title_name}</div> */}
+                        onMouseOver={() => {
+                          if (isDetailExpansion) {
+                            this.handleHoverOff();
+                            selectedGameID !== game_id &&
+                            selectedRowID === rowid
+                              ? handleExpansion(rowid, game_id)
+                              : null;
+                          } else {
+                            this.handleHoverOn(rowid, game_id, index);
+                          }
+                        }}
+                      >
+                        {/* <div className="tile__title">{game_title}</div> */}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CSSTransition>
-            ))}
+                </CSSTransition>
+              )
+            )}
           </Slider>
         </Grid>
       </TransitionGroup>
