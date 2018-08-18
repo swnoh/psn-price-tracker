@@ -5,6 +5,8 @@ import PriceChart from "./PriceChart";
 
 const formatData = dataUnformatted => {
   let dataFormatted = [];
+  if (typeof dataUnformatted === "undefined") return;
+
   for (let i = 0; i < dataUnformatted.length; i++) {
     var data = {};
     data["x"] = dataUnformatted[i]["date"];
@@ -16,7 +18,7 @@ const formatData = dataUnformatted => {
 
 class TitleExpansionPanelPriceHistory extends React.Component {
   render() {
-    const { gameItem, selectedGameID } = this.props;
+    const { gameItem, itemPrice, selectedGameID } = this.props;
 
     return (
       <React.Fragment>
@@ -24,8 +26,8 @@ class TitleExpansionPanelPriceHistory extends React.Component {
           <PriceChart
             selectedGameID={selectedGameID}
             game_id={this.props.itemPrice.game_id}
-            chartPrices={formatData(this.props.itemPrice.chartPrices)}
-            chartBonusPrices={formatData(this.props.itemPrice.chartBonusPrices)}
+            chartPrices={formatData(itemPrice.chartPrices)}
+            chartBonusPrices={formatData(itemPrice.chartBonusPrices)}
           />
         </Row>
         <Row className="row-price-table">

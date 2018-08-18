@@ -9,18 +9,26 @@ import {
   FormControl,
   Button
 } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import { CSSTransition } from "react-transition-group";
 
 class Header extends React.Component {
   constructor() {
     super();
     this.state = {
-      navbarTransparent: true
+      navbarTransparent: true,
+      showSearchBar: false
     };
   }
 
+  handleSearch = e => {
+    this.props.history.push("/search?q=" + e.target.value);
+  };
+
   listenScrollEvent = e => {
     e.preventDefault();
-    if (window.scrollY >= 100) {
+    if (window.scrollY >= 30) {
       this.setState({
         navbarTransparent: false
       });
@@ -39,6 +47,12 @@ class Header extends React.Component {
     window.addEventListener("scroll", this.listenScrollEvent);
   }
 
+  componentDidUpdate(Prev) {
+    if (this.props.location.pathname !== "/search" && this.input) {
+      this.input.value = "";
+    }
+  }
+
   render() {
     return (
       <Navbar
@@ -50,36 +64,41 @@ class Header extends React.Component {
       >
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="#brand" style={{ paddingTop: "8px" }}>
+            <NavLink to="/">
               <img
                 src="https://store.playstation.com//img/store-logo.svg"
                 style={{ height: "35px" }}
               />
-            </a>
+            </NavLink>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>
-          <Nav>
-            {/* <NavItem eventKey={1} href="#">
-              Link
-            </NavItem>
-            <NavItem eventKey={2} href="#">
-              Link
-            </NavItem>
-            <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-              <MenuItem eventKey={3.1}>Action</MenuItem>
-              <MenuItem eventKey={3.2}>Another action</MenuItem>
-              <MenuItem eventKey={3.3}>Something else here</MenuItem>
-              <MenuItem divider />
-              <MenuItem eventKey={3.3}>Separated link</MenuItem>
-            </NavDropdown> */}
-          </Nav>
           <Navbar.Form pullRight>
-            <FormGroup>
-              <FormControl type="text" placeholder="Search" />
-            </FormGroup>{" "}
-            <Button type="submit" bsStyle="link">
+            <CSSTransition
+              in={this.state.showSearchBar}
+              timeout={500}
+              classNames="searchbar"
+              unmountOnExit
+            >
+              <FormGroup>
+                <FormControl
+                  type="text"
+                  placeholder="Search"
+                  onChange={this.handleSearch}
+                  inputRef={ref => {
+                    this.input = ref;
+                  }}
+                />
+              </FormGroup>
+            </CSSTransition>
+            <Button
+              bsStyle="link"
+              style={{ outlineColor: "transparent" }}
+              onClick={() =>
+                this.setState({ showSearchBar: !this.state.showSearchBar })
+              }
+            >
               <i
                 className="fa fa-search"
                 aria-hidden="true"
@@ -93,4 +112,5 @@ class Header extends React.Component {
   }
 }
 
-export default Header;
+// export default Header;
+export default withRouter(Header);

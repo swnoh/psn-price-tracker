@@ -9,27 +9,15 @@ class TitleExpansionPanelDescription extends React.Component {
   }
 
   render() {
-    const { gameItem, gameItemData, selectedGameID } = this.props;
+    const { gameItem, gameItemApiData, selectedGameID } = this.props;
 
     const selectedGameItem = gameItem.gameItem.filter(
       item => item.id === selectedGameID
     )[0];
 
-    const description = gameItemData.long_desc;
+    const description = gameItemApiData.long_desc;
 
-    return (
-      // <TransitionGroup>
-      //   <CSSTransition
-      //     key={selectedGameID + 2}
-      //     timeout={300}
-      //     classNames="titleinfodetail"
-      //     unmountOnExit
-      //   >
-
-      <h4>{ReactHtmlParser(description)}</h4>
-      //   </CSSTransition>
-      // </TransitionGroup>
-    );
+    return <h4>{ReactHtmlParser(description)}</h4>;
   }
 }
 

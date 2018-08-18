@@ -9,13 +9,13 @@ class TitleExpansionPanelInfo extends React.Component {
   }
 
   render() {
-    const { gameItem, gameItemData, selectedGameItem } = this.props;
+    const { gameItem, gameItemApiData, selectedGameItem } = this.props;
 
     const regular_price =
-      gameItemData.default_sku && gameItemData.default_sku.display_price;
+      gameItemApiData.default_sku && gameItemApiData.default_sku.display_price;
 
     const rewards =
-      gameItemData.default_sku && gameItemData.default_sku.rewards[0];
+      gameItemApiData.default_sku && gameItemApiData.default_sku.rewards[0];
 
     const discount_price = rewards && rewards.display_price;
     const discount_price_percentage = rewards && rewards.discount;
@@ -24,14 +24,14 @@ class TitleExpansionPanelInfo extends React.Component {
     const plus_price_percentage = rewards && rewards.bonus_discount;
     const is_plus_price = rewards && rewards.isPlus;
 
-    const release_date = gameItemData.release_date;
+    const release_date = gameItemApiData.release_date;
     return (
       <TransitionGroup>
         <CSSTransition
           key={
             this.props.isPanelMedia || this.props.isPanelDescription
-              ? gameItemData.id + 50
-              : gameItemData.id
+              ? gameItemApiData.id + 50
+              : gameItemApiData.id
           }
           timeout={500}
           classNames={
@@ -95,13 +95,14 @@ class TitleExpansionPanelInfo extends React.Component {
               </h2>
               <Rating
                 initialRating={
-                  gameItemData.star_rating && gameItemData.star_rating.score
+                  gameItemApiData.star_rating &&
+                  gameItemApiData.star_rating.score
                 }
                 readonly
                 emptySymbol="fa fa-star-o"
                 fullSymbol="fa fa-star"
               />
-              <h4> {gameItemData.provider_name} </h4>
+              <h4> {gameItemApiData.provider_name} </h4>
               <h4>
                 {release_date
                   ? "Release date: " + release_date.slice(0, 10)
@@ -117,7 +118,8 @@ class TitleExpansionPanelInfo extends React.Component {
                     src="https://thumb.ibb.co/eWAJzJ/psn_store_icon.png"
                     width="30px"
                   />
-                </span>Buy at Playstation Store
+                </span>
+                Buy at Playstation Store
               </Button>
             </Col>
           </Row>

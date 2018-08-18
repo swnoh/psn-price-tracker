@@ -2,11 +2,12 @@
   position: relative;
   font-size: 11px;
   background-color: #000;
+  z-index: 15;
 }
 
 .rh5v-DefaultPlayer_video {
-  width: 100%;
-  /* height: 100%; */
+  /* width: 100%; */
+  height: 100%;
 }
 
 .rh5v-DefaultPlayer_controls {
@@ -15,6 +16,7 @@
   right: 0;
   left: 0;
   height: 34px;
+  width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -326,7 +328,3 @@
 .carousel-control.right {
   right: -80px;
 }
-
-/* .col-expansion-panel.col-expansion-media .media-content {
-  padding-right: 30px;
-} */

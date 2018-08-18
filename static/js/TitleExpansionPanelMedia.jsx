@@ -8,46 +8,53 @@ import Slider from "react-slick";
 class TitleExpansionPanelMedia extends React.Component {
   constructor(prop) {
     super(prop);
+    this.state = {
+      activeSlide: 0
+    };
   }
 
+  pause = index => {
+    if (typeof this.refs["videoPlayer" + index] !== "undefined")
+      this.refs["videoPlayer" + index].videoEl.pause();
+  };
+
   render() {
-    const { gameItem, gameItemData, selectedGameID } = this.props;
+    const { gameItem, gameItemApiData, selectedGameID } = this.props;
 
     const selectedGameItem = gameItem.gameItem.filter(
       item => item.id === selectedGameID
     )[0];
 
     const mediaPreview =
-      gameItemData.mediaList && gameItemData.mediaList.previews;
+      gameItemApiData.mediaList && gameItemApiData.mediaList.previews;
     const mediaScreenshot =
-      gameItemData.mediaList && gameItemData.mediaList.screenshots;
+      gameItemApiData.mediaList && gameItemApiData.mediaList.screenshots;
 
     const settings = {
       dots: true,
       infinite: true,
       speed: 500,
       slidesToShow: 1,
-      slidesToScroll: 1
+      slidesToScroll: 1,
+      fade: true,
+      lazyLoad: true,
+      afterChange: current => this.setState({ activeSlide: current })
     };
 
     return (
       <Slider {...settings}>
-        {mediaPreview.map(preview => (
-          <div className="media-content">
-            <Video
-              loop
-              muted
-              controls={["PlayPause", "Seek", "Time", "Volume", "Fullscreen"]}
-            >
-              <source src={preview.url} type="video/mp4" />
-            </Video>
-          </div>
+        {mediaPreview.map((preview, index) => (
+          <Video
+            ref={"videoPlayer" + index}
+            key={index}
+            muted
+            controls={["PlayPause", "Seek", "Time", "Volume", "Fullscreen"]}
+          >
+            <source src={preview.url} type="video/mp4" />
+            {this.state.activeSlide !== index ? this.pause(index) : null}
+          </Video>
         ))}
-        {mediaScreenshot.map(screenshot => (
-          <div className="media-content">
-            <img src={screenshot.url} />
-          </div>
-        ))}
+        {mediaScreenshot.map(screenshot => <img src={screenshot.url} />)}
       </Slider>
     );
   }

@@ -40,7 +40,7 @@ class PsnCategoryModel(DB.Model):
     id = DB.Column(DB.Integer, primary_key=True)
     category_url = DB.Column(DB.String())
     category_name = DB.Column(DB.String())
-    game_id = DB.Column(DB.JSON, nullable=False)
+    game_id = DB.Column(DB.String())
 
     def __init__(self, category_url, category_name, game_id):
         self.category_url = category_url
@@ -65,6 +65,16 @@ class PsnCategoryQuickModel(DB.Model):
         self.gameItem = gameItem
 
 
+class PsnBannerModel(DB.Model):
+    __tablename__ = 'psn_banner'
+
+    id = DB.Column(DB.Integer, primary_key=True)
+    banner_url = DB.Column(DB.JSON, nullable=False)
+
+    def __init__(self, banner_url):
+        self.banner_url = banner_url
+
+
 class PsnGameModel(DB.Model):
     """model for one of your table"""
     __tablename__ = 'psn_game'
@@ -81,9 +91,6 @@ class PsnGameModel(DB.Model):
     discount_message = DB.Column(DB.String())
     plus_price = DB.Column(DB.String())
     plus_exclusive_price = DB.Column(DB.String())
-    # highest_price = DB.Column(DB.Float(10, 2))
-    # lowest_price = DB.Column(DB.Float(10, 2))
-    # plus_lowest_price = DB.Column(DB.Float(10, 2))
 
     def __init__(
         self,
@@ -98,9 +105,6 @@ class PsnGameModel(DB.Model):
         discount_message,
         plus_price,
         plus_exclusive_price
-        # highest_price=None,
-        # lowest_price=None,
-        # plus_lowest_price=None
     ):
         self.game_id = game_id
         self.game_title = game_title
@@ -113,9 +117,6 @@ class PsnGameModel(DB.Model):
         self.discount_message = discount_message
         self.plus_price = plus_price
         self.plus_exclusive_price = plus_exclusive_price
-        # self.highest_price = highest_price,
-        # self.lowest_price = lowest_price,
-        # self.plus_lowest_price = plus_lowest_price
 
     def __repr__(self):
         return '<PsnGameModel: game_id {}>'.format(self.game_id)

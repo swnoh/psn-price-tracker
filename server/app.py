@@ -1,11 +1,13 @@
-from flask import Flask, render_template, url_for, json
+from flask import Flask, render_template, url_for, json, request
 import os
 from collections import defaultdict
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+import datetime
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../static",
+            template_folder="../static")
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
@@ -49,7 +51,7 @@ def parsePrice():
 
 @app.route('/')
 def home():
-    return render_template("/static/index.html")
+    return render_template("index.html")
 
 
 @app.route('/api/psn', methods=["GET"])
@@ -65,6 +67,34 @@ def psn():
     return json.dumps(selected_item)
 
 
+@app.route('/api/psn/category_quick')
+def psn_category_quick():
+    # itemCategory = PsnCategoryQuickModel.query.all()
+
+    # for item in itemCategory:
+    #     selected_item.append({'category_name': item.category_name,
+    #                           'category_url': item.category_url,
+    #                           'gameItem': item.gameItem
+    #                           })
+    # return json.dumps(selected_item)
+    selected_item = []
+
+    for category_name in DB.session.query(PsnCategoryModel.category_name).distinct():
+        selected_game_item = []
+        eachitems = DB.session.query(PsnGameModel).join(
+            PsnCategoryModel, PsnGameModel.game_id == PsnCategoryModel.game_id).filter(PsnCategoryModel.category_name == category_name).limit(20).all()
+
+        for eachitem in eachitems:
+            selected_game_item.append(convertPsnGameModelToDict(eachitem))
+
+        selected_item.append({'category_name': category_name,
+                              'category_url': category_name,
+                              'gameItem': selected_game_item
+                              })
+
+    return json.dumps(selected_item)
+
+
 @app.route('/api/psn/category/all', methods=["GET"])
 def psn_category_all():
     itemCategory = PsnCategoryModel.query.all()
@@ -73,21 +103,7 @@ def psn_category_all():
     for item in itemCategory:
         selected_item.append({'category_name': item.category_name,
                               'category_url': item.category_url,
-                              'game_id': item.game_id
-                              })
-    return json.dumps(selected_item)
-
-
-@app.route('/api/psn/category_quick')
-def psn_category_quick():
-    print("Received Request!!!!")
-    itemCategory = PsnCategoryQuickModel.query.all()
-    selected_item = []
-
-    for item in itemCategory:
-        selected_item.append({'category_name': item.category_name,
-                              'category_url': item.category_url,
-                              'gameItem': item.gameItem
+                              'gameItem': item.game_id
                               })
     return json.dumps(selected_item)
 
@@ -95,14 +111,30 @@ def psn_category_quick():
 @app.route('/api/psn/category/<category_name>', methods=["GET"])
 def psn_category_name(category_name):
     itemCategory = DB.session.query(PsnCategoryModel).filter(
-        PsnCategoryModel.category_name == category_name)
-    selected_item = []
+        PsnCategoryModel.category_name == category_name).all()
+    # selected_item = []
+    selected_game_item = []
 
-    for item in itemCategory:
-        selected_item.append({'category_name': item.category_name,
-                              'category_url': item.category_url,
-                              'game_id': item.game_id
-                              })
+    print(datetime.datetime.now())
+
+    # for item in itemCategory:
+    #     eachitem = DB.session.query(PsnGameModel).filter(
+    #         PsnGameModel.game_id == item.game_id).first()
+    #     if eachitem is not None:
+    #         selected_game_item.append(convertPsnGameModelToDict(eachitem))
+
+    eachitems = DB.session.query(PsnGameModel).join(
+        PsnCategoryModel, PsnGameModel.game_id == PsnCategoryModel.game_id).filter(PsnCategoryModel.category_name == category_name).all()
+
+    for eachitem in eachitems:
+        selected_game_item.append(convertPsnGameModelToDict(eachitem))
+
+    print(datetime.datetime.now())
+
+    selected_item = {'category_name': itemCategory[0].category_name,
+                     'category_url': itemCategory[0].category_url,
+                     'gameItem': selected_game_item
+                     }
     return json.dumps(selected_item)
 
 
@@ -111,81 +143,85 @@ def psn_category_item():
     return json.dumps(psnjson())
 
 
-# @app.route('/api/psn/category/game/all', methods=["GET"])
-# def psn_category_game_all():
-#     itemCategory = PsnCategoryModel.query.all()
-#     selected_category_item = []
+@app.route('/api/psn/search', methods=["GET"])
+def psn_search_title():
+    searchword = request.args.get('q')
+    gameItems = DB.session.query(PsnGameModel).filter(
+        PsnGameModel.game_title.ilike('%' + searchword + '%')).limit(100).all()
+    selected_game_item = []
 
-#     games = PsnGameModel.query.all()
-#     selected_game_item = []
+    for gameItem in gameItems:
+        selected_game_item.append(convertPsnGameModelToDict(gameItem))
 
-#     for category_item in itemCategory:
-#         selected_game_item = []
-
-#         for category_game_id in category_item.game_id:
-#             for game in games:
-#                 if category_game_id == game.game_id:
-#                     selected_game_item.append({'game_id': game.game_id,
-#                                                'game_title': game.game_title,
-#                                                'game_type': game.game_type,
-#                                                'game_url': game.game_url,
-#                                                'thumb_img_url': game.thumb_img_url,
-#                                                'api_url': game.api_url,
-#                                                'regular_price': game.regular_price,
-#                                                'display_price': game.display_price,
-#                                                'discount_message': game.discount_message,
-#                                                'plus_price': game.plus_price,
-#                                                'plus_exclusive_price': game.plus_exclusive_price
-#                                                })
-
-#         selected_category_item.append({'category_name': category_item.category_name,
-#                                        'category_url': category_item.category_url,
-#                                        'gameItem': selected_game_item
-#                                        })
-#     return json.dumps(selected_category_item)
-
-
-@app.route('/api/psn/price/<item_id>', methods=["GET"])
-def psn_price_history(item_id):
-    prices = (parsePrice())
-    for item in prices:
-        if item['game_id'] == item_id:
-            return json.dumps(item)
-    empty_item = {
-        "chartBonusPrices": [],
-        "chartPrices": [],
-        "game_id": "",
-        "game_title": ""}
-
-    return json.dumps(empty_item)
+    selected_item = {'category_name': "",
+                     'category_url': "",
+                     'gameItem': selected_game_item
+                     }
+    return json.dumps(selected_item)
 
 
 @app.route('/db/psn/price/<item_id>', methods=['GET'])
 def view_psn_price_history(item_id):
-    itemPrice = PsnPriceHistoryModel.query.all()
+    itemPrice = PsnPriceHistoryModel.query.filter(
+        PsnPriceHistoryModel.game_id == item_id).first()
 
-    for item in itemPrice:
-        if item.game_id == item_id:
-            selected_item = {'game_id': item.game_id,
-                             'game_title': item.game_title,
-                             'chartPrices': item.chartPrices,
-                             'chartBonusPrices': item.chartBonusPrices,
-                             'highest_price': str(item.highest_price),
-                             'lowest_price': str(item.lowest_price),
-                             'plus_lowest_price': str(item.plus_lowest_price)
-                             }
-            return json.dumps(selected_item)
+    if itemPrice is None:
+        selected_item = {
+            'game_id': "",
+            'game_title': "",
+            'chartBonusPrices': [],
+            'chartPrices': [],
+            'highest_price': None,
+            'lowest_price': None,
+            'plus_lowest_price': None
+        }
+    else:
+        selected_item = {'game_id': itemPrice.game_id,
+                         'game_title': itemPrice.game_title,
+                         'chartPrices': itemPrice.chartPrices,
+                         'chartBonusPrices': itemPrice.chartBonusPrices,
+                         'highest_price': str(itemPrice.highest_price),
+                         'lowest_price': str(itemPrice.lowest_price),
+                         'plus_lowest_price': str(itemPrice.plus_lowest_price)
+                         }
+    return json.dumps(selected_item)
 
-    empty_item = {
-        'game_id': "",
-        'game_title': "",
-        'chartBonusPrices': [],
-        'chartPrices': [],
-        'highest_price': None,
-        'lowest_price': None,
-        'plus_lowest_price': None
-    }
-    return json.dumps(empty_item)
+
+@app.route('/db/psn/banner', methods=["GET"])
+def psn_banner():
+
+    items = PsnBannerModel.query.first()
+    print(type(PsnPriceHistoryModel.query.first().chartPrices[0]))
+    print(PsnPriceHistoryModel.query.first().chartPrices[0]["date"])
+    selected_item = {'bannerItems': items.banner_url}
+
+    return json.dumps(selected_item)
+
+
+#########################################################
+#########################################################
+###############                           ###############
+###############      DB Insert Update     ###############
+###############                           ###############
+#########################################################
+#########################################################
+
+
+@app.route('/db/add/banner', methods=["GET"])
+def banner_add():
+
+    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+    json_url = os.path.join(SITE_ROOT, "./", "psnbanner.json")
+    data = json.load(open(json_url))
+
+    items = data[0]["bannerItems"]
+
+    bannerItem = PsnBannerModel(items)
+
+    DB.session.add(bannerItem)
+    DB.session.commit()
+
+    return "Banners: SUCCESS TO INSERT TO DB"
 
 
 @app.route('/db/add/init-quick-category', methods=["GET"])
@@ -200,22 +236,7 @@ def psn_init_category_quick():
                 PsnGameModel.game_id == eachid).first()
             if idx < 20:
                 if eachitem is not None:
-                    selected_item.append({
-                        'game_id': eachitem.game_id,
-                        'game_title': eachitem.game_title,
-                        'game_type': eachitem.game_type,
-                        'game_url': eachitem.game_url,
-                        'thumb_img_url': eachitem.thumb_img_url,
-                        'api_url': eachitem.api_url,
-                        'regular_price': eachitem.regular_price,
-                        'display_price': eachitem.display_price,
-                        'discount_message': eachitem.discount_message,
-                        'plus_price': eachitem.plus_price,
-                        'plus_exclusive_price': eachitem.plus_exclusive_price
-                        # 'highest_price': str(eachitem.highest_price),
-                        # 'lowest_price': str(eachitem.lowest_price),
-                        # 'plus_lowest_price': str(eachitem.plus_lowest_price)
-                    })
+                    selected_item.append(convertPsnGameModelToDict(eachitem))
 
         category_quick = PsnCategoryQuickModel(item.category_url, item.category_name,
                                                selected_item)
@@ -224,34 +245,89 @@ def psn_init_category_quick():
     return "json.dumps(selected_item)"
 
 
+# @app.route('/db/add/init-category', methods=['GET'])
+# def category_add():
+#     SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+#     json_url = os.path.join(SITE_ROOT, "./", "psn_game.json")
+#     data = json.load(open(json_url))
+#     DB.session.query(PsnCategoryModel).delete()
+#     DB.session.commit()
+
+#     DB.session.query(PsnCategoryQuickModel).delete()
+#     DB.session.commit()
+
+#     temp_title = []
+#     temp_category = {}
+#     temp_category_quick = {}
+
+#     for item in data:
+#         category_url = item["category_url"]
+#         category_name = item["category_name"]
+#         game_items = item["gameItem"]
+#         game_id = []
+#         game_id_quick = []
+
+#         for idx, game in enumerate(game_items):
+#             game_id.append(game['game_id'])
+
+#             if idx < 20:
+#                 game_id_quick.append(game)
+
+#         if category_name in temp_category:
+#             temp_category[category_name]["game_id"] += game_id
+#         else:
+#             temp_title.append(category_name)
+#             temp_category[category_name] = {
+#                 "category_name": category_name, "category_url": category_url, "game_id": game_id}
+#             temp_category_quick[category_name] = {
+#                 "category_name": category_name, "category_url": category_url, "game_id": game_id_quick}
+
+#     for title in temp_title:
+#         category = PsnCategoryModel(temp_category[title]["category_url"], temp_category[title]["category_name"],
+#                                     temp_category[title]["game_id"])
+
+#         DB.session.add(category)
+#         DB.session.commit()
+
+#         category_quick = PsnCategoryQuickModel(temp_category_quick[title]["category_url"], temp_category_quick[title]["category_name"],
+#                                                temp_category_quick[title]["game_id"])
+#         DB.session.add(category_quick)
+#         DB.session.commit()
+
+#     return "Category: SUCCESS TO INSERT TO DB"
+
+
 @app.route('/db/add/init-category', methods=['GET'])
 def category_add():
     SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-    json_url = os.path.join(SITE_ROOT, "./", "psncategory.json")
+    json_url = os.path.join(SITE_ROOT, "./", "psn_game.json")
     data = json.load(open(json_url))
-    for item in data:
-        category_url = item["category_url"]
-        category_name = item["category_name"]
-        game_items = item["gameItem"]
-        game_item = []
-        game_id = []
+    # DB.session.query(PsnCategoryModel).delete()
+    # DB.session.commit()
 
-        for idx, game in enumerate(game_items):
-            game_id.append(game['game_id'])
+    # DB.session.query(PsnCategoryQuickModel).delete()
+    # DB.session.commit()
 
-            if idx < 20:
-                game_item.append(game)
+    # for item in data:
+    #     category_url = item["category_url"]
+    #     category_name = item["category_name"]
+    #     game_items = item["gameItem"]
+    #     game_id_quick = []
 
-        category = PsnCategoryModel(category_url, category_name,
-                                    game_id)
+    #     for idx, game in enumerate(game_items):
+    #         category = PsnCategoryModel(
+    #             category_url, category_name, game['game_id'])
 
-        DB.session.add(category)
-        DB.session.commit()
+    #         DB.session.add(category)
+    #         DB.session.commit()
 
-        category_quick = PsnCategoryQuickModel(category_url, category_name,
-                                               game_item)
-        DB.session.add(category_quick)
-        DB.session.commit()
+    #         if idx < 20:
+    #             game_id_quick.append(game)
+
+    #     category_quick = PsnCategoryQuickModel(category_url, category_name,
+    #                                            game_id_quick)
+    #     DB.session.add(category_quick)
+    #     DB.session.commit()
 
     return "Category: SUCCESS TO INSERT TO DB"
 
@@ -274,9 +350,6 @@ def game_add():
             discount_message = item["discount_message"]
             plus_price = item["plus_price"]
             plus_exclusive_price = item["plus_exclusive_price"]
-            # highest_price = updateprice_legacy(item["game_id"])[0]
-            # lowest_price = updateprice_legacy(item["game_id"])[1]
-            # plus_lowest_price = updateprice_legacy(item["game_id"])[2]
 
             game = PsnGameModel(game_id,
                                 game_title,
@@ -289,11 +362,13 @@ def game_add():
                                 discount_message,
                                 plus_price,
                                 plus_exclusive_price)
-            # highest_price,
-            # lowest_price,
-            # plus_lowest_price)
-            DB.session.add(game)
-            DB.session.commit()
+
+            duplicatePsn = DB.session.query(
+                PsnGameModel).filter(PsnGameModel.game_id == item["game_id"]).first()
+
+            if not duplicatePsn:
+                DB.session.add(game)
+                DB.session.commit()
     return "Game: SUCCESS TO INSERT TO DB"
 
 
@@ -312,26 +387,29 @@ def price_add():
 
         chartPrices = item["chartPrices"]
         chartBonusPrices = item["chartBonusPrices"]
-        high_price = 0
-        low_price = 10000000
 
-        plus_high_price = 0
-        plus_low_price = 10000000
+        price_list = []
+        bonus_price_list = []
+        plus_low_price = []
+
+        high_price = None
+        low_price = None
+        plus_low_price = None
 
         for chartPrice in chartPrices:
-            if high_price < float(chartPrice["price"]):
-                high_price = float(chartPrice["price"])
-            if low_price > float(chartPrice["price"]):
-                low_price = float(chartPrice["price"])
+            price_list.append(float(chartPrice["price"]))
 
         for chartBonusPrice in chartBonusPrices:
-            if plus_high_price < float(chartBonusPrice["price"]):
-                plus_high_price = float(chartBonusPrice["price"])
-            if plus_low_price > float(chartBonusPrice["price"]):
-                plus_low_price = float(chartBonusPrice["price"])
+            bonus_price_list.append(float(chartBonusPrice["price"]))
+
+        if price_list:
+            high_price = max(price_list)
+            low_price = min(price_list)
+        if bonus_price_list:
+            plus_low_price = min(bonus_price_list)
 
         duplicatePsn = DB.session.query(
-            PsnPriceHistoryModel).filter_by(game_id=item["game_id"]).first()
+            PsnPriceHistoryModel).filter(PsnPriceHistoryModel.game_id == item["game_id"]).first()
 
         if not duplicatePsn:
             price = PsnPriceHistoryModel(item["game_id"], item["game_title"],
@@ -344,61 +422,20 @@ def price_add():
     return "SUCCESS TO INSERT TO DB"
 
 
-@app.route('/simple/compare')
-def duplicate():
-    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-    json_url = os.path.join(SITE_ROOT, "./", "psnhistory.json")
-    data = json.load(open(json_url))
-    tempdict = []
-    for item in data:
-        if item["game_id"] not in tempdict:
-            tempdict.append(item["game_id"])
-        else:
-            print(item["game_id"])
-    return "Done"
-
-
-@app.route('/simple/updateprice')
-def duplicate_updateprice():
-    tempdict = []
-    for item in data:
-        if item["game_id"] not in tempdict:
-            tempdict.append(item["game_id"])
-        else:
-            print(item["game_id"])
-    return "Done"
-
-
-def updateprice_legacy(game_id):
-
-    itemPrice = DB.session.query(PsnPriceHistoryModel).filter(
-        PsnPriceHistoryModel.game_id == game_id).first()
-
-    high_price = 0
-    low_price = 10000000
-
-    plus_high_price = 0
-    plus_low_price = 10000000
-
-    if itemPrice is not None:
-
-        for chartPrice in itemPrice.chartPrices:
-            if high_price < float(chartPrice["price"]):
-                high_price = float(chartPrice["price"])
-            if low_price > float(chartPrice["price"]):
-                low_price = float(chartPrice["price"])
-
-        for chartBonusPrice in itemPrice.chartBonusPrices:
-            if plus_high_price < float(chartBonusPrice["price"]):
-                plus_high_price = float(chartBonusPrice["price"])
-            if plus_low_price > float(chartBonusPrice["price"]):
-                plus_low_price = float(chartBonusPrice["price"])
-
-        price_legacy = []
-        price_legacy.extend((high_price, low_price, plus_low_price))
-        return price_legacy
-
-    return [None, None, None]
+def convertPsnGameModelToDict(eachitem):
+    return {
+        'game_id': eachitem.game_id,
+        'game_title': eachitem.game_title,
+        'game_type': eachitem.game_type,
+        'game_url': eachitem.game_url,
+        'thumb_img_url': eachitem.thumb_img_url,
+        'api_url': eachitem.api_url,
+        'regular_price': eachitem.regular_price,
+        'display_price': eachitem.display_price,
+        'discount_message': eachitem.discount_message,
+        'plus_price': eachitem.plus_price,
+        'plus_exclusive_price': eachitem.plus_exclusive_price
+    }
 
 
 @app.errorhandler(404)

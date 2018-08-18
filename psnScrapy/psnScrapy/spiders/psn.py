@@ -1,26 +1,23 @@
 import scrapy
+from psnScrapy.items import PsnBannerItem, PsnGameItem
 
 
 class PsnPriceSpider(scrapy.Spider):
     name = "psn_price_spider"
     start_urls = [
         'https://store.playstation.com/en-ca/grid/STORE-MSF77008-TOPGAMES/1',
-        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-TOPPSNGAMES/1',
+        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-NEWTHISWEEK/1',
+        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-TOPPSNGAMES/1',
+        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-ALLDEALS/1'
+        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-PSPLUSDISCOUNTS/1?gameContentType=games%2Cbundles'
         'https://store.playstation.com/en-ca/grid/STORE-MSF77008-ALLDEALS/1',
-        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-NEWGAMESGRID/1',
-        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-NWTHSWEEKCA/1',
-        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-FLASHSALE18LP/1',
-        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-PSPLUSEXCLUSIVES/1'
+        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-NEWGAMESGRID/1',
+        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-NWTHSWEEKCA/1',
+        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-PSPLUSEXCLUSIVES/1'
         # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-ALLGAMES/1'
     ]
 
     def parse(self, response):
-
-        # HEADER_SELECTOR = '.grid-header'
-        # CATEGORY_NAME_SELECTOR = '.grid-header__title ::text'
-
-        # category_name = response.css(HEADER_SELECTOR).css(
-        #     CATEGORY_NAME_SELECTOR).extract_first()
 
         category_url = response.xpath(
             "//meta[@property='og:url']/@content")[0].extract()
@@ -34,7 +31,7 @@ class PsnPriceSpider(scrapy.Spider):
         for grid in response.css(GRID_SELECTOR):
             URL_SELECTOR = 'a ::attr(href)'
             THUBM_IMG_SELECTOR = '.product-image__img.product-image__img--main ::attr(srcset)'
-            GAME_NAME_SELECTOR = '.grid-cell__title ::text'
+            GAME_NAME_SELECTOR = '.grid-cell__title span::text'
             GAME_TYPE = '.grid-cell__left-detail.grid-cell__left-detail--detail-2::text'
             REGULAR_PRICE_SELECTOR = '.price ::text'
             DISPLAY_PRICE_SELECTOR = '.price-display__price ::text'
@@ -44,7 +41,7 @@ class PsnPriceSpider(scrapy.Spider):
 
             item_id = grid.css(URL_SELECTOR).extract_first().replace(
                 "/en-ca/product/", "")
-            item_game_name = grid.css(GAME_NAME_SELECTOR).extract_first()
+            item_game_title = grid.css(GAME_NAME_SELECTOR).extract_first()
             item_game_type = grid.css(GAME_TYPE).extract_first()
             item_game_url = 'https://store.playstation.com' + \
                 grid.css(URL_SELECTOR).extract_first()
@@ -63,25 +60,63 @@ class PsnPriceSpider(scrapy.Spider):
             item_plus_exclusive_price = grid.css(
                 PLUS_EXCLUSIVE_PRICE_SELECTOR).extract_first()
 
-            gameItem.append({'game_id': item_id,
-                             'game_title': item_game_name,
-                             'game_type': item_game_type,
-                             'game_url': item_game_url,
-                             'thumb_img_url': item_thumb_img_url,
-                             'api_url': item_api_url,
-                             'regular_price': item_regular_price,
-                             'display_price': item_display_price,
-                             'discount_message': item_discount_message,
-                             'plus_price': item_plus_price,
-                             'plus_exclusive_price': item_plus_exclusive_price
-                             })
+            game_item = PsnGameItem(
+                category_url=category_url,
+                category_name=category_name,
+                game_id=item_id,
+                game_title=item_game_title,
+                game_type=item_game_type,
+                game_url=item_game_url,
+                thumb_img_url=item_thumb_img_url,
+                api_url=item_api_url,
+                regular_price=item_regular_price,
+                display_price=item_display_price,
+                discount_message=item_discount_message,
+                plus_price=item_plus_price,
+                plus_exclusive_price=item_plus_exclusive_price
+            )
+            yield game_item
 
-        yield {
-            'category_url': category_url,
-            'category_name': category_name,
-            'gameItem': gameItem}
+        # gameItem.append({'game_id': item_id,
+        #                  'game_title': item_game_name,
+        #                  'game_type': item_game_type,
+        #                  'game_url': item_game_url,
+        #                  'thumb_img_url': item_thumb_img_url,
+        #                  'api_url': item_api_url,
+        #                  'regular_price': item_regular_price,
+        #                  'display_price': item_display_price,
+        #                  'discount_message': item_discount_message,
+        #                  'plus_price': item_plus_price,
+        #                  'plus_exclusive_price': item_plus_exclusive_price
+        #                  })
+        # yield {
+        #     'category_url': category_url,
+        #     'category_name': category_name,
+        #     'gameItem': gameItem}
 
         # NEXT_PAGE_SELECTOR = '.paginator-control__next ::attr(href)'
         # next_page = response.css(NEXT_PAGE_SELECTOR).extract_first()
         # if next_page is not None:
         #     yield response.follow(next_page)
+
+
+class PsnBannerSpider(scrapy.Spider):
+    name = "psn_banner"
+    start_urls = [
+        'https://store.playstation.com/en-ca/home/games'
+    ]
+
+    def parse(self, response):
+
+        BANNER_SELECTOR = '.slideshow-banner .banner-click-event'
+
+        banner_items = []
+
+        for banner in response.css(BANNER_SELECTOR):
+            URL_SELECTOR = 'img ::attr(src)'
+
+            img_url = banner.css(URL_SELECTOR).extract_first()
+
+            banner_items.append(img_url)
+        bannerItem = PsnBannerItem(bannerItems=banner_items)
+        yield bannerItem
