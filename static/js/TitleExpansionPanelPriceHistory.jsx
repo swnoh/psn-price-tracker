@@ -34,7 +34,7 @@ class TitleExpansionPanelPriceHistory extends React.Component {
           <Col xs={4} className="price-table">
             <h5>Highest Price</h5>
             <h2 className="highest-price">
-              {this.props.itemPrice.highest_price == null
+              {this.props.itemPrice.highest_price < 0
                 ? "-"
                 : this.props.itemPrice.highest_price}
             </h2>
@@ -42,7 +42,7 @@ class TitleExpansionPanelPriceHistory extends React.Component {
           <Col xs={4} className="price-table">
             <h5>Lowest Price</h5>
             <h2 className="lowest-price">
-              {this.props.itemPrice.lowest_price == null
+              {this.props.itemPrice.lowest_price < 0
                 ? "-"
                 : this.props.itemPrice.lowest_price}
             </h2>
@@ -50,7 +50,7 @@ class TitleExpansionPanelPriceHistory extends React.Component {
           <Col xs={4} className="price-table">
             <h5>Lowest PS+ Price</h5>
             <h2 className="lowest-plus-price">
-              {this.props.itemPrice.plus_lowest_price == null
+              {this.props.itemPrice.plus_lowest_price < 0
                 ? "-"
                 : this.props.itemPrice.plus_lowest_price}
             </h2>

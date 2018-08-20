@@ -35,18 +35,18 @@ def psnjson():
     return data
 
 
-def parsePrice():
-    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-    json_url = os.path.join(SITE_ROOT, "./", "psnHistory.json")
-    data = json.load(open(json_url))
-    for item in data:
-        chartPrices = item["chartPrices"][0].replace(
-            "formatData(", "").replace(")", "")
-        chartBonusPrices = item["chartBonusPrices"][0].replace(
-            "formatData(", "").replace(")", "")
-        item["chartPrices"] = json.loads(chartPrices)
-        item["chartBonusPrices"] = json.loads(chartBonusPrices)
-    return data
+# def parsePrice():
+#     SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+#     json_url = os.path.join(SITE_ROOT, "./", "psnHistory.json")
+#     data = json.load(open(json_url))
+#     for item in data:
+#         chartPrices = item["chartPrices"][0].replace(
+#             "formatData(", "").replace(")", "")
+#         chartBonusPrices = item["chartBonusPrices"][0].replace(
+#             "formatData(", "").replace(")", "")
+#         item["chartPrices"] = json.loads(chartPrices)
+#         item["chartBonusPrices"] = json.loads(chartBonusPrices)
+#     return data
 
 
 @app.route('/')
@@ -69,20 +69,12 @@ def psn():
 
 @app.route('/api/psn/category_quick')
 def psn_category_quick():
-    # itemCategory = PsnCategoryQuickModel.query.all()
-
-    # for item in itemCategory:
-    #     selected_item.append({'category_name': item.category_name,
-    #                           'category_url': item.category_url,
-    #                           'gameItem': item.gameItem
-    #                           })
-    # return json.dumps(selected_item)
     selected_item = []
 
     for category_name in DB.session.query(PsnCategoryModel.category_name).distinct():
         selected_game_item = []
-        eachitems = DB.session.query(PsnGameModel).join(
-            PsnCategoryModel, PsnGameModel.game_id == PsnCategoryModel.game_id).filter(PsnCategoryModel.category_name == category_name).limit(20).all()
+        eachitems = DB.session.query(PsnGameModel).join(PsnCategoryModel, PsnGameModel.game_id == PsnCategoryModel.game_id).filter(
+            PsnCategoryModel.category_name == category_name).order_by(PsnCategoryModel.id.asc()).limit(20).all()
 
         for eachitem in eachitems:
             selected_game_item.append(convertPsnGameModelToDict(eachitem))
@@ -112,7 +104,7 @@ def psn_category_all():
 def psn_category_name(category_name):
     itemCategory = DB.session.query(PsnCategoryModel).filter(
         PsnCategoryModel.category_name == category_name).all()
-    # selected_item = []
+
     selected_game_item = []
 
     print(datetime.datetime.now())
@@ -160,7 +152,7 @@ def psn_search_title():
     return json.dumps(selected_item)
 
 
-@app.route('/db/psn/price/<item_id>', methods=['GET'])
+@app.route('/api/psn/price/<item_id>', methods=['GET'])
 def view_psn_price_history(item_id):
     itemPrice = PsnPriceHistoryModel.query.filter(
         PsnPriceHistoryModel.game_id == item_id).first()
@@ -187,7 +179,7 @@ def view_psn_price_history(item_id):
     return json.dumps(selected_item)
 
 
-@app.route('/db/psn/banner', methods=["GET"])
+@app.route('/api/psn/banner', methods=["GET"])
 def psn_banner():
 
     items = PsnBannerModel.query.first()
@@ -297,39 +289,39 @@ def psn_init_category_quick():
 #     return "Category: SUCCESS TO INSERT TO DB"
 
 
-@app.route('/db/add/init-category', methods=['GET'])
-def category_add():
-    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-    json_url = os.path.join(SITE_ROOT, "./", "psn_game.json")
-    data = json.load(open(json_url))
-    # DB.session.query(PsnCategoryModel).delete()
-    # DB.session.commit()
+# @app.route('/db/add/init-category', methods=['GET'])
+# def category_add():
+#     SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+#     json_url = os.path.join(SITE_ROOT, "./", "psn_game.json")
+#     data = json.load(open(json_url))
+#     DB.session.query(PsnCategoryModel).delete()
+#     DB.session.commit()
 
-    # DB.session.query(PsnCategoryQuickModel).delete()
-    # DB.session.commit()
+#     DB.session.query(PsnCategoryQuickModel).delete()
+#     DB.session.commit()
 
-    # for item in data:
-    #     category_url = item["category_url"]
-    #     category_name = item["category_name"]
-    #     game_items = item["gameItem"]
-    #     game_id_quick = []
+#     for item in data:
+#         category_url = item["category_url"]
+#         category_name = item["category_name"]
+#         game_items = item["gameItem"]
+#         game_id_quick = []
 
-    #     for idx, game in enumerate(game_items):
-    #         category = PsnCategoryModel(
-    #             category_url, category_name, game['game_id'])
+#         for idx, game in enumerate(game_items):
+#             category = PsnCategoryModel(
+#                 category_url, category_name, game['game_id'])
 
-    #         DB.session.add(category)
-    #         DB.session.commit()
+#             DB.session.add(category)
+#             DB.session.commit()
 
-    #         if idx < 20:
-    #             game_id_quick.append(game)
+#             if idx < 20:
+#                 game_id_quick.append(game)
 
-    #     category_quick = PsnCategoryQuickModel(category_url, category_name,
-    #                                            game_id_quick)
-    #     DB.session.add(category_quick)
-    #     DB.session.commit()
+#         category_quick = PsnCategoryQuickModel(category_url, category_name,
+#                                                game_id_quick)
+#         DB.session.add(category_quick)
+#         DB.session.commit()
 
-    return "Category: SUCCESS TO INSERT TO DB"
+#     return "Category: SUCCESS TO INSERT TO DB"
 
 
 @app.route('/db/add/init-game', methods=['GET'])

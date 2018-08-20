@@ -1,9 +1,8 @@
 # from sqlalchemy.dialects.postgresql import JSON
-from sqlalchemy import Column, String, Integer, JSON
+from sqlalchemy import Column, String, Integer, Float, JSON
 from sqlalchemy.ext.declarative import declarative_base
 
 base = declarative_base()
-
 # base.metadata.create_all(db)
 
 
@@ -38,3 +37,16 @@ class PsnCategoryModel(base):
     category_url = Column(String)
     category_name = Column(String)
     game_id = Column(String)
+
+
+class PsnPriceHistoryModel(base):
+    __tablename__ = 'psn_price_history'
+
+    id = Column(Integer, primary_key=True)
+    game_id = Column(String, unique=True)
+    game_title = Column(String)
+    chartPrices = Column(JSON)
+    chartBonusPrices = Column(JSON)
+    highest_price = Column(Float)
+    lowest_price = Column(Float)
+    plus_lowest_price = Column(Float)

@@ -2,8 +2,7 @@ import React from "react";
 import MainCategory from "./MainCategory";
 import { Transition } from "react-transition-group";
 
-// const SITE_URL = "http://psntracker.azurewebsites.net";
-const SITE_URL = "http://localhost:5000";
+const SITE_URL = "http://psntracker.azurewebsites.net";
 
 const duration = 500;
 

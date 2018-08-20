@@ -9,12 +9,7 @@ class PsnPriceHistory(scrapy.Spider):
         # 'https://psdeals.net/ca-store/collection/top_rated_sale',
         # 'https://psdeals.net/ca-store/all-games',
         # 'https://psdeals.net/ca-store/collection/hot_deals?page=1'
-        'https://psdeals.net/ca-store/game/1468520/conan-exiles',
-        'https://psdeals.net/ca-store/game/1412923/gang-beasts',
-        'https://psdeals.net/ca-store/game/11267/minecraft-playstation4-edition',
-        'https://psdeals.net/ca-store/game/10307/mx-vs-atv-supercross-encore',
-        'https://psdeals.net/ca-store/game/1468521/dragons-crown-pro',
-        'https://psdeals.net/ca-store/game/10296/darksiders-ii-deathinitive-edition'
+
     ]
 
     # def parse(self, response):

@@ -2,7 +2,6 @@ import React from "react";
 import { Carousel } from "react-bootstrap";
 
 const SITE_URL = "http://psntracker.azurewebsites.net";
-// const SITE_URL = "http://localhost:5000";
 
 class MainFeature extends React.Component {
   constructor(prop) {
@@ -13,7 +12,7 @@ class MainFeature extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`${SITE_URL}/db/psn/banner`)
+    fetch(`${SITE_URL}/api/psn/banner`)
       .then(response => {
         return response.json();
       })

@@ -8,8 +8,7 @@ import { NavLink } from "react-router-dom";
 const API_URL =
   "https://store.playstation.com/store/api/chihiro/00_09_000/container/CA/en/19/";
 
-// const SITE_URL = "http://psntracker.azurewebsites.net";
-const SITE_URL = "http://localhost:5000";
+const SITE_URL = "http://psntracker.azurewebsites.net";
 
 class MainCategory extends React.Component {
   constructor(prop) {
@@ -49,7 +48,7 @@ class MainCategory extends React.Component {
         console.log("Fetch failed");
       });
 
-    fetch(`${SITE_URL}/db/psn/price/${id}`)
+    fetch(`${SITE_URL}/api/psn/price/${id}`)
       .then(response => response.json())
       .then(data => this.setState({ itemPrice: data }))
       .catch(function(error) {

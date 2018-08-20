@@ -51,20 +51,6 @@ class PsnCategoryModel(DB.Model):
         return '<id {}>'.format(self.id)
 
 
-class PsnCategoryQuickModel(DB.Model):
-    __tablename__ = 'psn_category_quick'
-
-    id = DB.Column(DB.Integer, primary_key=True)
-    category_url = DB.Column(DB.String())
-    category_name = DB.Column(DB.String())
-    gameItem = DB.Column(DB.JSON, nullable=False)
-
-    def __init__(self, category_url, category_name, gameItem):
-        self.category_url = category_url
-        self.category_name = category_name
-        self.gameItem = gameItem
-
-
 class PsnBannerModel(DB.Model):
     __tablename__ = 'psn_banner'
 

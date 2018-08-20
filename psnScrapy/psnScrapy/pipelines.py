@@ -4,13 +4,17 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-import psycopg2
-
+import datetime
+import requests
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-db_string = "postgres://manager:supersecretpass@localhost/test"
+
+db_string = 'postgres://%s:%s@%s/%s' % (
+    os.environ['DBUSER'], os.environ['DBPASS'], os.environ['DBHOST'], os.environ['DBNAME']
+)
 
 db = create_engine(db_string)
 
@@ -23,72 +27,163 @@ from psnScrapy.models import *
 
 class PsnscrapyPipeline(object):
 
-    def __init__(self):
-        self.ids_seen = set()
-
     def process_item(self, item, spider):
 
         # # Banner #
+        # session.query(PsnBannerModel).delete()
+        # session.commit()
+
         # bannerItem = PsnBannerModel(banner_url=item['bannerItems'])
         # session.add(bannerItem)
         # session.commit()
 
-        if item['game_id'] in self.ids_seen:
-            raise DropItem("Repeated items found: %s" % item)
+        # return
+
+        gameItemDB = session.query(PsnGameModel).filter(
+            PsnGameModel.game_id == item['game_id']).first()
+
+        if not gameItemDB:
+            gameItem = PsnGameModel(
+                game_id=item['game_id'],
+                game_title=item['game_title'],
+                game_type=item['game_type'],
+                game_url=item['game_url'],
+                thumb_img_url=item['thumb_img_url'],
+                api_url=item['api_url'],
+                regular_price=item['regular_price'],
+                display_price=item['display_price'],
+                discount_message=item['discount_message'],
+                plus_price=item['plus_price'],
+                plus_exclusive_price=item['plus_exclusive_price']
+            )
+            session.add(gameItem)
+            session.commit()
+
         else:
-            self.ids_seen.add(item['game_id'])
+            gameItemDB.game_title = item['game_title']
+            gameItemDB.game_type = item['game_type']
+            gameItemDB.game_url = item['game_url']
+            gameItemDB.thumb_img_url = item['thumb_img_url']
+            gameItemDB.api_url = item['api_url']
+            gameItemDB.regular_price = item['regular_price']
+            gameItemDB.display_price = item['display_price']
+            gameItemDB.discount_message = item['discount_message']
+            gameItemDB.plus_price = item['plus_price']
+            gameItemDB.plus_exclusive_price = item['plus_exclusive_price']
 
-            gameItemDB = session.query(PsnGameModel).filter(
-                PsnGameModel.game_id == item['game_id']).first()
+            session.commit()
 
-            if not gameItemDB:
-                gameItem = PsnGameModel(
-                    game_id=item['game_id'],
-                    game_title=item['game_title'],
-                    game_type=item['game_type'],
-                    game_url=item['game_url'],
-                    thumb_img_url=item['thumb_img_url'],
-                    api_url=item['api_url'],
-                    regular_price=item['regular_price'],
-                    display_price=item['display_price'],
-                    discount_message=item['discount_message'],
-                    plus_price=item['plus_price'],
-                    plus_exclusive_price=item['plus_exclusive_price']
-                )
-                session.add(gameItem)
-                session.commit()
+        categoryItemDB = session.query(PsnCategoryModel).filter(
+            PsnCategoryModel.category_name == item['category_name']).filter(
+            PsnCategoryModel.game_id == item['game_id']).first()
 
+        if not categoryItemDB:
+            categoryItem = PsnCategoryModel(
+                category_url=item['category_url'],
+                category_name=item['category_name'],
+                game_id=item['game_id']
+            )
+            session.add(categoryItem)
+            session.commit()
+
+        response = requests.get(item['api_url'])
+        api_data = response.json()
+
+        if api_data['default_sku']['display_price'] != 'Free':
+            chartPrice = float(api_data['default_sku']['display_price'].replace(
+                "$", ""))
+        else:
+            chartPrice = -1
+
+        chartBonusPrice = -1
+
+        if api_data['default_sku']['rewards']:
+            if api_data['default_sku']['rewards'][0]['display_price'] != 'Free':
+                chartPrice = float(api_data['default_sku']['rewards'][0]['display_price'].replace(
+                    "$", ""))
             else:
-                selectedGame = session.query(PsnGameModel).filter(
-                    PsnGameModel.game_id == item['game_id']).one()
+                chartPrice = -1
 
-                selectedGame.game_title = item['game_title']
-                selectedGame.game_type = item['game_type']
-                selectedGame.game_url = item['game_url']
-                selectedGame.thumb_img_url = item['thumb_img_url']
-                selectedGame.api_url = item['api_url']
-                selectedGame.regular_price = item['regular_price']
-                selectedGame.display_price = item['display_price']
-                selectedGame.discount_message = item['discount_message']
-                selectedGame.plus_price = item['plus_price']
-                selectedGame.plus_exclusive_price = item['plus_exclusive_price']
+            if 'bonus_display_price' in api_data['default_sku']['rewards'][0]:
+                chartBonusPrice = float(api_data['default_sku']['rewards'][0]['bonus_display_price'].replace(
+                    "$", ""))
 
+            if api_data['default_sku']['rewards'][0]['isPlus']:
+                chartBonusPrice = chartPrice
+                chartPrice = -1
+
+        print(item['game_id'])
+        print(chartPrice)
+        print(chartBonusPrice)
+
+        date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        chartPriceItem = [{
+            'date': date,
+            'price': str(chartPrice)
+        }]
+        chartBonusPriceItem = [{
+            'date': date,
+            'price': str(chartBonusPrice)
+        }]
+
+        priceItemDB = session.query(PsnPriceHistoryModel).filter(
+            PsnPriceHistoryModel.game_id == item['game_id']).first()
+
+        if not priceItemDB:
+
+            if chartPrice == -1:
+                chartPriceItem = []
+
+            if chartBonusPrice == -1:
+                chartBonusPriceItem = []
+
+            priceItem = PsnPriceHistoryModel(
+                game_id=item['game_id'],
+                game_title=item['game_title'],
+                chartPrices=chartPriceItem,
+                chartBonusPrices=chartBonusPriceItem,
+                highest_price=chartPrice,
+                lowest_price=chartPrice,
+                plus_lowest_price=chartBonusPrice
+            )
+            session.add(priceItem)
+            session.commit()
+
+        else:
+            selectedPriceItem = session.query(PsnPriceHistoryModel).filter(
+                PsnPriceHistoryModel.game_id == item['game_id']).first()
+
+            updatePrice = selectedPriceItem.chartPrices
+            updateBonusPrice = selectedPriceItem.chartBonusPrices
+            isPriceUpdate = False
+            isBonusPriceUpdate = False
+
+            if chartPriceItem[0]['price'] != '-1' and selectedPriceItem.chartPrices[-1]['price'] != chartPriceItem[0]['price']:
+                updatePrice.append(chartPriceItem[0])
+                isPriceUpdate = True
+
+            if chartBonusPriceItem[0]['price'] != '-1' and selectedPriceItem.chartBonusPrices[-1]['price'] != chartBonusPriceItem[0]['price']:
+                updateBonusPrice.append(chartBonusPriceItem[0])
+                isBonusPriceUpdate = True
+
+            if selectedPriceItem.highest_price < chartPrice or selectedPriceItem.highest_price == -1:
+                selectedPriceItem.highest_price = chartPrice
+
+            if selectedPriceItem.lowest_price > chartPrice or selectedPriceItem.lowest_price == -1:
+                selectedPriceItem.lowest_price = chartPrice
+
+            if selectedPriceItem.plus_lowest_price > chartBonusPrice or selectedPriceItem.plus_lowest_price == -1:
+                selectedPriceItem.plus_lowest_price = chartBonusPrice
+
+            session.commit()
+
+            if isPriceUpdate:
+                selectedPriceItem.chartPrices = updatePrice
+            if isBonusPriceUpdate:
+                selectedPriceItem.chartBonusPrices = updateBonusPrice
+
+            if isPriceUpdate or isBonusPriceUpdate:
                 session.commit()
 
-            categoryItemDB = session.query(PsnCategoryModel).filter(
-                PsnCategoryModel.category_name == item['category_name']).filter(
-                PsnCategoryModel.game_id == item['game_id']).first()
-
-            if not categoryItemDB:
-                categoryItem = PsnCategoryModel(
-                    category_url=item['category_url'],
-                    category_name=item['category_name'],
-                    game_id=item['game_id']
-                )
-                session.add(categoryItem)
-                session.commit()
-
-            return item
-
-    # def process_item(self, item, spider):
-    #     return item
+        return

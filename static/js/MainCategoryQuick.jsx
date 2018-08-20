@@ -1,8 +1,7 @@
 import React from "react";
 import MainCategory from "./MainCategory";
 
-// const SITE_URL = "http://psntracker.azurewebsites.net";
-const SITE_URL = "http://localhost:5000";
+const SITE_URL = "http://psntracker.azurewebsites.net";
 
 class MainCategoryQuick extends React.Component {
   constructor(prop) {
