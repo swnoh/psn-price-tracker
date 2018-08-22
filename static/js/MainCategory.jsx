@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, ListGroup, ListGroupItem, Button, Fade } from "react-bootstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import TitleSlide from "./TitleSlide";
-import TitleExpansion from "./TitleExpansion";
+import ExpansionPanel from "./ExpansionPanel";
 import { NavLink } from "react-router-dom";
 
 const API_URL =
@@ -56,7 +56,7 @@ class MainCategory extends React.Component {
   render() {
     const { isDetailExpansion, selectedRowID, selectedGameID } = this.state;
 
-    const { categoryItems, categoryTitleExpansion } = this.props;
+    const { categoryItems, categoryExpansionPanel } = this.props;
 
     return (
       <Grid fluid>
@@ -64,7 +64,7 @@ class MainCategory extends React.Component {
           ({ category_url, category_name, gameItem }, index) => (
             <div className="row-category" key={index}>
               <React.Fragment>
-                {!categoryTitleExpansion ? (
+                {!categoryExpansionPanel ? (
                   <NavLink
                     to={"category/" + category_name}
                     className="row-category-title-link"
@@ -132,16 +132,16 @@ class MainCategory extends React.Component {
                   isDetailExpansion={isDetailExpansion}
                   handleSelectTitle={this.handleSelectTitle}
                   handleExpansion={this.handleExpansion}
-                  categoryTitleExpansion={categoryTitleExpansion}
+                  categoryExpansionPanel={categoryExpansionPanel}
                 />
 
                 <CSSTransition
                   in={isDetailExpansion && selectedRowID == category_url}
-                  timeout={400}
+                  timeout={500}
                   classNames="expansion"
                   unmountOnExit
                 >
-                  <TitleExpansion
+                  <ExpansionPanel
                     gameItem={
                       categoryItems.filter(
                         categoryItem =>

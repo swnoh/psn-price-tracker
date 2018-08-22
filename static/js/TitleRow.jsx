@@ -65,7 +65,7 @@ class TitleRow extends React.Component {
       handleExpansion,
       selectedRowID,
       selectedGameID,
-      categoryTitleExpansion
+      categoryExpansionPanel
     } = this.props;
 
     const { currentIdx, intialTransition, isHoverOn } = this.state;

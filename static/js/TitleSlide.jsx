@@ -61,7 +61,7 @@ class TitleSlide extends React.Component {
       handleExpansion,
       selectedRowID,
       selectedGameID,
-      categoryTitleExpansion
+      categoryExpansionPanel
     } = this.props;
 
     const slick_settings = {
@@ -69,7 +69,7 @@ class TitleSlide extends React.Component {
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: !categoryTitleExpansion,
+      arrows: !categoryExpansionPanel,
       lazyLoad: true,
       draggable: false
     };
@@ -96,7 +96,7 @@ class TitleSlide extends React.Component {
               handleExpansion={handleExpansion}
               selectedRowID={selectedRowID}
               selectedGameID={selectedGameID}
-              categoryTitleExpansion={categoryTitleExpansion}
+              categoryExpansionPanel={categoryExpansionPanel}
               gameItem={gameItem}
             />
           ))}

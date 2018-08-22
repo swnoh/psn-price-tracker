@@ -6,7 +6,7 @@ const SITE_URL = "http://psntracker.azurewebsites.net";
 class MainCategoryQuick extends React.Component {
   state = {
     categoryItems: [],
-    categoryTitleExpansion: false
+    categoryExpansionPanel: false
   };
 
   componentDidMount() {
@@ -22,7 +22,7 @@ class MainCategoryQuick extends React.Component {
     return (
       <MainCategory
         categoryItems={this.state.categoryItems}
-        categoryTitleExpansion={this.state.categoryTitleExpansion}
+        categoryExpansionPanel={this.state.categoryExpansionPanel}
       />
     );
   }

@@ -21,7 +21,7 @@ class MainSearchPage extends React.Component {
     searchWord: "",
     rawData: {},
     categoryItems: [],
-    categoryTitleExpansion: false,
+    categoryExpansionPanel: false,
     showTransition: false,
     isFetchDone: false,
     slideChunk: 10
@@ -121,7 +121,7 @@ class MainSearchPage extends React.Component {
           this.setState({
             slideChunk: this.state.slideChunk,
             categoryItems: newCategory,
-            categoryTitleExpansion: true,
+            categoryExpansionPanel: true,
             isFetchDone: true
           }),
         loading ? 1000 : 0
@@ -133,7 +133,7 @@ class MainSearchPage extends React.Component {
     const {
       showTransition,
       categoryItems,
-      categoryTitleExpansion,
+      categoryExpansionPanel,
       isFetchDone
     } = this.state;
     return (
@@ -150,7 +150,7 @@ class MainSearchPage extends React.Component {
               categoryItems.length !== 0 ? (
                 <MainCategory
                   categoryItems={categoryItems}
-                  categoryTitleExpansion={categoryTitleExpansion}
+                  categoryExpansionPanel={categoryExpansionPanel}
                 />
               ) : (
                 <p

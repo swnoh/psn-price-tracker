@@ -3,7 +3,7 @@ import { Row, Col, Button } from "react-bootstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Rating from "react-rating";
 
-class TitleExpansionPanelInfo extends React.Component {
+class ExpansionPanelInfo extends React.Component {
   render() {
     const { gameItem, gameItemApiData, selectedGameItem } = this.props;
 
@@ -125,4 +125,4 @@ class TitleExpansionPanelInfo extends React.Component {
   }
 }
 
-export default TitleExpansionPanelInfo;
+export default ExpansionPanelInfo;

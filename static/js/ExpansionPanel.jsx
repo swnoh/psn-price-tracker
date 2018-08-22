@@ -4,14 +4,14 @@ import { Grid, Row, Col, Button } from "react-bootstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import PriceChart from "./PriceChart";
 import Rating from "react-rating";
-import TitleExpansionHeader from "./TitleExpansionHeader";
-import TitleExpansionPanelInfo from "./TitleExpansionPanelInfo";
-import TitleExpansionPanelPriceHistory from "./TitleExpansionPanelPriceHistory";
-import TitleExpansionPanelMedia from "./TitleExpansionPanelMedia";
-import TitleExpansionPanelDescription from "./TitleExpansionPanelDescription";
+import ExpansionPanelHeader from "./ExpansionPanelHeader";
+import ExpansionPanelInfo from "./ExpansionPanelInfo";
+import ExpansionPanelPriceHistory from "./ExpansionPanelPriceHistory";
+import ExpansionPanelMedia from "./ExpansionPanelMedia";
+import ExpansionPanelDescription from "./ExpansionPanelDescription";
 import { Element } from "react-scroll";
 
-class TitleExpansion extends React.Component {
+class ExpansionPanel extends React.Component {
   state = {
     isPanelPriceHistory: true,
     isPanelMedia: false,
@@ -99,21 +99,19 @@ class TitleExpansion extends React.Component {
             classNames="titleinfodetail"
             unmountOnExit
           >
-            <React.Fragment>
-              <TitleExpansionHeader
-                game_title={selectedGameItem.game_title}
-                isPanelMedia={isPanelMedia}
-                isPanelDescription={isPanelDescription}
-                handleExpansion={handleExpansion}
-                selectedRowID={selectedRowID}
-                selectedGameID={selectedGameID}
-              />
-            </React.Fragment>
+            <ExpansionPanelHeader
+              game_title={selectedGameItem.game_title}
+              isPanelMedia={isPanelMedia}
+              isPanelDescription={isPanelDescription}
+              handleExpansion={handleExpansion}
+              selectedRowID={selectedRowID}
+              selectedGameID={selectedGameID}
+            />
           </CSSTransition>
         </TransitionGroup>
         <Row>
           <Col className="col-title-info" xs={12} md={4} lg={3}>
-            <TitleExpansionPanelInfo
+            <ExpansionPanelInfo
               selectedGameID={selectedGameID}
               gameItem={gameItem}
               gameItemApiData={gameItemApiData}
@@ -134,15 +132,13 @@ class TitleExpansion extends React.Component {
               lg={8}
               className="col-expansion-panel col-expansion-price"
             >
-              {/* {!this.state.isLoading ? ( */}
-              <TitleExpansionPanelPriceHistory
+              <ExpansionPanelPriceHistory
                 gameItem={gameItem}
                 gameItemApiData={gameItemApiData}
                 selectedGameItem={selectedGameItem}
                 itemPrice={itemPrice}
                 selectedGameID={selectedGameID}
               />
-              {/* ) : null} */}
             </Col>
           </CSSTransition>
           <CSSTransition
@@ -158,7 +154,7 @@ class TitleExpansion extends React.Component {
               className="col-expansion-panel col-expansion-media"
             >
               {isPanelMedia ? (
-                <TitleExpansionPanelMedia
+                <ExpansionPanelMedia
                   gameItem={gameItem}
                   gameItemApiData={gameItemApiData}
                   selectedGameID={selectedGameID}
@@ -178,7 +174,7 @@ class TitleExpansion extends React.Component {
               lg={8}
               className="col-expansion-panel col-expansion-description"
             >
-              <TitleExpansionPanelDescription
+              <ExpansionPanelDescription
                 gameItem={gameItem}
                 gameItemApiData={gameItemApiData}
                 selectedGameID={selectedGameID}
@@ -219,4 +215,4 @@ class TitleExpansion extends React.Component {
   }
 }
 
-export default TitleExpansion;
+export default ExpansionPanel;

@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
-const TitleExpansionHeader = ({
+const ExpansionPanelHeader = ({
   game_title,
   isPanelMedia,
   isPanelDescription,
@@ -45,4 +45,4 @@ const TitleExpansionHeader = ({
   );
 };
 
-export default TitleExpansionHeader;
+export default ExpansionPanelHeader;

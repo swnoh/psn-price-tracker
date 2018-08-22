@@ -50,7 +50,7 @@ export default class App extends React.Component {
                 />
                 <Route exact path="/search" component={MainSearchPage} />
               </Switch>
-            </Row>{" "}
+            </Row>
             <Row>
               <Footer />
             </Row>

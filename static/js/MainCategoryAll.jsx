@@ -21,7 +21,7 @@ class MainCategoryAll extends React.Component {
     category_name: "",
     rawData: {},
     categoryItems: [],
-    categoryTitleExpansion: false,
+    categoryExpansionPanel: false,
     showTransition: false,
     slideChunk: 10
   };
@@ -116,7 +116,7 @@ class MainCategoryAll extends React.Component {
       this.setState({
         slideChunk: this.state.slideChunk,
         categoryItems: newCategory,
-        categoryTitleExpansion: true
+        categoryExpansionPanel: true
       });
     }
   };
@@ -134,7 +134,7 @@ class MainCategoryAll extends React.Component {
           >
             <MainCategory
               categoryItems={this.state.categoryItems}
-              categoryTitleExpansion={this.state.categoryTitleExpansion}
+              categoryExpansionPanel={this.state.categoryExpansionPanel}
             />
           </div>
         )}
