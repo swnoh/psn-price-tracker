@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, ListGroup, ListGroupItem, Button, Fade } from "react-bootstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import TitleRow from "./TitleRow";
+import TitleSlide from "./TitleSlide";
 import TitleExpansion from "./TitleExpansion";
 import { NavLink } from "react-router-dom";
 
@@ -11,19 +11,16 @@ const API_URL =
 const SITE_URL = "http://psntracker.azurewebsites.net";
 
 class MainCategory extends React.Component {
-  constructor(prop) {
-    super(prop);
-    this.state = {
-      isDetailExpansion: false,
-      selectedRowID: "",
-      selectedGameID: "",
-      gameItemApiData: {},
-      itemPrice: {},
-      categoryTitleHover: false,
-      currentIdx: 0,
-      show: false
-    };
-  }
+  state = {
+    isDetailExpansion: false,
+    selectedRowID: "",
+    selectedGameID: "",
+    gameItemApiData: {},
+    itemPrice: {},
+    categoryTitleHover: false,
+    currentIdx: 0,
+    show: false
+  };
 
   handleSelectTitle = (rowid, id) => {
     this.setState({
@@ -68,7 +65,10 @@ class MainCategory extends React.Component {
             <div className="row-category" key={index}>
               <React.Fragment>
                 {!categoryTitleExpansion ? (
-                  <NavLink to={"category/" + category_name}>
+                  <NavLink
+                    to={"category/" + category_name}
+                    className="row-category-title-link"
+                  >
                     <h3
                       className="row-category-title"
                       onMouseEnter={() =>
@@ -84,49 +84,47 @@ class MainCategory extends React.Component {
                         })
                       }
                     >
-                      <a className="row-category-title-link">
-                        <div
-                          className="row-category-title-name"
-                          style={{
-                            cursor: "pointer"
-                          }}
-                        >
-                          {category_name}
-                        </div>
-                        <CSSTransition
-                          in={
-                            this.state.currentIdx == index &&
-                            this.state.categoryTitleHover
-                          }
-                          timeout={800}
-                          classNames="rowTitle"
-                          unmountOnExit
-                        >
-                          {state => (
-                            <div className="row-category-title-explorer">
-                              Explorer All
-                              <CSSTransition
-                                in={state === "entered"}
-                                timeout={300}
-                                classNames="rowTitleArrow"
-                                unmountOnExit
-                              >
-                                <i
-                                  className="fa fa-angle-double-right"
-                                  style={{ paddingLeft: "7px" }}
-                                />
-                              </CSSTransition>
-                            </div>
-                          )}
-                        </CSSTransition>
-                      </a>
+                      <div
+                        className="row-category-title-name"
+                        style={{
+                          cursor: "pointer"
+                        }}
+                      >
+                        {category_name}
+                      </div>
+                      <CSSTransition
+                        in={
+                          this.state.currentIdx == index &&
+                          this.state.categoryTitleHover
+                        }
+                        timeout={800}
+                        classNames="rowTitle"
+                        unmountOnExit
+                      >
+                        {state => (
+                          <div className="row-category-title-explorer">
+                            Check Out More
+                            <CSSTransition
+                              in={state === "entered"}
+                              timeout={50}
+                              classNames="rowTitleArrow"
+                              unmountOnExit
+                            >
+                              <i
+                                className="fa fa-angle-double-right"
+                                style={{ paddingLeft: "7px" }}
+                              />
+                            </CSSTransition>
+                          </div>
+                        )}
+                      </CSSTransition>
                     </h3>
                   </NavLink>
                 ) : index == 0 ? (
                   <h3> {category_name} </h3>
                 ) : null}
 
-                <TitleRow
+                <TitleSlide
                   rowid={category_url}
                   gameItem={gameItem}
                   selectedRowID={selectedRowID}
@@ -139,7 +137,7 @@ class MainCategory extends React.Component {
 
                 <CSSTransition
                   in={isDetailExpansion && selectedRowID == category_url}
-                  timeout={700}
+                  timeout={400}
                   classNames="expansion"
                   unmountOnExit
                 >

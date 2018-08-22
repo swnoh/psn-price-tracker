@@ -6,12 +6,9 @@ import "./stylesVideo.css";
 import Slider from "react-slick";
 
 class TitleExpansionPanelMedia extends React.Component {
-  constructor(prop) {
-    super(prop);
-    this.state = {
-      activeSlide: 0
-    };
-  }
+  state = {
+    activeSlide: 0
+  };
 
   pause = index => {
     if (typeof this.refs["videoPlayer" + index] !== "undefined")
@@ -54,7 +51,9 @@ class TitleExpansionPanelMedia extends React.Component {
             {this.state.activeSlide !== index ? this.pause(index) : null}
           </Video>
         ))}
-        {mediaScreenshot.map(screenshot => <img src={screenshot.url} />)}
+        {mediaScreenshot.map((screenshot, index) => (
+          <img src={screenshot.url} key={index} />
+        ))}
       </Slider>
     );
   }

@@ -138,12 +138,15 @@ def psn_category_item():
 @app.route('/api/psn/search', methods=["GET"])
 def psn_search_title():
     searchword = request.args.get('q')
+
     gameItems = DB.session.query(PsnGameModel).filter(
         PsnGameModel.game_title.ilike('%' + searchword + '%')).limit(100).all()
+
     selected_game_item = []
 
-    for gameItem in gameItems:
-        selected_game_item.append(convertPsnGameModelToDict(gameItem))
+    if searchword:
+        for gameItem in gameItems:
+            selected_game_item.append(convertPsnGameModelToDict(gameItem))
 
     selected_item = {'category_name': "",
                      'category_url': "",

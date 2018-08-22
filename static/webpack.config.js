@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const config = {
     entry:  __dirname + '/js/index.jsx',
@@ -21,8 +22,23 @@ const config = {
             exclude: /node_modules/,
             use:  ['style-loader', 'css-loader']
           },
+          {
+            test: /\.(png|jp(e*)g|svg|gif)$/,  
+            use: [{
+                loader: 'url-loader',
+                options: { 
+                    limit: 80000,
+                    name: 'images/[hash]-[name].[ext]'
+                } 
+            }]
+        }
         ]
-    }
+    },
+    // plugins: [
+    //     new CopyWebpackPlugin([
+    //         { from: 'images', to: 'images' }
+    //     ])
+    // ]
 };
 
 module.exports = config;

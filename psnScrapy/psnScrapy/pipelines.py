@@ -10,7 +10,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-
+from flask import json
 
 db_string = 'postgres://%s:%s@%s/%s' % (
     os.environ['DBUSER'], os.environ['DBPASS'], os.environ['DBHOST'], os.environ['DBNAME']
@@ -26,6 +26,51 @@ from psnScrapy.models import *
 
 
 class PsnscrapyPipeline(object):
+
+    # def process_item(self, item, spider):
+    #     priceItemDB = session.query(PsnPriceHistoryModel).filter(
+    #         PsnPriceHistoryModel.game_id == item['game_id']).first()
+
+    #     chartPrices = item["chartPrices"][0].replace(
+    #         "formatData(", "").replace(")", "")
+    #     chartBonusPrices = item["chartBonusPrices"][0].replace(
+    #         "formatData(", "").replace(")", "")
+    #     item["chartPrices"] = json.loads(chartPrices)
+    #     item["chartBonusPrices"] = json.loads(chartBonusPrices)
+
+    #     chartPrices = item["chartPrices"]
+    #     chartBonusPrices = item["chartBonusPrices"]
+
+    #     price_list = []
+    #     bonus_price_list = []
+    #     plus_low_price = []
+
+    #     high_price = None
+    #     low_price = None
+    #     plus_low_price = None
+
+    #     for chartPrice in chartPrices:
+    #         price_list.append(float(chartPrice["price"]))
+
+    #     for chartBonusPrice in chartBonusPrices:
+    #         bonus_price_list.append(float(chartBonusPrice["price"]))
+
+    #     if price_list:
+    #         high_price = max(price_list)
+    #         low_price = min(price_list)
+    #     if bonus_price_list:
+    #         plus_low_price = min(bonus_price_list)
+
+    #     if priceItemDB:
+
+    #         priceItemDB.chartPrices = chartPrices
+    #         priceItemDB.chartBonusPrices = chartBonusPrices
+    #         priceItemDB.highest_price = high_price
+    #         priceItemDB.lowest_price = low_price
+    #         priceItemDB.plus_lowest_price = plus_low_price
+
+    #         session.commit()
+    #     return item
 
     def process_item(self, item, spider):
 
@@ -73,18 +118,18 @@ class PsnscrapyPipeline(object):
 
             session.commit()
 
-        categoryItemDB = session.query(PsnCategoryModel).filter(
-            PsnCategoryModel.category_name == item['category_name']).filter(
-            PsnCategoryModel.game_id == item['game_id']).first()
+        # categoryItemDB = session.query(PsnCategoryModel).filter(
+        #     PsnCategoryModel.category_name == item['category_name']).filter(
+        #     PsnCategoryModel.game_id == item['game_id']).first()
 
-        if not categoryItemDB:
-            categoryItem = PsnCategoryModel(
-                category_url=item['category_url'],
-                category_name=item['category_name'],
-                game_id=item['game_id']
-            )
-            session.add(categoryItem)
-            session.commit()
+        # if not categoryItemDB:
+        #     categoryItem = PsnCategoryModel(
+        #         category_url=item['category_url'],
+        #         category_name=item['category_name'],
+        #         game_id=item['game_id']
+        #     )
+        #     session.add(categoryItem)
+        #     session.commit()
 
         response = requests.get(item['api_url'])
         api_data = response.json()

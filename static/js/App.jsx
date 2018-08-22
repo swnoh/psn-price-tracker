@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "./Header";
-import MainFeature from "./MainFeature";
+import MainBanner from "./MainBanner";
 import MainCategoryQuick from "./MainCategoryQuick";
 import MainCategoryAll from "./MainCategoryAll";
 import MainSearchPage from "./MainSearchPage";
@@ -34,7 +34,7 @@ export default class App extends React.Component {
               <Header />
             </Row>
             <Row className="main-feature" style={mainBackgroundImage}>
-              <Route exact path="/" component={MainFeature} />
+              <Route exact path="/" component={MainBanner} />
             </Row>
             <Row className="row-content">
               <Switch>

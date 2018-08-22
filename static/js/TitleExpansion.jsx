@@ -12,15 +12,12 @@ import TitleExpansionPanelDescription from "./TitleExpansionPanelDescription";
 import { Element } from "react-scroll";
 
 class TitleExpansion extends React.Component {
-  constructor(prop) {
-    super(prop);
-    this.state = {
-      isPanelPriceHistory: true,
-      isPanelMedia: false,
-      isPanelDescription: false,
-      isLoading: true
-    };
-  }
+  state = {
+    isPanelPriceHistory: true,
+    isPanelMedia: false,
+    isPanelDescription: false,
+    isLoading: true
+  };
 
   handlePanel = event => {
     switch (event.target.text) {

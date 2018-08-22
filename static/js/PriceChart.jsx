@@ -1,5 +1,4 @@
 import React from "react";
-// import Chart from "chart.js";
 import { Line } from "react-chartjs-2";
 
 const option = {
@@ -109,13 +108,10 @@ const data = {
 };
 
 class PriceChart extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      chart_data_set: {},
-      data_loading: true
-    };
-  }
+  state = {
+    chart_data_set: {},
+    data_loading: true
+  };
 
   componentDidMount() {
     data.datasets[0].data = this.props.chartPrices;

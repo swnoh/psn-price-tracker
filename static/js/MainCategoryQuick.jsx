@@ -4,13 +4,10 @@ import MainCategory from "./MainCategory";
 const SITE_URL = "http://psntracker.azurewebsites.net";
 
 class MainCategoryQuick extends React.Component {
-  constructor(prop) {
-    super(prop);
-    this.state = {
-      categoryItems: [],
-      categoryTitleExpansion: false
-    };
-  }
+  state = {
+    categoryItems: [],
+    categoryTitleExpansion: false
+  };
 
   componentDidMount() {
     fetch(`${SITE_URL}/api/psn/category_quick`)

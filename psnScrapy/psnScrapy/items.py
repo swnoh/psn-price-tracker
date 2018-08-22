@@ -33,3 +33,10 @@ class PsnCategoryItem(Item):
 
 class PsnBannerItem(Item):
     bannerItems = Field()
+
+
+class PsnPriceHistoryItem(Item):
+    game_id = Field()
+    game_title = Field()
+    chartPrices = Field()
+    chartBonusPrices = Field()

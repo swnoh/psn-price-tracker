@@ -1,6 +1,7 @@
 import scrapy
 import re
 import json
+from psnScrapy.items import PsnPriceHistoryItem
 
 
 class PsnPriceHistory(scrapy.Spider):
@@ -9,6 +10,22 @@ class PsnPriceHistory(scrapy.Spider):
         # 'https://psdeals.net/ca-store/collection/top_rated_sale',
         # 'https://psdeals.net/ca-store/all-games',
         # 'https://psdeals.net/ca-store/collection/hot_deals?page=1'
+        'https://psdeals.net/ca-store/game/10608/rocket-league',
+        'https://psdeals.net/ca-store/game/10833/slender-the-arrival',
+        'https://psdeals.net/ca-store/game/10314/assassins-creed-syndicate',
+        'https://psdeals.net/ca-store/game/10225/unravel',
+        'https://psdeals.net/ca-store/game/11314/surgeon-simulator-ae-anniversary-edition',
+        'https://psdeals.net/ca-store/game/10443/overruled',
+        'https://psdeals.net/ca-store/game/11383/valiant-hearts-the-great-war',
+        'https://psdeals.net/ca-store/game/11625/minecraft-playstation3-edition',
+        'https://psdeals.net/ca-store/game/11204/styx-master-of-shadows',
+        'https://psdeals.net/ca-store/game/12094/alien-breed',
+        'https://psdeals.net/ca-store/game/10229/tom-clancys-the-division',
+        'https://psdeals.net/ca-store/game/11045/far-cry-4-',
+        'https://psdeals.net/ca-store/game/10236/tom-clancys-rainbow-six-siege',
+        'https://psdeals.net/ca-store/game/11267/minecraft-playstation4-edition',
+        'https://psdeals.net/ca-store/game/11143/battlefield-4-premium-edition',
+        'https://psdeals.net/ca-store/game/11057/monopoly-family-fun-pack'
 
     ]
 
@@ -40,9 +57,14 @@ class PsnPriceHistory(scrapy.Spider):
             "var chartPrices = (.+?);\n", response.body.decode("utf-8"), re.S)
         chartBonusPrices = re.findall(
             "var chartBonusPrices = (.+?);\n", response.body.decode("utf-8"), re.S)
-        yield {
-            'game_id': game_id,
-            'game_title': game_title,
-            'chartPrices': chartPrices,
-            'chartBonusPrices': chartBonusPrices
-        }
+        # yield {
+        #     'game_id': game_id,
+        #     'game_title': game_title,
+        #     'chartPrices': chartPrices,
+        #     'chartBonusPrices': chartBonusPrices
+        # }
+
+        priceItems = PsnPriceHistoryItem(
+            game_id=game_id, game_title=game_title,
+            chartPrices=chartPrices, chartBonusPrices=chartBonusPrices)
+        yield priceItems

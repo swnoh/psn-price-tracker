@@ -4,10 +4,6 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Rating from "react-rating";
 
 class TitleExpansionPanelInfo extends React.Component {
-  constructor(prop) {
-    super(prop);
-  }
-
   render() {
     const { gameItem, gameItemApiData, selectedGameItem } = this.props;
 

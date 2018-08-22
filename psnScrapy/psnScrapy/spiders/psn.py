@@ -5,10 +5,11 @@ from psnScrapy.items import PsnBannerItem, PsnGameItem
 class PsnPriceSpider(scrapy.Spider):
     name = "psn_price_spider"
     start_urls = [
-        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-TOPGAMES/1',
-        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-TOPPSNGAMES/1',
-        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-ALLDEALS/1?gameContentType=games',
-        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-PS3PSNPRRDRSCA/1'
+        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-TOPGAMES/1',
+        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-TOPPSNGAMES/1',
+        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-ALLDEALS/1?gameContentType=games',
+        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-PS3PSNPRRDRSCA/1'
+        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-ALLGAMES/1'
     ]
 
     def parse(self, response):
@@ -70,23 +71,6 @@ class PsnPriceSpider(scrapy.Spider):
                 plus_exclusive_price=item_plus_exclusive_price
             )
             yield game_item
-
-        # gameItem.append({'game_id': item_id,
-        #                  'game_title': item_game_name,
-        #                  'game_type': item_game_type,
-        #                  'game_url': item_game_url,
-        #                  'thumb_img_url': item_thumb_img_url,
-        #                  'api_url': item_api_url,
-        #                  'regular_price': item_regular_price,
-        #                  'display_price': item_display_price,
-        #                  'discount_message': item_discount_message,
-        #                  'plus_price': item_plus_price,
-        #                  'plus_exclusive_price': item_plus_exclusive_price
-        #                  })
-        # yield {
-        #     'category_url': category_url,
-        #     'category_name': category_name,
-        #     'gameItem': gameItem}
 
         NEXT_PAGE_SELECTOR = '.paginator-control__next ::attr(href)'
         next_page = response.css(NEXT_PAGE_SELECTOR).extract_first()

@@ -1,26 +1,14 @@
 import React from "react";
-import {
-  Navbar,
-  Nav,
-  NavItem,
-  NavDropdown,
-  MenuItem,
-  FormGroup,
-  FormControl,
-  Button
-} from "react-bootstrap";
+import { Navbar, FormGroup, FormControl, Button } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 
 class Header extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      navbarTransparent: true,
-      showSearchBar: false
-    };
-  }
+  state = {
+    navbarTransparent: true,
+    showSearchBar: false
+  };
 
   handleSearch = e => {
     this.props.history.push("/search?q=" + e.target.value);
@@ -59,7 +47,6 @@ class Header extends React.Component {
         inverse
         collapseOnSelect
         fixedTop
-        navbar-transparent
         className={this.state.navbarTransparent ? "navbar-transparent" : null}
       >
         <Navbar.Header>
@@ -84,11 +71,22 @@ class Header extends React.Component {
               <FormGroup>
                 <FormControl
                   type="text"
-                  placeholder="Search"
+                  placeholder="Search Title"
                   onChange={this.handleSearch}
                   inputRef={ref => {
                     this.input = ref;
                   }}
+                  style={
+                    this.state.navbarTransparent
+                      ? {
+                          color: "white",
+                          fontWeight: "bold",
+                          backgroundColor: "rgba(0, 0, 0, 0.5)"
+                        }
+                      : {
+                          fontWeight: "bold"
+                        }
+                  }
                 />
               </FormGroup>
             </CSSTransition>
@@ -102,7 +100,7 @@ class Header extends React.Component {
               <i
                 className="fa fa-search"
                 aria-hidden="true"
-                style={{ fontSize: "1.5em" }}
+                style={{ fontSize: "1.5em", color: "white" }}
               />
             </Button>
           </Navbar.Form>
@@ -112,5 +110,4 @@ class Header extends React.Component {
   }
 }
 
-// export default Header;
 export default withRouter(Header);

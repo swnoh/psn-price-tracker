@@ -3,13 +3,10 @@ import { Carousel } from "react-bootstrap";
 
 const SITE_URL = "http://psntracker.azurewebsites.net";
 
-class MainFeature extends React.Component {
-  constructor(prop) {
-    super(prop);
-    this.state = {
-      homeImgs: []
-    };
-  }
+class MainBanner extends React.Component {
+  state = {
+    homeImgs: []
+  };
 
   componentDidMount() {
     fetch(`${SITE_URL}/api/psn/banner`)
@@ -35,4 +32,4 @@ class MainFeature extends React.Component {
   }
 }
 
-export default MainFeature;
+export default MainBanner;

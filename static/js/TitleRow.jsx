@@ -1,7 +1,6 @@
 import React from "react";
-import { Grid, Row, Col } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import { Transition } from "react-transition-group";
-import Slider from "react-slick";
 import LazyLoad from "react-lazy-load";
 
 const duration = 500;
@@ -17,20 +16,10 @@ const transitionStyles = {
 };
 
 class TitleRow extends React.Component {
-  constructor(prop) {
-    super(prop);
-    this.state = {
-      isHoverOn: false,
-      currentIdx: 0,
-      intialTransition: false
-    };
-  }
-
-  mouseHoverStyle = {
-    default: {
-      position: "relative",
-      transition: "350ms"
-    }
+  state = {
+    isHoverOn: false,
+    currentIdx: 0,
+    intialTransition: false
   };
 
   componentDidMount() {
@@ -39,33 +28,33 @@ class TitleRow extends React.Component {
     });
   }
 
-  handleHoverOn = (rowid, id, index) => {
+  handleHoverOn = (rowid, id, index, event) => {
+    const selectedSlickIndex =
+      event.target.parentNode.parentNode.parentNode.parentNode.parentNode
+        .dataset.index;
     this.setState({ isHoverOn: true, currentIdx: index });
     this.props.handleSelectTitle(rowid, id);
-    // console.log(this.state.activeSlide);
-    const selectedInx = index >= 7 ? index % 7 : index;
-    console.log(
-      document
-        .getElementsByClassName("slick-active")[0]
-        .getAttribute("data-index")
-    );
-    console.log(document.getElementsByClassName("slick-active"));
-    // console.log(
-    //   document
-    //     .getElementsByClassName("slick-active")
-    //     [getElementsByClassName("slick-active").length - 1].getAttribute(
-    //       "data-index"
-    //     )
-    // );
   };
 
   handleHoverOff = () => {
-    this.setState({ isHoverOn: false, currentIdx: 0 });
+    this.setState({ isHoverOn: false, currentIdx: -1 });
   };
 
-  handleHoverOffsss = event => {
-    this.setState({ isHoverOn: false, currentIdx: 0 });
-    console.log(event.target.parentElement);
+  handleTransform = (index, lastIdx) => {
+    const { isHoverOn, currentIdx } = this.state;
+
+    let classNameTransform = "tile__media";
+
+    if (this.state.isHoverOn) {
+      if (index === currentIdx) classNameTransform += " tile_transform";
+      else if (index < currentIdx) classNameTransform += " tile_prev_transform";
+      else if (index > currentIdx) classNameTransform += " tile_next_transform";
+
+      if (currentIdx === 0) classNameTransform += " first";
+      else if (currentIdx === lastIdx) classNameTransform += " last";
+    }
+
+    return classNameTransform;
   };
 
   render() {
@@ -73,136 +62,84 @@ class TitleRow extends React.Component {
       gameItem,
       rowid,
       isDetailExpansion,
-      handleSelectTitle,
       handleExpansion,
       selectedRowID,
       selectedGameID,
       categoryTitleExpansion
     } = this.props;
 
-    const slick_settings = {
-      infinite: true,
-      speed: 500,
-      slidesToShow: categoryTitleExpansion ? gameItem.length : 10,
-      slidesToScroll: categoryTitleExpansion ? gameItem.length : 10,
-      arrows: !categoryTitleExpansion,
-      variableWidth: true,
-      lazyLoad: true,
-      draggable: false,
-      responsive: [
-        {
-          breakpoint: 1600,
-          settings: {
-            slidesToShow: categoryTitleExpansion ? gameItem.length : 7,
-            slidesToScroll: categoryTitleExpansion ? gameItem.length : 7
-          }
-        },
-        {
-          breakpoint: 1300,
-          settings: {
-            slidesToShow: categoryTitleExpansion ? gameItem.length : 5,
-            slidesToScroll: categoryTitleExpansion ? gameItem.length : 5
-          }
-        },
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: categoryTitleExpansion ? gameItem.length : 4,
-            slidesToScroll: categoryTitleExpansion ? gameItem.length : 4
-          }
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: categoryTitleExpansion ? gameItem.length : 2,
-            slidesToScroll: categoryTitleExpansion ? gameItem.length : 2
-          }
-        },
-        {
-          breakpoint: 480,
-          settings: {
-            slidesToShow: categoryTitleExpansion ? gameItem.length : 1,
-            slidesToScroll: categoryTitleExpansion ? gameItem.length : 1
-          }
-        }
-      ]
-    };
+    const { currentIdx, intialTransition, isHoverOn } = this.state;
+
+    const lastIdx = gameItem.length - 1;
 
     return (
-      <Grid fluid>
-        <Slider {...slick_settings}>
-          {gameItem.map(
-            (
-              {
-                game_id,
-                game_title,
-                thumb_img_url,
-                regular_price,
-                display_price,
-                discount_message,
-                plus_price,
-                plus_exclusive_price
-              },
-              index
-            ) => (
-              <Transition in={this.state.intialTransition} timeout={duration}>
-                {state => (
-                  <div
-                    className="tile"
-                    style={{
-                      ...defaultStyle,
-                      ...transitionStyles[state]
-                    }}
-                    data-tile={index}
-                    onClick={() => {
-                      handleExpansion(rowid, game_id);
+      <Row className="row-slide-game">
+        {gameItem.map(
+          (
+            {
+              game_id,
+              game_title,
+              thumb_img_url,
+              regular_price,
+              display_price,
+              discount_message,
+              plus_price,
+              plus_exclusive_price
+            },
+            index
+          ) => (
+            <Transition in={intialTransition} timeout={duration} key={index}>
+              {state => (
+                <div
+                  className="tile"
+                  style={{
+                    ...defaultStyle,
+                    ...transitionStyles[state]
+                  }}
+                  onClick={() => {
+                    handleExpansion(rowid, game_id);
+                    this.handleHoverOff();
+                  }}
+                  onMouseEnter={event => {
+                    if (isDetailExpansion) {
                       this.handleHoverOff();
-                    }}
-                    onMouseEnter={event => {
-                      if (isDetailExpansion) {
-                        this.handleHoverOff();
-                        selectedGameID !== game_id && selectedRowID === rowid
-                          ? handleExpansion(rowid, game_id)
-                          : null;
-                      } else {
-                        this.handleHoverOn(rowid, game_id, index);
-                      }
-                    }}
-                    onMouseLeave={this.handleHoverOff}
+                      selectedGameID !== game_id && selectedRowID === rowid
+                        ? handleExpansion(rowid, game_id)
+                        : null;
+                    } else {
+                      this.handleHoverOn(rowid, game_id, index, event);
+                    }
+                  }}
+                  onMouseLeave={this.handleHoverOff}
+                >
+                  <div
+                    className={
+                      isHoverOn && selectedGameID === game_id
+                        ? currentIdx === 0
+                          ? "tile__details tile_transform first"
+                          : currentIdx === lastIdx
+                            ? "tile__details tile_transform last"
+                            : "tile__details tile_transform"
+                        : "tile__details"
+                    }
                   >
-                    <div
-                      className={
-                        this.state.isHoverOn && selectedGameID === game_id
-                          ? "tile__details selected"
-                          : "tile__details"
-                      }
-                    >
-                      <div className="tile__title">{game_title}</div>
-                      <div className="tile__price">{display_price}</div>
-                    </div>
-                    <div
-                      className={
-                        this.state.isHoverOn
-                          ? selectedGameID === game_id
-                            ? "tile__media tile_transform"
-                            : this.state.currentIdx > index
-                              ? "tile__media tile_prev_transform"
-                              : "tile__media tile_next_transform"
-                          : "tile__media"
-                      }
-                    >
-                      <LazyLoad offsetVertical={500} offsetHorizontal={1300}>
-                        <img
-                          className="tile__img"
-                          src={thumb_img_url}
-                          onError={e => {
-                            e.target.src =
-                              "https://store.playstation.com/store/api/chihiro/00_09_000/container/CA/en/999/UP1477-CUSA07022_00-FORTNITETESTING1/1532106140000/image?w=240&h=240&bg_color=000000&opacity=100&_version=00_09_000";
-                          }}
-                          alt={game_title}
-                        />
-                      </LazyLoad>
+                    <div className="tile__title">{game_title}</div>
+                    <div className="tile__price">{display_price}</div>
+                  </div>
+                  <div className={this.handleTransform(index, lastIdx)}>
+                    <LazyLoad offsetVertical={500} offsetHorizontal={1800}>
+                      <img
+                        className="tile__img"
+                        src={thumb_img_url}
+                        onError={e => {
+                          e.target.src =
+                            "https://store.playstation.com/store/api/chihiro/00_09_000/container/CA/en/999/UP1477-CUSA07022_00-FORTNITETESTING1/1532106140000/image?w=240&h=240&bg_color=000000&opacity=100&_version=00_09_000";
+                        }}
+                        alt={game_title}
+                      />
+                    </LazyLoad>
 
+                    <LazyLoad offsetVertical={500} offsetHorizontal={1800}>
                       <div
                         className={
                           plus_price || plus_exclusive_price
@@ -224,23 +161,23 @@ class TitleRow extends React.Component {
                           )
                         ) : null}
                       </div>
-                      <div
-                        className={
-                          isDetailExpansion && selectedRowID === rowid
-                            ? selectedGameID === game_id
-                              ? "tile__focus focus-box"
-                              : "tile__focus overlay"
-                            : null
-                        }
-                      />
-                    </div>
+                    </LazyLoad>
+                    <div
+                      className={
+                        isDetailExpansion && selectedRowID === rowid
+                          ? selectedGameID === game_id
+                            ? "tile__focus focus-box"
+                            : "tile__focus overlay"
+                          : null
+                      }
+                    />
                   </div>
-                )}
-              </Transition>
-            )
-          )}
-        </Slider>
-      </Grid>
+                </div>
+              )}
+            </Transition>
+          )
+        )}
+      </Row>
     );
   }
 }

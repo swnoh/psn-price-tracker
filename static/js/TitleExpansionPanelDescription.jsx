@@ -1,13 +1,7 @@
 import React from "react";
-import { Col } from "react-bootstrap";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 import ReactHtmlParser from "react-html-parser";
 
 class TitleExpansionPanelDescription extends React.Component {
-  constructor(prop) {
-    super(prop);
-  }
-
   render() {
     const { gameItem, gameItemApiData, selectedGameID } = this.props;
 
