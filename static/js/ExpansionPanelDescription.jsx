@@ -3,11 +3,7 @@ import ReactHtmlParser from "react-html-parser";
 
 class ExpansionPanelDescription extends React.Component {
   render() {
-    const { gameItem, gameItemApiData, selectedGameID } = this.props;
-
-    const selectedGameItem = gameItem.gameItem.filter(
-      item => item.id === selectedGameID
-    )[0];
+    const { gameItemApiData } = this.props;
 
     const description = gameItemApiData.long_desc;
 

@@ -111,7 +111,7 @@ class MainSearchPage extends React.Component {
     } else {
       for (let i = 0, j = data.gameItem.length; i < j; i += chunk) {
         newCategory.push({
-          category_url: i,
+          category_url: "search-" + searchWord + "-" + i,
           category_name: "Result for " + searchWord,
           gameItem: data.gameItem.slice(i, i + chunk)
         });

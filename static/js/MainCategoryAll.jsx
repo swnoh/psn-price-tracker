@@ -108,7 +108,7 @@ class MainCategoryAll extends React.Component {
     } else {
       for (let i = 0, j = data.gameItem.length; i < j; i += chunk) {
         newCategory.push({
-          category_url: i,
+          category_url: category_name + "-" + i,
           category_name: category_name,
           gameItem: data.gameItem.slice(i, i + chunk)
         });

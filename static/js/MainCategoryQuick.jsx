@@ -19,10 +19,11 @@ class MainCategoryQuick extends React.Component {
   }
 
   render() {
+    const { categoryItems, categoryExpansionPanel } = this.state;
     return (
       <MainCategory
-        categoryItems={this.state.categoryItems}
-        categoryExpansionPanel={this.state.categoryExpansionPanel}
+        categoryItems={categoryItems}
+        categoryExpansionPanel={categoryExpansionPanel}
       />
     );
   }

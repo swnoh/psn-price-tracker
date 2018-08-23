@@ -15,8 +15,7 @@ class ExpansionPanel extends React.Component {
   state = {
     isPanelPriceHistory: true,
     isPanelMedia: false,
-    isPanelDescription: false,
-    isLoading: true
+    isPanelDescription: false
   };
 
   handlePanel = event => {
@@ -58,9 +57,12 @@ class ExpansionPanel extends React.Component {
   render() {
     const {
       handleExpansion,
+      showExpansionPanel,
       gameItem,
       gameItemApiData,
+      isGameItemApiData,
       itemPrice,
+      isItemPrice,
       selectedRowID,
       selectedGameID
     } = this.props;
@@ -71,9 +73,13 @@ class ExpansionPanel extends React.Component {
       isPanelDescription
     } = this.state;
 
-    const selectedGameItem = gameItem.gameItem.filter(
+    let selectedGameItem = gameItem.gameItem.filter(
       item => item.game_id === selectedGameID
     )[0];
+
+    if (selectedGameItem === undefined) {
+      selectedGameItem = gameItem.gameItem[0];
+    }
 
     const mediaPreview =
       gameItemApiData.mediaList && gameItemApiData.mediaList.previews;
@@ -111,17 +117,22 @@ class ExpansionPanel extends React.Component {
         </TransitionGroup>
         <Row>
           <Col className="col-title-info" xs={12} md={4} lg={3}>
-            <ExpansionPanelInfo
-              selectedGameID={selectedGameID}
-              gameItem={gameItem}
-              gameItemApiData={gameItemApiData}
-              selectedGameItem={selectedGameItem}
-              isPanelMedia={isPanelMedia}
-              isPanelDescription={isPanelDescription}
-            />
+            <CSSTransition
+              in={isGameItemApiData}
+              timeout={500}
+              classNames="fade"
+              unmountOnExit
+            >
+              <ExpansionPanelInfo
+                gameItemApiData={gameItemApiData}
+                selectedGameItem={selectedGameItem}
+                isPanelMedia={isPanelMedia}
+                isPanelDescription={isPanelDescription}
+              />
+            </CSSTransition>
           </Col>
           <CSSTransition
-            in={isPanelPriceHistory}
+            in={isPanelPriceHistory && isItemPrice}
             timeout={300}
             classNames="titleinfodetail"
             unmountOnExit
@@ -133,9 +144,6 @@ class ExpansionPanel extends React.Component {
               className="col-expansion-panel col-expansion-price"
             >
               <ExpansionPanelPriceHistory
-                gameItem={gameItem}
-                gameItemApiData={gameItemApiData}
-                selectedGameItem={selectedGameItem}
                 itemPrice={itemPrice}
                 selectedGameID={selectedGameID}
               />
@@ -154,11 +162,7 @@ class ExpansionPanel extends React.Component {
               className="col-expansion-panel col-expansion-media"
             >
               {isPanelMedia ? (
-                <ExpansionPanelMedia
-                  gameItem={gameItem}
-                  gameItemApiData={gameItemApiData}
-                  selectedGameID={selectedGameID}
-                />
+                <ExpansionPanelMedia gameItemApiData={gameItemApiData} />
               ) : null}
             </Col>
           </CSSTransition>
@@ -174,18 +178,14 @@ class ExpansionPanel extends React.Component {
               lg={8}
               className="col-expansion-panel col-expansion-description"
             >
-              <ExpansionPanelDescription
-                gameItem={gameItem}
-                gameItemApiData={gameItemApiData}
-                selectedGameID={selectedGameID}
-              />
+              <ExpansionPanelDescription gameItemApiData={gameItemApiData} />
             </Col>
           </CSSTransition>
         </Row>
         <Row className="expansion-menu">
           <TransitionGroup>
             <CSSTransition
-              key={selectedGameID + 111}
+              key={selectedGameID + 1}
               timeout={700}
               classNames="titlepanelmenu"
               unmountOnExit

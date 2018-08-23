@@ -27,6 +27,7 @@ from psnScrapy.models import *
 
 class PsnscrapyPipeline(object):
 
+    # Price history update!!!
     # def process_item(self, item, spider):
     #     priceItemDB = session.query(PsnPriceHistoryModel).filter(
     #         PsnPriceHistoryModel.game_id == item['game_id']).first()
@@ -158,8 +159,6 @@ class PsnscrapyPipeline(object):
                 chartPrice = -1
 
         print(item['game_id'])
-        print(chartPrice)
-        print(chartBonusPrice)
 
         date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -216,10 +215,12 @@ class PsnscrapyPipeline(object):
                 selectedPriceItem.highest_price = chartPrice
 
             if selectedPriceItem.lowest_price > chartPrice or selectedPriceItem.lowest_price == -1:
-                selectedPriceItem.lowest_price = chartPrice
+                if(chartPrice != -1):
+                    selectedPriceItem.lowest_price = chartPrice
 
             if selectedPriceItem.plus_lowest_price > chartBonusPrice or selectedPriceItem.plus_lowest_price == -1:
-                selectedPriceItem.plus_lowest_price = chartBonusPrice
+                if (chartBonusPrice != -1):
+                    selectedPriceItem.plus_lowest_price = chartBonusPrice
 
             session.commit()
 

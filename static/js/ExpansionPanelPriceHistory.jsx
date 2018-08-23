@@ -18,14 +18,14 @@ const formatData = dataUnformatted => {
 
 class ExpansionPanelPriceHistory extends React.Component {
   render() {
-    const { gameItem, itemPrice, selectedGameID } = this.props;
+    const { itemPrice, selectedGameID } = this.props;
 
     return (
       <React.Fragment>
         <Row className="price-history-chart">
           <PriceChart
             selectedGameID={selectedGameID}
-            game_id={this.props.itemPrice.game_id}
+            game_id={itemPrice.game_id}
             chartPrices={formatData(itemPrice.chartPrices)}
             chartBonusPrices={formatData(itemPrice.chartBonusPrices)}
           />
@@ -34,25 +34,21 @@ class ExpansionPanelPriceHistory extends React.Component {
           <Col xs={4} className="price-table">
             <h5>Highest Price</h5>
             <h2 className="highest-price">
-              {this.props.itemPrice.highest_price < 0
-                ? "-"
-                : this.props.itemPrice.highest_price}
+              {itemPrice.highest_price < 0 ? "-" : itemPrice.highest_price}
             </h2>
           </Col>
           <Col xs={4} className="price-table">
             <h5>Lowest Price</h5>
             <h2 className="lowest-price">
-              {this.props.itemPrice.lowest_price < 0
-                ? "-"
-                : this.props.itemPrice.lowest_price}
+              {itemPrice.lowest_price < 0 ? "-" : itemPrice.lowest_price}
             </h2>
           </Col>
           <Col xs={4} className="price-table">
             <h5>Lowest PS+ Price</h5>
             <h2 className="lowest-plus-price">
-              {this.props.itemPrice.plus_lowest_price < 0
+              {itemPrice.plus_lowest_price < 0
                 ? "-"
-                : this.props.itemPrice.plus_lowest_price}
+                : itemPrice.plus_lowest_price}
             </h2>
           </Col>
         </Row>

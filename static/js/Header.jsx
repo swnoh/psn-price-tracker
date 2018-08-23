@@ -70,6 +70,7 @@ class Header extends React.Component {
             >
               <FormGroup>
                 <FormControl
+                  autoFocus
                   type="text"
                   placeholder="Search Title"
                   onChange={this.handleSearch}

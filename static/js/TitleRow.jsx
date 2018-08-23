@@ -19,7 +19,8 @@ class TitleRow extends React.Component {
   state = {
     isHoverOn: false,
     currentIdx: 0,
-    intialTransition: false
+    intialTransition: false,
+    imgLoaded: false
   };
 
   componentDidMount() {
@@ -61,7 +62,7 @@ class TitleRow extends React.Component {
     const {
       gameItem,
       rowid,
-      isDetailExpansion,
+      showExpansionPanel,
       handleExpansion,
       selectedRowID,
       selectedGameID,
@@ -101,7 +102,7 @@ class TitleRow extends React.Component {
                     this.handleHoverOff();
                   }}
                   onMouseEnter={event => {
-                    if (isDetailExpansion) {
+                    if (showExpansionPanel) {
                       this.handleHoverOff();
                       selectedGameID !== game_id && selectedRowID === rowid
                         ? handleExpansion(rowid, game_id)
@@ -129,8 +130,17 @@ class TitleRow extends React.Component {
                   <div className={this.handleTransform(index, lastIdx)}>
                     <LazyLoad offsetVertical={500} offsetHorizontal={1800}>
                       <img
-                        className="tile__img"
+                        className={
+                          this.state.imgLoaded
+                            ? "tile__img loaded"
+                            : "tile__img"
+                        }
                         src={thumb_img_url}
+                        onLoad={() => {
+                          this.setState({
+                            imgLoaded: true
+                          });
+                        }}
                         onError={e => {
                           e.target.src =
                             "https://store.playstation.com/store/api/chihiro/00_09_000/container/CA/en/999/UP1477-CUSA07022_00-FORTNITETESTING1/1532106140000/image?w=240&h=240&bg_color=000000&opacity=100&_version=00_09_000";
@@ -138,13 +148,16 @@ class TitleRow extends React.Component {
                         alt={game_title}
                       />
                     </LazyLoad>
-
                     <LazyLoad offsetVertical={500} offsetHorizontal={1800}>
                       <div
                         className={
-                          plus_price || plus_exclusive_price
-                            ? "tile__discount tile__plus_discount"
-                            : "tile__discount"
+                          this.state.imgLoaded
+                            ? plus_price || plus_exclusive_price
+                              ? "tile__discount tile__plus_discount loaded"
+                              : "tile__discount loaded"
+                            : plus_price || plus_exclusive_price
+                              ? "tile__discount tile__plus_discount"
+                              : "tile__discount"
                         }
                       >
                         {discount_message ? (
@@ -164,7 +177,7 @@ class TitleRow extends React.Component {
                     </LazyLoad>
                     <div
                       className={
-                        isDetailExpansion && selectedRowID === rowid
+                        showExpansionPanel && selectedRowID === rowid
                           ? selectedGameID === game_id
                             ? "tile__focus focus-box"
                             : "tile__focus overlay"

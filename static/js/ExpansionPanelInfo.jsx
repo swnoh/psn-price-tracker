@@ -5,7 +5,12 @@ import Rating from "react-rating";
 
 class ExpansionPanelInfo extends React.Component {
   render() {
-    const { gameItem, gameItemApiData, selectedGameItem } = this.props;
+    const {
+      isPanelMedia,
+      isPanelDescription,
+      gameItemApiData,
+      selectedGameItem
+    } = this.props;
 
     const regular_price =
       gameItemApiData.default_sku && gameItemApiData.default_sku.display_price;
@@ -25,15 +30,13 @@ class ExpansionPanelInfo extends React.Component {
       <TransitionGroup>
         <CSSTransition
           key={
-            this.props.isPanelMedia || this.props.isPanelDescription
+            isPanelMedia || isPanelDescription
               ? gameItemApiData.id + 50
               : gameItemApiData.id
           }
           timeout={500}
           classNames={
-            this.props.isPanelMedia || this.props.isPanelDescription
-              ? "titleinfopanel"
-              : "titleinfo"
+            isPanelMedia || isPanelDescription ? "titleinfopanel" : "fade"
           }
         >
           <Row>

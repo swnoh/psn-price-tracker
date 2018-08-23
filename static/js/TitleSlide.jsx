@@ -56,7 +56,7 @@ class TitleSlide extends React.Component {
     const {
       gameItem,
       rowid,
-      isDetailExpansion,
+      showExpansionPanel,
       handleSelectTitle,
       handleExpansion,
       selectedRowID,
@@ -91,13 +91,12 @@ class TitleSlide extends React.Component {
               key={index}
               gameItem={gameItem}
               rowid={rowid}
-              isDetailExpansion={isDetailExpansion}
+              showExpansionPanel={showExpansionPanel}
               handleSelectTitle={handleSelectTitle}
               handleExpansion={handleExpansion}
               selectedRowID={selectedRowID}
               selectedGameID={selectedGameID}
               categoryExpansionPanel={categoryExpansionPanel}
-              gameItem={gameItem}
             />
           ))}
         </Slider>

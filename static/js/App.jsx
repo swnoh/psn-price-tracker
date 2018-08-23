@@ -8,7 +8,7 @@ import Footer from "./Footer";
 import "./styles.css";
 import { Grid, Row } from "react-bootstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { HashRouter, Switch, Route } from "react-router-dom";
+import { HashRouter, Switch, Route, BrowserRouter } from "react-router-dom";
 import ScrollToTop from "./ScrollToTop";
 
 const mainBackgroundImage = {
@@ -27,7 +27,7 @@ const mainBackgroundImage = {
 export default class App extends React.Component {
   render() {
     return (
-      <HashRouter>
+      <BrowserRouter>
         <ScrollToTop>
           <Grid fluid className="main-grid">
             <Row>
@@ -56,7 +56,7 @@ export default class App extends React.Component {
             </Row>
           </Grid>
         </ScrollToTop>
-      </HashRouter>
+      </BrowserRouter>
     );
   }
 }
