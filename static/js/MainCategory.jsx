@@ -38,7 +38,7 @@ class MainCategory extends React.Component {
     scroller.scrollTo(rowid, {
       duration: 500,
       smooth: true,
-      offset: -50
+      offset: -78
     });
   };
 

@@ -161,7 +161,10 @@ def temp():
             tmp_price.append(float(bprices["price"]))
 
         if tmp_price:
-            lowest = min(tmp_price)
+            if len(tmp_price) < 5 and item.lowest_price == min(tmp_price):
+                lowest = -1
+            else:
+                lowest = min(tmp_price)
 
         upItem = PsnPriceHistoryModel.query.filter(
             PsnPriceHistoryModel.game_id == item.game_id).first()
