@@ -24,53 +24,12 @@ class MainSearchPage extends React.Component {
     categoryExpansionPanel: false,
     showTransition: false,
     isFetchDone: false
-    // slideChunk: 10
   };
-  // handleResize = () => {
-  //   if (window.innerWidth > 1904)
-  //     this.setState({
-  //       slideChunk: 10
-  //     });
-  //   else if (window.innerWidth > 1729)
-  //     this.setState({
-  //       slideChunk: 9
-  //     });
-  //   else if (window.innerWidth > 1554)
-  //     this.setState({
-  //       slideChunk: 8
-  //     });
-  //   else if (window.innerWidth > 1379)
-  //     this.setState({
-  //       slideChunk: 7
-  //     });
-  //   else if (window.innerWidth > 1204)
-  //     this.setState({
-  //       slideChunk: 6
-  //     });
-  //   else if (window.innerWidth > 1029)
-  //     this.setState({
-  //       slideChunk: 5
-  //     });
-  //   else if (window.innerWidth > 854)
-  //     this.setState({
-  //       slideChunk: 4
-  //     });
-  //   else
-  //     this.setState({
-  //       slideChunk: 3
-  //     });
-  // };
-
-  // componentWillUnmount() {
-  //   window.removeEventListener("resize", this.handleResize);
-  // }
 
   componentDidMount() {
     this.setState({ showTransition: true });
     const value = queryString.parse(this.props.location.search);
     this.handleSearch(value.q);
-    // this.handleResize();
-    // window.addEventListener("resize", this.handleResize);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -119,7 +78,6 @@ class MainSearchPage extends React.Component {
       setTimeout(
         () =>
           this.setState({
-            // slideChunk: this.state.slideChunk,
             categoryItems: newCategory,
             categoryExpansionPanel: true,
             isFetchDone: true

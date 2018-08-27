@@ -2,9 +2,6 @@ import React from "react";
 import { Line } from "react-chartjs-2";
 
 const option = {
-  // animation: {
-  //   duration: 0
-  // },
   scales: {
     xAxes: [
       {

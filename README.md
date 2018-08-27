@@ -8,6 +8,23 @@ Demo: [http://psntracker.azurewebsites.net](http://psntracker.azurewebsites.net)
 
 ![Mockup demo](screenshots/main.png)
 
+## Development Stack
+
+- Deployed on Azure.
+- Backend stack: Flask, SQLAlchemy ORM, Scrapy.
+- Frontend stack: React, Webpack, Babel.
+- Backend API: RESTful API.
+- Database utilizes a Postgresql with Azure.
+- Libraries for React: React Bootstrap, React Router4, TransitionGroup, React Lazy Load, Slick.js, Chart.js
+
+## Features
+
+- Tracking the price history
+- Checking Lowest price ever
+- Instant search
+- Responsive design
+- Mobile friendly
+
 ## User Interface
 
 ### Mobile View
@@ -28,7 +45,7 @@ Demo: [http://psntracker.azurewebsites.net](http://psntracker.azurewebsites.net)
 
 ## Build
 
-To build and run this application locally, you'll need a dedicated database. Here are some commands that I used for building apps.
+To build and run this application locally, you'll need a dedicated database. Here are some commands that I used for building and deploying apps.
 
 ### Client(React) Build
 
