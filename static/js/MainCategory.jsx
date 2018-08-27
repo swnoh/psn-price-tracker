@@ -3,6 +3,7 @@ import { Grid, ListGroup, ListGroupItem, Button, Fade } from "react-bootstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import TitleSlide from "./TitleSlide";
 import ExpansionPanel from "./ExpansionPanel";
+import ExpansionPanelNonTransition from "./ExpansionPanelNonTransition";
 import { NavLink } from "react-router-dom";
 import { Link, Element, animateScroll as scroll, scroller } from "react-scroll";
 
@@ -36,9 +37,9 @@ class MainCategory extends React.Component {
 
   handleScroll = rowid => {
     scroller.scrollTo(rowid, {
-      duration: 500,
+      duration: 300,
       smooth: true,
-      offset: -78
+      offset: -95
     });
   };
 
@@ -110,15 +111,21 @@ class MainCategory extends React.Component {
       }, 50);
     }
 
-    setTimeout(() => {
-      this.handleScroll(rowid);
-    }, 600);
+    this.props.slideChunk > 3 &&
+      setTimeout(() => {
+        this.handleScroll(rowid);
+      }, 600);
   };
 
   render() {
     const { showExpansionPanel, selectedRowID, selectedGameID } = this.state;
 
-    const { categoryItems, categoryExpansionPanel } = this.props;
+    const {
+      categoryItems,
+      categoryExpansionPanel,
+      slideChunk,
+      isCategoryQuick
+    } = this.props;
 
     return (
       <Grid fluid>
@@ -128,6 +135,18 @@ class MainCategory extends React.Component {
               className="row-category"
               key={index}
               data-scroll={category_url}
+              onMouseEnter={() =>
+                this.setState({
+                  currentIdx: index,
+                  categoryTitleHover: true
+                })
+              }
+              onMouseLeave={() =>
+                this.setState({
+                  currentIdx: index,
+                  categoryTitleHover: false
+                })
+              }
             >
               <React.Fragment>
                 {!categoryExpansionPanel ? (
@@ -135,27 +154,8 @@ class MainCategory extends React.Component {
                     to={"category/" + category_name}
                     className="row-category-title-link"
                   >
-                    <h3
-                      className="row-category-title"
-                      onMouseEnter={() =>
-                        this.setState({
-                          currentIdx: index,
-                          categoryTitleHover: !this.state.categoryTitleHover
-                        })
-                      }
-                      onMouseLeave={() =>
-                        this.setState({
-                          currentIdx: index,
-                          categoryTitleHover: !this.state.categoryTitleHover
-                        })
-                      }
-                    >
-                      <div
-                        className="row-category-title-name"
-                        style={{
-                          cursor: "pointer"
-                        }}
-                      >
+                    <h3 className="row-category-title">
+                      <div className="row-category-title-name">
                         {category_name}
                       </div>
                       <CSSTransition
@@ -163,16 +163,21 @@ class MainCategory extends React.Component {
                           this.state.currentIdx == index &&
                           this.state.categoryTitleHover
                         }
-                        timeout={800}
+                        timeout={400}
                         classNames="rowTitle"
                         unmountOnExit
                       >
                         {state => (
-                          <div className="row-category-title-explorer">
+                          <div
+                            className="row-category-title-explorer"
+                            style={{
+                              cursor: "pointer"
+                            }}
+                          >
                             Check Out More
                             <CSSTransition
                               in={state === "entered"}
-                              timeout={50}
+                              timeout={150}
                               classNames="rowTitleArrow"
                               unmountOnExit
                             >
@@ -187,7 +192,7 @@ class MainCategory extends React.Component {
                     </h3>
                   </NavLink>
                 ) : index == 0 ? (
-                  <h3> {category_name} </h3>
+                  <h3 className="row-category-title"> {category_name} </h3>
                 ) : null}
 
                 <Element name={category_url} className="element" />
@@ -200,30 +205,54 @@ class MainCategory extends React.Component {
                   handleSelectTitle={this.handleSelectTitle}
                   handleExpansion={this.handleExpansion}
                   categoryExpansionPanel={categoryExpansionPanel}
+                  slideChunk={slideChunk}
+                  isCategoryQuick={isCategoryQuick}
                 />
-                <CSSTransition
-                  in={showExpansionPanel && selectedRowID == category_url}
-                  timeout={500}
-                  classNames="expansion"
-                  unmountOnExit
-                >
-                  <ExpansionPanel
-                    gameItem={
-                      categoryItems.filter(
-                        categoryItem =>
-                          categoryItem.category_url === selectedRowID
-                      )[0]
-                    }
-                    gameItemApiData={this.state.gameItemApiData}
-                    isGameItemApiData={this.state.isGameItemApiData}
-                    itemPrice={this.state.itemPrice}
-                    isItemPrice={this.state.isItemPrice}
-                    selectedRowID={selectedRowID}
-                    selectedGameID={selectedGameID}
-                    showExpansionPanel={showExpansionPanel}
-                    handleExpansion={this.handleExpansion}
-                  />
-                </CSSTransition>
+                {slideChunk > 3 ? (
+                  <CSSTransition
+                    in={showExpansionPanel && selectedRowID == category_url}
+                    timeout={500}
+                    classNames="expansion"
+                    unmountOnExit
+                  >
+                    <ExpansionPanel
+                      gameItem={
+                        categoryItems.filter(
+                          categoryItem =>
+                            categoryItem.category_url === selectedRowID
+                        )[0]
+                      }
+                      gameItemApiData={this.state.gameItemApiData}
+                      isGameItemApiData={this.state.isGameItemApiData}
+                      itemPrice={this.state.itemPrice}
+                      isItemPrice={this.state.isItemPrice}
+                      selectedRowID={selectedRowID}
+                      selectedGameID={selectedGameID}
+                      showExpansionPanel={showExpansionPanel}
+                      handleExpansion={this.handleExpansion}
+                    />
+                  </CSSTransition>
+                ) : (
+                  showExpansionPanel &&
+                  selectedRowID == category_url && (
+                    <ExpansionPanelNonTransition
+                      gameItem={
+                        categoryItems.filter(
+                          categoryItem =>
+                            categoryItem.category_url === selectedRowID
+                        )[0]
+                      }
+                      gameItemApiData={this.state.gameItemApiData}
+                      isGameItemApiData={this.state.isGameItemApiData}
+                      itemPrice={this.state.itemPrice}
+                      isItemPrice={this.state.isItemPrice}
+                      selectedRowID={selectedRowID}
+                      selectedGameID={selectedGameID}
+                      showExpansionPanel={showExpansionPanel}
+                      handleExpansion={this.handleExpansion}
+                    />
+                  )
+                )}
               </React.Fragment>
             </div>
           )

@@ -9,13 +9,13 @@ import ExpansionPanelInfo from "./ExpansionPanelInfo";
 import ExpansionPanelPriceHistory from "./ExpansionPanelPriceHistory";
 import ExpansionPanelMedia from "./ExpansionPanelMedia";
 import ExpansionPanelDescription from "./ExpansionPanelDescription";
-import { Element } from "react-scroll";
 
 class ExpansionPanel extends React.Component {
   state = {
     isPanelPriceHistory: true,
     isPanelMedia: false,
-    isPanelDescription: false
+    isPanelDescription: false,
+    isImgLoaded: false
   };
 
   handlePanel = event => {
@@ -49,7 +49,8 @@ class ExpansionPanel extends React.Component {
       this.setState({
         isPanelPriceHistory: true,
         isPanelMedia: false,
-        isPanelDescription: false
+        isPanelDescription: false,
+        isImgLoaded: false
       });
     }
   }
@@ -70,7 +71,8 @@ class ExpansionPanel extends React.Component {
     const {
       isPanelPriceHistory,
       isPanelMedia,
-      isPanelDescription
+      isPanelDescription,
+      isImgLoaded
     } = this.state;
 
     let selectedGameItem = gameItem.gameItem.filter(
@@ -86,17 +88,29 @@ class ExpansionPanel extends React.Component {
     const mediaScreenshot =
       gameItemApiData.mediaList && gameItemApiData.mediaList.screenshots;
 
+    const backgroundImgUrl =
+      mediaScreenshot !== undefined ? mediaScreenshot[0].url : "";
+    const backgroundImgStyle = {
+      transition: `opacity 1000ms ease-in-out`,
+      backgroundImage: `url(${backgroundImgUrl})`
+    };
+
     return (
       <Grid className="container-expansion">
         <div
           className="expansion-background"
           style={
-            mediaScreenshot !== undefined
-              ? { backgroundImage: `url(${mediaScreenshot[0].url}) ` }
-              : {
-                  backgroundImage: `url("https://www.solidbackgrounds.com/images/2560x1440/2560x1440-black-solid-color-background.jpg"`
-                }
+            !this.state.isImgLoaded ? { opacity: "0" } : backgroundImgStyle
           }
+        />
+        <img
+          style={{ display: "none" }}
+          src={backgroundImgUrl}
+          onLoad={() => {
+            this.setState({
+              isImgLoaded: true
+            });
+          }}
         />
         <TransitionGroup>
           <CSSTransition
@@ -161,7 +175,9 @@ class ExpansionPanel extends React.Component {
               lg={8}
               className="col-expansion-panel col-expansion-media"
             >
-              {isPanelMedia ? (
+              {isPanelMedia &&
+              mediaPreview !== undefined &&
+              mediaScreenshot !== undefined ? (
                 <ExpansionPanelMedia gameItemApiData={gameItemApiData} />
               ) : null}
             </Col>

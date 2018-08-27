@@ -24,7 +24,7 @@ class MainBanner extends React.Component {
       <Carousel indicators={false}>
         {this.state.homeImgs.map((img, index) => (
           <Carousel.Item key={index}>
-            <img width={800} src={img} />
+            <img src={img} />
           </Carousel.Item>
         ))}
       </Carousel>

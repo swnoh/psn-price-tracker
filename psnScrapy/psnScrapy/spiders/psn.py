@@ -7,9 +7,8 @@ class PsnPriceSpider(scrapy.Spider):
     start_urls = [
         # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-TOPGAMES/1',
         # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-TOPPSNGAMES/1',
-        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-ALLDEALS/1?gameContentType=games',
-        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-PS3PSNPRRDRSCA/1'
-        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-ALLGAMES/1'
+        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-ALLDEALS/1?gameContentType=games%2Cbundles'
+        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-ALLGAMES/1'
     ]
 
     def parse(self, response):
@@ -41,7 +40,7 @@ class PsnPriceSpider(scrapy.Spider):
             item_game_url = 'https://store.playstation.com' + \
                 grid.css(URL_SELECTOR).extract_first()
             item_thumb_img_url = grid.css(
-                THUBM_IMG_SELECTOR).extract_first().split(", ")[2]
+                THUBM_IMG_SELECTOR).extract_first().split(", ")[2].replace("3x", "")
             item_api_url = 'https://store.playstation.com/store/api/chihiro/00_09_000/container/CA/en/999/' + \
                 grid.css(URL_SELECTOR).extract_first()[15:]
 
@@ -72,10 +71,10 @@ class PsnPriceSpider(scrapy.Spider):
             )
             yield game_item
 
-        NEXT_PAGE_SELECTOR = '.paginator-control__next ::attr(href)'
-        next_page = response.css(NEXT_PAGE_SELECTOR).extract_first()
-        if next_page is not None:
-            yield response.follow(next_page)
+        # NEXT_PAGE_SELECTOR = '.paginator-control__next ::attr(href)'
+        # next_page = response.css(NEXT_PAGE_SELECTOR).extract_first()
+        # if next_page is not None:
+        #     yield response.follow(next_page)
 
 
 class PsnBannerSpider(scrapy.Spider):

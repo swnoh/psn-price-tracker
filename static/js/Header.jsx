@@ -52,10 +52,7 @@ class Header extends React.Component {
         <Navbar.Header>
           <Navbar.Brand>
             <NavLink to="/">
-              <img
-                src="https://store.playstation.com//img/store-logo.svg"
-                style={{ height: "35px" }}
-              />
+              <img src="https://store.playstation.com//img/store-logo.svg" />
             </NavLink>
           </Navbar.Brand>
           <Navbar.Toggle />
@@ -98,11 +95,7 @@ class Header extends React.Component {
                 this.setState({ showSearchBar: !this.state.showSearchBar })
               }
             >
-              <i
-                className="fa fa-search"
-                aria-hidden="true"
-                style={{ fontSize: "1.5em", color: "white" }}
-              />
+              <i className="fa fa-search" aria-hidden="true" />
             </Button>
           </Navbar.Form>
         </Navbar.Collapse>

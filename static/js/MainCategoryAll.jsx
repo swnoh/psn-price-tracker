@@ -26,48 +26,7 @@ class MainCategoryAll extends React.Component {
     slideChunk: 10
   };
 
-  handleResize = () => {
-    if (window.innerWidth > 1904)
-      this.setState({
-        slideChunk: 10
-      });
-    else if (window.innerWidth > 1729)
-      this.setState({
-        slideChunk: 9
-      });
-    else if (window.innerWidth > 1554)
-      this.setState({
-        slideChunk: 8
-      });
-    else if (window.innerWidth > 1379)
-      this.setState({
-        slideChunk: 7
-      });
-    else if (window.innerWidth > 1204)
-      this.setState({
-        slideChunk: 6
-      });
-    else if (window.innerWidth > 1029)
-      this.setState({
-        slideChunk: 5
-      });
-    else if (window.innerWidth > 854)
-      this.setState({
-        slideChunk: 4
-      });
-    else
-      this.setState({
-        slideChunk: 3
-      });
-  };
-
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.handleResize);
-  }
-
   componentDidMount() {
-    this.handleResize();
-    window.addEventListener("resize", this.handleResize);
     this.setState({ showTransition: true });
 
     if (
@@ -80,7 +39,7 @@ class MainCategoryAll extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.slideChunk !== this.state.slideChunk) {
+    if (prevProps.slideChunk !== this.props.slideChunk) {
       this.handleChunk(this.state.category_name, this.state.rawData);
     }
   }
@@ -101,7 +60,7 @@ class MainCategoryAll extends React.Component {
   handleChunk = (category_name, data) => {
     let newCategory = [];
     let rowItem = [];
-    let chunk = this.state.slideChunk;
+    let chunk = this.props.slideChunk;
 
     if (Object.keys(data).length === 0 && data.constructor === Object) {
       return;
@@ -114,7 +73,6 @@ class MainCategoryAll extends React.Component {
         });
       }
       this.setState({
-        slideChunk: this.state.slideChunk,
         categoryItems: newCategory,
         categoryExpansionPanel: true
       });
@@ -135,6 +93,7 @@ class MainCategoryAll extends React.Component {
             <MainCategory
               categoryItems={this.state.categoryItems}
               categoryExpansionPanel={this.state.categoryExpansionPanel}
+              slideChunk={this.props.slideChunk}
             />
           </div>
         )}

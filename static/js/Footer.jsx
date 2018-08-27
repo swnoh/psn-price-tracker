@@ -3,7 +3,7 @@ import { Grid } from "react-bootstrap";
 
 const Footer = () => {
   return (
-    <Grid>
+    <Grid className="footer">
       <p style={{ padding: "50px" }}>© 2018 PSN Tracker</p>
     </Grid>
   );

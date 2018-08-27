@@ -29,22 +29,18 @@ class TitleRow extends React.Component {
     });
   }
 
-  handleHoverOn = (rowid, id, index, event) => {
-    const selectedSlickIndex =
-      event.target.parentNode.parentNode.parentNode.parentNode.parentNode
-        .dataset.index;
+  handleHoverOn = index => {
     this.setState({ isHoverOn: true, currentIdx: index });
-    this.props.handleSelectTitle(rowid, id);
   };
 
   handleHoverOff = () => {
     this.setState({ isHoverOn: false, currentIdx: -1 });
   };
 
-  handleTransform = (index, lastIdx) => {
+  handleTransform = (className, index, lastIdx) => {
     const { isHoverOn, currentIdx } = this.state;
 
-    let classNameTransform = "tile__media";
+    let classNameTransform = className;
 
     if (this.state.isHoverOn) {
       if (index === currentIdx) classNameTransform += " tile_transform";
@@ -52,7 +48,8 @@ class TitleRow extends React.Component {
       else if (index > currentIdx) classNameTransform += " tile_next_transform";
 
       if (currentIdx === 0) classNameTransform += " first";
-      else if (currentIdx === lastIdx) classNameTransform += " last";
+      else if (currentIdx === lastIdx && this.props.slideChunk - 1 === lastIdx)
+        classNameTransform += " last";
     }
 
     return classNameTransform;
@@ -64,9 +61,12 @@ class TitleRow extends React.Component {
       rowid,
       showExpansionPanel,
       handleExpansion,
+      handleSelectTitle,
       selectedRowID,
       selectedGameID,
-      categoryExpansionPanel
+      categoryExpansionPanel,
+      slideChunk,
+      isCategoryQuick
     } = this.props;
 
     const { currentIdx, intialTransition, isHoverOn } = this.state;
@@ -74,7 +74,11 @@ class TitleRow extends React.Component {
     const lastIdx = gameItem.length - 1;
 
     return (
-      <Row className="row-slide-game">
+      <Row
+        className={
+          isCategoryQuick ? "row-slide-game" : "row-slide-game no-slide-arrow"
+        }
+      >
         {gameItem.map(
           (
             {
@@ -99,35 +103,39 @@ class TitleRow extends React.Component {
                   }}
                   onClick={() => {
                     handleExpansion(rowid, game_id);
+                    handleSelectTitle(rowid, game_id);
                     this.handleHoverOff();
                   }}
-                  onMouseEnter={event => {
+                  onMouseEnter={() => {
                     if (showExpansionPanel) {
-                      this.handleHoverOff();
-                      selectedGameID !== game_id && selectedRowID === rowid
-                        ? handleExpansion(rowid, game_id)
-                        : null;
+                      selectedRowID === rowid
+                        ? selectedGameID !== game_id
+                          ? handleExpansion(rowid, game_id)
+                          : null
+                        : this.handleHoverOn(index);
                     } else {
-                      this.handleHoverOn(rowid, game_id, index, event);
+                      slideChunk > 3 ? this.handleHoverOn(index) : null;
                     }
                   }}
                   onMouseLeave={this.handleHoverOff}
                 >
                   <div
-                    className={
-                      isHoverOn && selectedGameID === game_id
-                        ? currentIdx === 0
-                          ? "tile__details tile_transform first"
-                          : currentIdx === lastIdx
-                            ? "tile__details tile_transform last"
-                            : "tile__details tile_transform"
-                        : "tile__details"
-                    }
+                    className={this.handleTransform(
+                      "tile__details",
+                      index,
+                      lastIdx
+                    )}
                   >
                     <div className="tile__title">{game_title}</div>
                     <div className="tile__price">{display_price}</div>
                   </div>
-                  <div className={this.handleTransform(index, lastIdx)}>
+                  <div
+                    className={this.handleTransform(
+                      "tile__media",
+                      index,
+                      lastIdx
+                    )}
+                  >
                     <LazyLoad offsetVertical={500} offsetHorizontal={1800}>
                       <img
                         className={

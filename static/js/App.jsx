@@ -11,21 +11,59 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { HashRouter, Switch, Route, BrowserRouter } from "react-router-dom";
 import ScrollToTop from "./ScrollToTop";
 
-const mainBackgroundImage = {
-  backgroundImage: `url(
-      "https://apollo2.dl.playstation.net/cdn/UP1477/CUSA07022_00/FREE_CONTENTSM4qUEXYckBPnnAnxhvj/PREVIEW_SCREENSHOT2_153277.png"
-    )`
-};
-//https://apollo2.dl.playstation.net/cdn/UP0006/CUSA08724_00/FREE_CONTENToQIMNNW75HcxC310D2pk/PREVIEW_SCREENSHOT8_165567.jpg
-//https://apollo2.dl.playstation.net/cdn/UP9000/CUSA02299_00/FREE_CONTENTaF5vcf6gJ2FyFca5zoIj/PREVIEW_SCREENSHOT6_164001.jpg
-//https://apollo2.dl.playstation.net/cdn/UP0006/CUSA10038_00/FREE_CONTENTrTcFqBk8oI1z05VGnC9f/PREVIEW_SCREENSHOT1_167281.jpg
-//https://apollo2.dl.playstation.net/cdn/UP0002/CUSA05969_00/FREE_CONTENTv66N8XMUSL6w2Ig1xTfx/PREVIEW_SCREENSHOT1_165073.jpg
-//https://apollo2.dl.playstation.net/cdn/UP0006/CUSA08006_00/FREE_CONTENTFcK5FdjUK5Top2t7SRqv/PREVIEW_SCREENSHOT5_151250.jpg
-//https://apollo2.dl.playstation.net/cdn/UP9000/CUSA03220_00/FREE_CONTENTZ8tbU2ebGUo8oaL0CZKt/PREVIEW_SCREENSHOT7_116713.jpg
-//https://apollo2.dl.playstation.net/cdn/UP1477/CUSA07022_00/FREE_CONTENTSM4qUEXYckBPnnAnxhvj/PREVIEW_SCREENSHOT2_153277.png
+const SITE_URL = "http://psntracker.azurewebsites.net";
 
 export default class App extends React.Component {
+  state = {
+    backgroundImgUrls: "",
+    isImgLoaded: false,
+    slideChunk: 10
+  };
+
+  handleResize = () => {
+    const baseWidth = 1904;
+    const baseImg = 175.5;
+    let slideChunk = 10;
+
+    if (window.innerWidth > baseWidth - baseImg * 0) slideChunk = 10;
+    else if (window.innerWidth > baseWidth - baseImg * 1) slideChunk = 9;
+    else if (window.innerWidth > baseWidth - baseImg * 2) slideChunk = 8;
+    else if (window.innerWidth > baseWidth - baseImg * 3) slideChunk = 7;
+    else if (window.innerWidth > baseWidth - baseImg * 4) slideChunk = 6;
+    else if (window.innerWidth > baseWidth - baseImg * 5) slideChunk = 5;
+    else if (window.innerWidth > baseWidth - baseImg * 6) slideChunk = 3;
+    else slideChunk = 2;
+
+    if (this.state.slideChunk !== slideChunk)
+      this.setState({ slideChunk: slideChunk });
+  };
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
+
+  componentDidMount() {
+    this.handleResize();
+    window.addEventListener("resize", this.handleResize);
+    fetch(`${SITE_URL}/api/psn/banner`)
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ backgroundImgUrls: data.bannerBackgroundUrl });
+      });
+  }
+
   render() {
+    const { backgroundImgUrls } = this.state;
+
+    const backgroundImgUrl =
+      backgroundImgUrls[Math.floor(Math.random() * backgroundImgUrls.length)];
+
+    const backgroundImgStyle = {
+      transition: `opacity 1000ms ease-in-out`,
+      backgroundImage: `url(${backgroundImgUrl})`,
+      opacity: 1
+    };
+
     return (
       <BrowserRouter>
         <ScrollToTop>
@@ -33,22 +71,57 @@ export default class App extends React.Component {
             <Row>
               <Header />
             </Row>
-            <Row className="main-feature" style={mainBackgroundImage}>
+            <Row
+              className="main-feature"
+              style={
+                !this.state.isImgLoaded ? { opacity: "0" } : backgroundImgStyle
+              }
+            >
               <Route exact path="/" component={MainBanner} />
+              <img
+                style={{ display: "none" }}
+                src={backgroundImgUrl}
+                onLoad={() => {
+                  this.setState({
+                    isImgLoaded: true
+                  });
+                }}
+              />
             </Row>
             <Row className="row-content">
               <Switch>
-                <Route
-                  exact
-                  path="/"
-                  component={props => <MainCategoryQuick match={props.match} />}
-                />
+                {this.state.isImgLoaded ? (
+                  <Route
+                    exact
+                    path="/"
+                    component={props => (
+                      <MainCategoryQuick
+                        match={props.match}
+                        slideChunk={this.state.slideChunk}
+                      />
+                    )}
+                  />
+                ) : null}
                 <Route
                   exact
                   path="/category/:name"
-                  component={props => <MainCategoryAll match={props.match} />}
+                  component={props => (
+                    <MainCategoryAll
+                      match={props.match}
+                      slideChunk={this.state.slideChunk}
+                    />
+                  )}
                 />
-                <Route exact path="/search" component={MainSearchPage} />
+                <Route
+                  exact
+                  path="/search"
+                  component={props => (
+                    <MainSearchPage
+                      location={props.location}
+                      slideChunk={this.state.slideChunk}
+                    />
+                  )}
+                />
               </Switch>
             </Row>
             <Row>

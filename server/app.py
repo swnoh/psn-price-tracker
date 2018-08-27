@@ -50,10 +50,17 @@ def psn():
 def psn_category_quick():
     selected_item = []
 
+    chunkNumber = request.args.get('limit')
+
+    if not chunkNumber:
+        chunkNumber = 20
+    else:
+        chunkNumber = int(chunkNumber)
+
     for category_name in DB.session.query(PsnCategoryModel.category_name).distinct():
         selected_game_item = []
         eachitems = DB.session.query(PsnGameModel).join(PsnCategoryModel, PsnGameModel.game_id == PsnCategoryModel.game_id).filter(
-            PsnCategoryModel.category_name == category_name).order_by(PsnCategoryModel.id.asc()).limit(20).all()
+            PsnCategoryModel.category_name == category_name).order_by(PsnCategoryModel.id.asc()).limit(chunkNumber).all()
 
         category_url = DB.session.query(PsnCategoryModel).filter(
             PsnCategoryModel.category_name == category_name).first().category_url
@@ -69,7 +76,7 @@ def psn_category_quick():
     return json.dumps(selected_item)
 
 
-@app.route('/api/psn/category/all', methods=["GET"])
+@app.route('/api/psn/category', methods=["GET"])
 def psn_category_all():
     itemCategory = PsnCategoryModel.query.all()
     selected_item = []
@@ -179,9 +186,8 @@ def temp():
 def psn_banner():
 
     items = PsnBannerModel.query.first()
-    print(type(PsnPriceHistoryModel.query.first().chartPrices[0]))
-    print(PsnPriceHistoryModel.query.first().chartPrices[0]["date"])
-    selected_item = {'bannerItems': items.banner_url}
+    selected_item = {'bannerItems': items.banner_url,
+                     'bannerBackgroundUrl': items.banner_background_url}
 
     return json.dumps(selected_item)
 

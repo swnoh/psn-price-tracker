@@ -142,6 +142,7 @@ class PsnscrapyPipeline(object):
             chartPrice = -1
 
         chartBonusPrice = -1
+        isBonusPrice = False
 
         if api_data['default_sku']['rewards']:
             if api_data['default_sku']['rewards'][0]['display_price'] != 'Free':
@@ -153,12 +154,18 @@ class PsnscrapyPipeline(object):
             if 'bonus_display_price' in api_data['default_sku']['rewards'][0]:
                 chartBonusPrice = float(api_data['default_sku']['rewards'][0]['bonus_display_price'].replace(
                     "$", ""))
+                isBonusPrice = True
 
             if api_data['default_sku']['rewards'][0]['isPlus']:
                 chartBonusPrice = chartPrice
-                chartPrice = -1
+                isBonusPrice = True
+                chartPrice = float(
+                    api_data['default_sku']['display_price'].replace("$", ""))
 
         print(item['game_id'])
+
+        if chartBonusPrice == -1:
+            chartBonusPrice = chartPrice
 
         date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -180,7 +187,7 @@ class PsnscrapyPipeline(object):
                 chartPriceItem = []
 
             if chartBonusPrice == -1:
-                chartBonusPriceItem = []
+                chartBonusPriceItem = chartPriceItem
 
             priceItem = PsnPriceHistoryModel(
                 game_id=item['game_id'],
@@ -205,11 +212,14 @@ class PsnscrapyPipeline(object):
 
             if chartPriceItem[0]['price'] != '-1' and selectedPriceItem.chartPrices[-1]['price'] != chartPriceItem[0]['price']:
                 updatePrice.append(chartPriceItem[0])
+                updateBonusPrice.append(chartBonusPriceItem[0])
                 isPriceUpdate = True
 
             if chartBonusPriceItem[0]['price'] != '-1' and selectedPriceItem.chartBonusPrices[-1]['price'] != chartBonusPriceItem[0]['price']:
-                updateBonusPrice.append(chartBonusPriceItem[0])
-                isBonusPriceUpdate = True
+                if not isPriceUpdate:
+                    updatePrice.append(chartPriceItem[0])
+                    updateBonusPrice.append(chartBonusPriceItem[0])
+                    isBonusPriceUpdate = True
 
             if selectedPriceItem.highest_price < chartPrice or selectedPriceItem.highest_price == -1:
                 selectedPriceItem.highest_price = chartPrice
@@ -218,18 +228,15 @@ class PsnscrapyPipeline(object):
                 if(chartPrice != -1):
                     selectedPriceItem.lowest_price = chartPrice
 
-            if selectedPriceItem.plus_lowest_price > chartBonusPrice or selectedPriceItem.plus_lowest_price == -1:
-                if (chartBonusPrice != -1):
+            if isBonusPrice:
+                if selectedPriceItem.plus_lowest_price > chartBonusPrice or selectedPriceItem.plus_lowest_price == -1:
                     selectedPriceItem.plus_lowest_price = chartBonusPrice
 
             session.commit()
 
-            if isPriceUpdate:
-                selectedPriceItem.chartPrices = updatePrice
-            if isBonusPriceUpdate:
-                selectedPriceItem.chartBonusPrices = updateBonusPrice
-
             if isPriceUpdate or isBonusPriceUpdate:
+                selectedPriceItem.chartPrices = updatePrice
+                selectedPriceItem.chartBonusPrices = updateBonusPrice
                 session.commit()
 
         return

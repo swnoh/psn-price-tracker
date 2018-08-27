@@ -23,54 +23,54 @@ class MainSearchPage extends React.Component {
     categoryItems: [],
     categoryExpansionPanel: false,
     showTransition: false,
-    isFetchDone: false,
-    slideChunk: 10
+    isFetchDone: false
+    // slideChunk: 10
   };
-  handleResize = () => {
-    if (window.innerWidth > 1904)
-      this.setState({
-        slideChunk: 10
-      });
-    else if (window.innerWidth > 1729)
-      this.setState({
-        slideChunk: 9
-      });
-    else if (window.innerWidth > 1554)
-      this.setState({
-        slideChunk: 8
-      });
-    else if (window.innerWidth > 1379)
-      this.setState({
-        slideChunk: 7
-      });
-    else if (window.innerWidth > 1204)
-      this.setState({
-        slideChunk: 6
-      });
-    else if (window.innerWidth > 1029)
-      this.setState({
-        slideChunk: 5
-      });
-    else if (window.innerWidth > 854)
-      this.setState({
-        slideChunk: 4
-      });
-    else
-      this.setState({
-        slideChunk: 3
-      });
-  };
+  // handleResize = () => {
+  //   if (window.innerWidth > 1904)
+  //     this.setState({
+  //       slideChunk: 10
+  //     });
+  //   else if (window.innerWidth > 1729)
+  //     this.setState({
+  //       slideChunk: 9
+  //     });
+  //   else if (window.innerWidth > 1554)
+  //     this.setState({
+  //       slideChunk: 8
+  //     });
+  //   else if (window.innerWidth > 1379)
+  //     this.setState({
+  //       slideChunk: 7
+  //     });
+  //   else if (window.innerWidth > 1204)
+  //     this.setState({
+  //       slideChunk: 6
+  //     });
+  //   else if (window.innerWidth > 1029)
+  //     this.setState({
+  //       slideChunk: 5
+  //     });
+  //   else if (window.innerWidth > 854)
+  //     this.setState({
+  //       slideChunk: 4
+  //     });
+  //   else
+  //     this.setState({
+  //       slideChunk: 3
+  //     });
+  // };
 
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.handleResize);
-  }
+  // componentWillUnmount() {
+  //   window.removeEventListener("resize", this.handleResize);
+  // }
 
   componentDidMount() {
     this.setState({ showTransition: true });
     const value = queryString.parse(this.props.location.search);
     this.handleSearch(value.q);
-    this.handleResize();
-    window.addEventListener("resize", this.handleResize);
+    // this.handleResize();
+    // window.addEventListener("resize", this.handleResize);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -79,7 +79,7 @@ class MainSearchPage extends React.Component {
       this.handleSearch(value.q);
     }
 
-    if (prevState.slideChunk !== this.state.slideChunk) {
+    if (prevProps.slideChunk !== this.props.slideChunk) {
       this.handleChunk(this.state.searchWord, this.state.rawData, false);
     }
   }
@@ -104,7 +104,7 @@ class MainSearchPage extends React.Component {
   handleChunk = (searchWord, data, loading) => {
     let newCategory = [];
     let rowItem = [];
-    let chunk = this.state.slideChunk;
+    let chunk = this.props.slideChunk;
 
     if (Object.keys(data).length === 0 && data.constructor === Object) {
       return;
@@ -119,7 +119,7 @@ class MainSearchPage extends React.Component {
       setTimeout(
         () =>
           this.setState({
-            slideChunk: this.state.slideChunk,
+            // slideChunk: this.state.slideChunk,
             categoryItems: newCategory,
             categoryExpansionPanel: true,
             isFetchDone: true
@@ -151,6 +151,7 @@ class MainSearchPage extends React.Component {
                 <MainCategory
                   categoryItems={categoryItems}
                   categoryExpansionPanel={categoryExpansionPanel}
+                  slideChunk={this.props.slideChunk}
                 />
               ) : (
                 <p

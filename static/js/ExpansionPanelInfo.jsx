@@ -26,6 +26,7 @@ class ExpansionPanelInfo extends React.Component {
     const is_plus_price = rewards && rewards.isPlus;
 
     const release_date = gameItemApiData.release_date;
+
     return (
       <TransitionGroup>
         <CSSTransition
@@ -39,14 +40,14 @@ class ExpansionPanelInfo extends React.Component {
             isPanelMedia || isPanelDescription ? "titleinfopanel" : "fade"
           }
         >
-          <Row>
-            <Col xs={5} md={12} lg={12}>
+          <Row className="row-expansion-title-info">
+            <Col xs={6} md={12} lg={12}>
               <img
+                className="title-info-thumb"
                 src={selectedGameItem.thumb_img_url}
-                style={{ width: "200px", paddingTop: "30px" }}
               />
             </Col>
-            <Col xs={7} md={12} lg={12}>
+            <Col xs={6} md={12} lg={12}>
               <h2>
                 <span
                   style={
@@ -95,7 +96,8 @@ class ExpansionPanelInfo extends React.Component {
               <Rating
                 initialRating={
                   gameItemApiData.star_rating &&
-                  gameItemApiData.star_rating.score
+                  gameItemApiData.star_rating.scoren &&
+                  parseFloat(gameItemApiData.star_rating.score)
                 }
                 readonly
                 emptySymbol="fa fa-star-o"

@@ -5,52 +5,8 @@ import TitleRow from "./TitleRow";
 
 class TitleSlide extends React.Component {
   state = {
-    slideChunk: 10
+    activeSlide: 0
   };
-
-  handleResize = () => {
-    if (window.innerWidth > 1904)
-      this.setState({
-        slideChunk: 10
-      });
-    else if (window.innerWidth > 1729)
-      this.setState({
-        slideChunk: 9
-      });
-    else if (window.innerWidth > 1554)
-      this.setState({
-        slideChunk: 8
-      });
-    else if (window.innerWidth > 1379)
-      this.setState({
-        slideChunk: 7
-      });
-    else if (window.innerWidth > 1204)
-      this.setState({
-        slideChunk: 6
-      });
-    else if (window.innerWidth > 1029)
-      this.setState({
-        slideChunk: 5
-      });
-    else if (window.innerWidth > 854)
-      this.setState({
-        slideChunk: 4
-      });
-    else
-      this.setState({
-        slideChunk: 3
-      });
-  };
-
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.handleResize);
-  }
-
-  componentDidMount() {
-    this.handleResize();
-    window.addEventListener("resize", this.handleResize);
-  }
 
   render() {
     const {
@@ -61,7 +17,9 @@ class TitleSlide extends React.Component {
       handleExpansion,
       selectedRowID,
       selectedGameID,
-      categoryExpansionPanel
+      categoryExpansionPanel,
+      slideChunk,
+      isCategoryQuick
     } = this.props;
 
     const slick_settings = {
@@ -71,11 +29,16 @@ class TitleSlide extends React.Component {
       slidesToScroll: 1,
       arrows: !categoryExpansionPanel,
       lazyLoad: true,
-      draggable: false
+      draggable: slideChunk > 3 ? false : true,
+      beforeChange: (current, next) => this.setState({ activeSlide: next })
+    };
+
+    const defaultStyle = {
+      height: slideChunk > 3 ? "270px" : "400px"
     };
 
     let splitGameItem = [];
-    let chunk = this.state.slideChunk;
+    let chunk = slideChunk;
 
     for (let i = 0, j = gameItem.length; i < j; i += chunk) {
       splitGameItem.push({
@@ -84,7 +47,13 @@ class TitleSlide extends React.Component {
     }
 
     return (
-      <Grid fluid>
+      <Grid
+        fluid
+        className={`container-row-slide ${
+          this.state.activeSlide === 0 ? "initial-slide" : ""
+        }`}
+        style={defaultStyle}
+      >
         <Slider {...slick_settings}>
           {splitGameItem.map(({ gameItem }, index) => (
             <TitleRow
@@ -97,6 +66,8 @@ class TitleSlide extends React.Component {
               selectedRowID={selectedRowID}
               selectedGameID={selectedGameID}
               categoryExpansionPanel={categoryExpansionPanel}
+              slideChunk={slideChunk}
+              isCategoryQuick={isCategoryQuick}
             />
           ))}
         </Slider>

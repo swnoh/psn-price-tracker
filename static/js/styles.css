@@ -21,6 +21,29 @@ html {
   padding: 0;
 }
 
+.navbar > .container {
+  width: 100%;
+}
+
+.navbar-brand {
+  height: 60px;
+  margin-left: 40px !important;
+}
+
+.navbar-brand > img {
+  height: 35px;
+}
+
+.navbar-right {
+  margin-top: 15px;
+  margin-right: 40px !important;
+}
+
+.navbar-form.navbar-right i {
+  font-size: 1.5em;
+  color: white;
+}
+
 .main-feature.row {
   position: relative;
   margin: 0 0 80px 0;
@@ -28,31 +51,39 @@ html {
 
 .row-content {
   margin: 0;
-  padding: 0 30px;
-  min-height: 90vh;
+  min-height: 70vh;
 }
 
 .row-category {
   position: relative;
+  z-index: 0;
 }
 
 .row-category h3 {
-  margin: 15px 0 -5px 35px;
+  margin: 15px 0 -5px 85px;
 }
 
 .row-category-title-name {
   font-weight: 900;
+  color: rgb(230, 230, 230);
   font-family: "Catamaran", sans-serif;
 }
 
+.row-category-title,
 .row-category-title-link .row-category-title div {
-  color: rgb(230, 230, 230);
   display: inline-block;
 }
 
 .row-category-title-explorer {
   font-size: 0.8em;
+  font-weight: bold;
   margin-left: 20px;
+  color: #3379b7dc !important;
+}
+
+.row-category-title-explorer:hover {
+  font-size: 0.8em;
+  color: rgb(230, 230, 230) !important;
 }
 
 .page-category-all,
@@ -114,30 +145,26 @@ a:hover {
 
 .container-expansion {
   position: relative;
-  z-index: 5;
-  top: -40px;
-  margin-left: 0;
-  margin-right: 0;
+  z-index: -1;
+  top: -50px;
   width: 100%;
 }
 
 .close-button {
   position: absolute;
-  right: 0;
-  top: 0;
-  font-size: 3em;
+  right: 20px;
+  top: 20px;
+  font-size: 3.5em;
   padding: 0 20px;
-  z-index: 12;
   cursor: pointer;
   color: #fff;
 }
 
 .col-expansion-title {
-  padding-left: 50px;
+  padding-left: 100px;
 }
 
 .col-expansion-title h2 {
-  font-size: 2.5em;
   font-weight: 700;
 }
 
@@ -160,7 +187,7 @@ a:hover {
 }
 
 .price-table h2,
-.price-table h5 {
+.price-table h4 {
   text-align: center;
 }
 
@@ -178,8 +205,7 @@ a:hover {
   width: 100%;
   height: 100%;
   position: absolute;
-  opacity: 0.5;
-  transition: background-image 1s ease-in-out;
+  opacity: 0.3;
 }
 
 .expansion-background:after {
@@ -205,8 +231,14 @@ a:hover {
 .row-slide-game {
   height: 100%;
   padding-top: 45px;
-  padding-left: 20px;
   margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.row-slide-game.no-slide-arrow {
+  justify-content: left;
+  padding-left: 60px;
 }
 
 .tile {
@@ -217,9 +249,20 @@ a:hover {
 }
 
 .slick-slide img {
-  width: 175px;
-  height: auto;
+  height: 78%;
   border: 3px solid transparent;
+}
+
+.col-expansion-media .slick-slide img {
+  height: 100%;
+}
+
+.col-expansion-media .slick-prev {
+  left: -35px;
+}
+
+.col-expansion-media .slick-next {
+  right: -35px;
 }
 
 .tile_transform {
@@ -227,7 +270,7 @@ a:hover {
 }
 
 .tile_transform.first {
-  transform: scale(1.5) translate3d(20px, 0px, 0px);
+  transform: scale(1.5) translate3d(30px, 0px, 0px);
 }
 
 .tile_transform.last {
@@ -247,7 +290,7 @@ a:hover {
 }
 
 .tile__media.tile_next_transform.first {
-  transform: translate3d(74px, 0px, 0px);
+  transform: translate3d(87px, 0px, 0px);
   transition-duration: 350ms;
   transition-timing-function: cubic-bezier(0.5, 0, 0.1, 1);
 }
@@ -265,7 +308,7 @@ a:hover {
 }
 
 .slick-track .slick-slide {
-  height: 270px;
+  height: 100%;
 }
 
 .col-expansion-media .slick-track .slick-slide {
@@ -275,23 +318,51 @@ a:hover {
   height: 450px;
 }
 
-/* .slick-next:before,
-.slick-prev:after {
-  font-size: 30px;
-  color: rgb(102, 45, 45);
-} */
+.container-row-slide {
+  z-index: 2;
+}
+
+.slick-prev,
+.slick-next {
+  top: 45%;
+  z-index: 10;
+}
+
+.container-row-slide .slick-prev {
+  left: 32px;
+}
+
+.container-row-slide.initial-slide .slick-prev {
+  display: none !important;
+}
+
+.container-row-slide .slick-next {
+  right: 40px;
+}
+
+.container-row-slide .slick-prev:hover,
+.container-row-slide .slick-next:hover {
+  top: 40%;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+  transition: all 200ms;
+  transform: scale(1.5);
+  top: 42%;
+}
 
 .slick-prev:before {
   font-family: "FontAwesome";
   content: "\f053";
-  color: rgb(200, 200, 200);
+  color: rgb(230, 230, 230);
   font-size: 30px;
 }
 
 .slick-next:before {
   font-family: "FontAwesome";
   content: "\f054";
-  color: rgb(200, 200, 200);
+  color: rgb(230, 230, 230);
   font-size: 30px;
 }
 
@@ -299,7 +370,7 @@ a:hover {
   position: absolute;
   bottom: 0;
   left: 0;
-  right: 0;
+  right: 1;
   top: 0;
   font-size: 10px;
   opacity: 0;
@@ -312,6 +383,7 @@ a:hover {
   );
   transition: 0ms opacity;
   outline: none;
+  height: 78%;
 }
 
 .tile__details:after,
@@ -460,6 +532,20 @@ img.plus_exclusive_price_icon {
   opacity: 0.5;
 }
 
+.container-fluid,
+.row-content,
+.container-expansion {
+  padding: 0;
+}
+
+.container-expansion.container {
+  width: 100%;
+}
+
+.row-expansion-title-info {
+  padding-left: 50px;
+}
+
 .wrapper-title-row h3 {
   margin-bottom: -15px;
   font-weight: bold;
@@ -477,6 +563,11 @@ img.plus_exclusive_price_icon {
 .col-title-info {
   height: 30vh;
   padding-left: 50px;
+  padding-top: 30px;
+}
+
+.col-title-info .title-info-thumb {
+  width: 200px;
 }
 
 .price-history-chart {
@@ -484,7 +575,6 @@ img.plus_exclusive_price_icon {
 }
 
 .col-expansion-description {
-  /* color: rgb(192, 192, 192); */
   color: rgb(228, 228, 228);
   padding: 20px 0 0 30px;
   overflow: auto;
@@ -506,7 +596,6 @@ img.plus_exclusive_price_icon {
 
 .expansion-menu ul {
   width: 100%;
-  font-size: 1.7vw;
   z-index: 100;
   padding: 0;
   margin: 0;
@@ -641,13 +730,13 @@ transition-group setting
 
 .rowTitleArrow-enter {
   opacity: 1;
-  transform: scale(1) translateX(-150%);
+  transform: scale(1) translateX(-400%);
 }
 
 .rowTitleArrow-enter-active {
   opacity: 1;
   transform: scale(1) translateX(0%);
-  transition: all 50ms ease-in-out;
+  transition: all 150ms ease-in-out;
 }
 
 .rowTitleArrow-exit {
@@ -842,29 +931,128 @@ transition-group setting
   }
 }
 
+@media (max-width: 991px) {
+  .navbar-transparent {
+    background-color: #222;
+  }
+  .navbar-brand {
+    height: 100px;
+    margin-left: 0 !important;
+  }
+  .navbar-brand > img {
+    height: 75px;
+  }
+  .navbar-right {
+    margin-right: 0;
+    margin-top: 20px;
+  }
+  .navbar-form.navbar-right i {
+    font-size: 4em;
+  }
+  .form-control {
+    height: 64px;
+    font-size: 30px;
+  }
+  .row-category h3 {
+    margin-top: 80px;
+    margin-left: 30px;
+  }
+  .main-feature.row img {
+    width: 100%;
+  }
+  .row-slide-game.no-slide-arrow {
+    padding-left: 0;
+    justify-content: center;
+  }
+  .container-expansion {
+    font-size: 2.5em;
+  }
+  .button-playstation-store {
+    font-size: 25px;
+    width: 100%;
+    color: rgb(221, 221, 221) !important;
+  }
+  .container-fluid,
+  .row-content,
+  .container-expansion {
+    padding: 0;
+  }
+  .row-category-title {
+    font-size: 3em;
+  }
+  .container-row-slide .slick-prev,
+  .container-row-slide .slick-next {
+    transition: none;
+    transform: none;
+    top: -50px;
+  }
+  .container-row-slide .slick-prev:before,
+  .container-row-slide .slick-next:before {
+    font-size: 80px;
+  }
+  .container-row-slide .slick-prev {
+    right: 200px;
+    left: auto;
+  }
+  .container-row-slide .slick-next {
+    right: 80px;
+  }
+  .container-row-slide .slick-prev:hover,
+  .container-row-slide .slick-next:hover {
+    transition: none;
+    transform: none;
+  }
+  .tile__discount span {
+    font-size: 2em;
+  }
+  .col-expansion-title {
+    padding-left: 50px;
+    padding-top: 30px;
+  }
+  .row-expansion-title-info {
+    padding-left: 0;
+  }
+  .col-title-info .title-info-thumb {
+    width: 370px;
+    padding-left: 30px;
+  }
+  .col-expansion-title h2,
+  .col-title-info h2,
+  .price-table h2 {
+    font-size: 1.2em;
+  }
+  .col-title-info h4,
+  .price-table h4 {
+    font-size: 0.8em;
+  }
+  .close-button {
+    top: -40px;
+  }
+  .slick-slide img {
+    height: 88%;
+  }
+  .col-expansion-panel.col-expansion-media {
+    width: 95%;
+  }
+
+  .col-expansion-panel.col-expansion-description {
+    font-size: 0.8em;
+  }
+
+  .footer p {
+    font-size: 2em;
+    font-weight: 700;
+  }
+}
+
 @media (min-width: 992px) {
   .col-title-info {
     height: 48vh;
   }
 }
 
-@media (min-width: 1200px) {
-  .expansion-menu ul {
-    font-size: 1.2vw;
-  }
-}
-
 @media (min-width: 1500px) {
-  .container {
-    width: 1450px;
-  }
   .expansion-menu ul {
-    font-size: 1vw;
-  }
-}
-
-@media (min-width: 1800px) {
-  .container {
-    width: 1750px;
+    font-size: 1.3em;
   }
 }

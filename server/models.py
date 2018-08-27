@@ -56,9 +56,11 @@ class PsnBannerModel(DB.Model):
 
     id = DB.Column(DB.Integer, primary_key=True)
     banner_url = DB.Column(DB.JSON, nullable=False)
+    banner_background_url = DB.Column(DB.JSON)
 
-    def __init__(self, banner_url):
+    def __init__(self, banner_url, banner_background_url):
         self.banner_url = banner_url
+        self.banner_background_url = banner_background_url
 
 
 class PsnGameModel(DB.Model):

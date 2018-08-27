@@ -32,19 +32,19 @@ class ExpansionPanelPriceHistory extends React.Component {
         </Row>
         <Row className="row-price-table">
           <Col xs={4} className="price-table">
-            <h5>Highest Price</h5>
+            <h4>Highest Price</h4>
             <h2 className="highest-price">
               {itemPrice.highest_price < 0 ? "-" : itemPrice.highest_price}
             </h2>
           </Col>
           <Col xs={4} className="price-table">
-            <h5>Lowest Price</h5>
+            <h4>Lowest Price</h4>
             <h2 className="lowest-price">
               {itemPrice.lowest_price < 0 ? "-" : itemPrice.lowest_price}
             </h2>
           </Col>
           <Col xs={4} className="price-table">
-            <h5>Lowest PS+ Price</h5>
+            <h4>Lowest PS+ Price</h4>
             <h2 className="lowest-plus-price">
               {itemPrice.plus_lowest_price < 0
                 ? "-"
