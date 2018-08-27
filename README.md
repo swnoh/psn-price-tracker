@@ -2,50 +2,64 @@
 
 Interactive and responsive price tracker website for Playstation Store, highly inspired by Netflix's UI, designed and coded by [Seungwan Noh](https://github.com/swnoh).
 
-This project was developed with React, Html5, CSS3, Flask, Scrapy, and Postgresql.
+This project was developed with React, Html5, CSS3, Flask, Scrapy, and Postgresql and deployed on Azure.
 
 Demo: [http://psntracker.azurewebsites.net](http://psntracker.azurewebsites.net)
 
 ![Mockup demo](screenshots/main.png)
 
-## Instant Search
+## User Interface
 
-![Mockup demo](screenshots/searching.gif)
-
-## Mobile View
+### Mobile View
 
 ![Mockup demo](screenshots/mobile.png)
 
-## Carousel Sliders
+### Carousel Sliders
 
 ![Mockup demo](screenshots/slider.gif)
 
-## Detail Panel
+### Detail Panel
 
 ![Mockup demo](screenshots/detail_panel.gif)
 
-## React Build
+### Instant Search
 
+![Mockup demo](screenshots/searching.gif)
+
+## Build
+
+To build and run this application locally, you'll need a dedicated database. Here are some commands that I used for building apps.
+
+### Client(React) Build
+
+```
 cd static
 npm run build
+```
 
-## Server
+### Server
 
+```
 cd server
 source venv/bin/activate
 
 pip install -r requirements.txt
 FLASK_APP=app.py DBHOST="<SERVER_HOST_NAME>" DBUSER=<USERNAME> DBNAME=<DATABASE_NAME> DBPASS=<PASSWORD> flask run
+```
 
-## Docker
+### Docker
 
-### Run locally
+#### Run locally
 
+```
 docker build -t psn-tracker .
 docker run -it --env DBPASS="<PASSWORD>" --env DBHOST="<SERVER_HOST_NAME>" --env DBUSER="<USERNAME>" --env DBNAME="<DATABASE_NAME>" -p 5000:5000 psn-tracker
+```
 
-### Upload app to a container registry
+#### Upload app to a container registry
 
+```
 docker build -t psn-tracker
 docker tag psn-tracker <REGISTRY_NAME>
 docker push <REGISTRY_NAME>
+```
