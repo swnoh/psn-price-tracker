@@ -11,7 +11,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { HashRouter, Switch, Route, BrowserRouter } from "react-router-dom";
 import ScrollToTop from "./ScrollToTop";
 
-const SITE_URL = "http://psntracker.azurewebsites.net";
+const SITE_URL = "https://psntracker.azurewebsites.net";
 
 export default class App extends React.Component {
   state = {

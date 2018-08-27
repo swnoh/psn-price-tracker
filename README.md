@@ -4,13 +4,13 @@ Interactive and responsive price tracker website for Playstation Store, highly i
 
 This project was developed with React, Html5, CSS3, Flask, Scrapy, and Postgresql and deployed on Azure.
 
-Demo: [http://psntracker.azurewebsites.net](http://psntracker.azurewebsites.net)
+Demo: [https://psntracker.azurewebsites.net](https://psntracker.azurewebsites.net)
 
 ![Mockup demo](screenshots/main.png)
 
 ## Development Stack
 
-- Deployed on Azure.
+- Deployed on Azure with Docker.
 - Backend stack: Flask, SQLAlchemy ORM, Scrapy.
 - Frontend stack: React, Webpack, Babel.
 - Backend API: RESTful API.
@@ -47,7 +47,7 @@ Demo: [http://psntracker.azurewebsites.net](http://psntracker.azurewebsites.net)
 
 To build and run this application locally, you'll need a dedicated database. Here are some commands that I used for building and deploying apps.
 
-### Client(React) Build
+### Client
 
 ```
 cd static

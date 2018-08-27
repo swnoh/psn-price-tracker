@@ -1,7 +1,7 @@
 import React from "react";
 import MainCategory from "./MainCategory";
 
-const SITE_URL = "http://psntracker.azurewebsites.net";
+const SITE_URL = "https://psntracker.azurewebsites.net";
 
 class MainCategoryQuick extends React.Component {
   state = {
@@ -26,7 +26,6 @@ class MainCategoryQuick extends React.Component {
 
   render() {
     const { categoryItems, categoryExpansionPanel } = this.state;
-    console.log(categoryItems);
     return (
       <MainCategory
         categoryItems={categoryItems}

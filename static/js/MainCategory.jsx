@@ -10,7 +10,7 @@ import { Link, Element, animateScroll as scroll, scroller } from "react-scroll";
 const API_URL =
   "https://store.playstation.com/store/api/chihiro/00_09_000/container/CA/en/19/";
 
-const SITE_URL = "http://psntracker.azurewebsites.net";
+const SITE_URL = "https://psntracker.azurewebsites.net";
 
 class MainCategory extends React.Component {
   state = {

@@ -1,7 +1,7 @@
 import React from "react";
 import { Carousel } from "react-bootstrap";
 
-const SITE_URL = "http://psntracker.azurewebsites.net";
+const SITE_URL = "https://psntracker.azurewebsites.net";
 
 class MainBanner extends React.Component {
   state = {

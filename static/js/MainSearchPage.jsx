@@ -5,7 +5,7 @@ import queryString from "query-string";
 import loadingImg from "../images/loading.svg";
 import unhappyImg from "../images/unhappy.png";
 
-const SITE_URL = "http://psntracker.azurewebsites.net";
+const SITE_URL = "https://psntracker.azurewebsites.net";
 const duration = 500;
 const defaultStyle = {
   transition: `opacity ${duration}ms ease-in-out`,
