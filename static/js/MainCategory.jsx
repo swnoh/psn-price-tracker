@@ -114,7 +114,7 @@ class MainCategory extends React.Component {
     this.props.slideChunk > 3 &&
       setTimeout(() => {
         this.handleScroll(rowid);
-      }, 600);
+      }, 800);
   };
 
   render() {

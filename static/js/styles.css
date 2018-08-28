@@ -1031,12 +1031,19 @@ transition-group setting
   .slick-slide img {
     height: 88%;
   }
+
+  img.plus_exclusive_price_icon {
+    margin: 6px -8px 0 2px;
+    width: 24px;
+    height: 24px;
+  }
+
   .col-expansion-panel.col-expansion-media {
     width: 95%;
   }
 
-  .col-expansion-panel.col-expansion-description {
-    font-size: 0.8em;
+  .col-expansion-panel.col-expansion-description h4 {
+    font-size: 0.9em;
   }
 
   .footer p {

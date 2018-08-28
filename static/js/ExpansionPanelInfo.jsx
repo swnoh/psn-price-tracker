@@ -51,7 +51,7 @@ class ExpansionPanelInfo extends React.Component {
               <h2>
                 <span
                   style={
-                    discount_price
+                    discount_price && !is_plus_price
                       ? {
                           textDecoration: "line-through",
                           color: "grey"
@@ -59,20 +59,10 @@ class ExpansionPanelInfo extends React.Component {
                       : null
                   }
                 >
-                  {!is_plus_price && regular_price}
+                  {regular_price}
                 </span>
-                <span style={is_plus_price ? { color: "yellow" } : null}>
-                  {discount_price && " " + discount_price}
-                  {is_plus_price ? (
-                    <img
-                      style={{
-                        width: "20px",
-                        marginLeft: "5px"
-                      }}
-                      src="https://image.ibb.co/jOncz8/playstation_plus_plus_icon.png"
-                      alt="playstation_plus_plus_icon"
-                    />
-                  ) : null}
+                <span>
+                  {discount_price && !is_plus_price && " " + discount_price}
                 </span>
               </h2>
               <h2
@@ -81,8 +71,8 @@ class ExpansionPanelInfo extends React.Component {
                   marginTop: "0"
                 }}
               >
-                {plus_price}
-                {plus_price ? (
+                {is_plus_price ? discount_price : plus_price}
+                {is_plus_price || plus_price ? (
                   <img
                     style={{
                       width: "20px",
@@ -96,7 +86,7 @@ class ExpansionPanelInfo extends React.Component {
               <Rating
                 initialRating={
                   gameItemApiData.star_rating &&
-                  gameItemApiData.star_rating.scoren &&
+                  gameItemApiData.star_rating.score &&
                   parseFloat(gameItemApiData.star_rating.score)
                 }
                 readonly

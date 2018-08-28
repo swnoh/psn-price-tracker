@@ -75,15 +75,15 @@ class PsnscrapyPipeline(object):
 
     def process_item(self, item, spider):
 
-        # # Banner #
-        # session.query(PsnBannerModel).delete()
-        # session.commit()
+            # # Banner #
+            # session.query(PsnBannerModel).delete()
+            # session.commit()
 
-        # bannerItem = PsnBannerModel(banner_url=item['bannerItems'])
-        # session.add(bannerItem)
-        # session.commit()
+            # bannerItem = PsnBannerModel(banner_url=item['bannerItems'])
+            # session.add(bannerItem)
+            # session.commit()
 
-        # return
+            # return
 
         gameItemDB = session.query(PsnGameModel).filter(
             PsnGameModel.game_id == item['game_id']).first()
@@ -119,18 +119,18 @@ class PsnscrapyPipeline(object):
 
             session.commit()
 
-        # categoryItemDB = session.query(PsnCategoryModel).filter(
-        #     PsnCategoryModel.category_name == item['category_name']).filter(
-        #     PsnCategoryModel.game_id == item['game_id']).first()
+        categoryItemDB = session.query(PsnCategoryModel).filter(
+            PsnCategoryModel.category_name == item['category_name']).filter(
+            PsnCategoryModel.game_id == item['game_id']).first()
 
-        # if not categoryItemDB:
-        #     categoryItem = PsnCategoryModel(
-        #         category_url=item['category_url'],
-        #         category_name=item['category_name'],
-        #         game_id=item['game_id']
-        #     )
-        #     session.add(categoryItem)
-        #     session.commit()
+        if not categoryItemDB:
+            categoryItem = PsnCategoryModel(
+                category_url=item['category_url'],
+                category_name=item['category_name'],
+                game_id=item['game_id']
+            )
+            session.add(categoryItem)
+            session.commit()
 
         response = requests.get(item['api_url'])
         api_data = response.json()
@@ -157,11 +157,13 @@ class PsnscrapyPipeline(object):
                 isBonusPrice = True
 
             if api_data['default_sku']['rewards'][0]['isPlus']:
-                chartBonusPrice = chartPrice
+                chartBonusPrice == float(api_data['default_sku']['rewards'][0]['display_price'].replace(
+                    "$", ""))
                 isBonusPrice = True
                 chartPrice = float(
                     api_data['default_sku']['display_price'].replace("$", ""))
 
+        print(item['category_name'])
         print(item['game_id'])
 
         if chartBonusPrice == -1:

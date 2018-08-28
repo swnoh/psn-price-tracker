@@ -69,7 +69,7 @@ class TitleRow extends React.Component {
       isCategoryQuick
     } = this.props;
 
-    const { currentIdx, intialTransition, isHoverOn } = this.state;
+    const { currentIdx, intialTransition, isHoverOn, imgLoaded } = this.state;
 
     const lastIdx = gameItem.length - 1;
 
@@ -138,11 +138,7 @@ class TitleRow extends React.Component {
                   >
                     <LazyLoad offsetVertical={500} offsetHorizontal={1800}>
                       <img
-                        className={
-                          this.state.imgLoaded
-                            ? "tile__img loaded"
-                            : "tile__img"
-                        }
+                        className={imgLoaded ? "tile__img loaded" : "tile__img"}
                         src={thumb_img_url}
                         onLoad={() => {
                           this.setState({
@@ -159,17 +155,14 @@ class TitleRow extends React.Component {
                     <LazyLoad offsetVertical={500} offsetHorizontal={1800}>
                       <div
                         className={
-                          this.state.imgLoaded
-                            ? plus_price || plus_exclusive_price
-                              ? "tile__discount tile__plus_discount loaded"
-                              : "tile__discount loaded"
-                            : plus_price || plus_exclusive_price
-                              ? "tile__discount tile__plus_discount"
-                              : "tile__discount"
+                          plus_price || plus_exclusive_price
+                            ? `tile__discount tile__plus_discount ${imgLoaded &&
+                                " loaded"}`
+                            : `tile__discount  ${imgLoaded && " loaded"}`
                         }
                       >
                         {discount_message ? (
-                          plus_exclusive_price ? (
+                          plus_price || plus_exclusive_price ? (
                             <React.Fragment>
                               <img
                                 className="plus_exclusive_price_icon"
