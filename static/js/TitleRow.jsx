@@ -147,7 +147,7 @@ class TitleRow extends React.Component {
                         }}
                         onError={e => {
                           e.target.src =
-                            "https://store.playstation.com/store/api/chihiro/00_09_000/container/CA/en/999/UP1477-CUSA07022_00-FORTNITETESTING1/1532106140000/image?w=240&h=240&bg_color=000000&opacity=100&_version=00_09_000";
+                            "https://store.playstation.com/img/default/product-image-game.svg";
                         }}
                         alt={game_title}
                       />

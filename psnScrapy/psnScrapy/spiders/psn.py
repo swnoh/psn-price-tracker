@@ -7,9 +7,10 @@ class PsnPriceSpider(scrapy.Spider):
     start_urls = [
         # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-TOPGAMES/1',
         # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-TOPPSNGAMES/1',
+        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-PSPLUSSPECIALS/1?gameContentType=bundles%2Cgames',
         # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-ALLDEALS/1?gameContentType=bundles%2Cgames'
         # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-ALLGAMES/1'
-        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-PSPLUSDISCOUNTS/1?gameContentType=games%2Cbundles'
+        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-PSPLUSDISCOUNTS/1?gameContentType=games%2Cbundles'
     ]
 
     def parse(self, response):

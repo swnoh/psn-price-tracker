@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const UglifyWebpackPlugin = require("uglifyjs-webpack-plugin");
 
 const config = {
     entry:  __dirname + '/js/index.jsx',
@@ -34,11 +34,12 @@ const config = {
         }
         ]
     },
-    // plugins: [
-    //     new CopyWebpackPlugin([
-    //         { from: 'images', to: 'images' }
-    //     ])
-    // ]
+
+    optimization: {
+        minimizer: [
+          new UglifyWebpackPlugin()
+        ]
+      }
 };
 
 module.exports = config;

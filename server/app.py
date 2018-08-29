@@ -1,4 +1,5 @@
-from flask import Flask, render_template, url_for, json, request
+from flask import Flask, render_template, url_for, json, request, Response
+from flask_compress import Compress
 import os
 from collections import defaultdict
 from flask_cors import CORS
@@ -17,6 +18,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://%s:%s@%s/%s' % (
     # ARGS.dbuser, ARGS.dbpass, ARGS.dbhost, ARGS.dbname
     os.environ['DBUSER'], os.environ['DBPASS'], os.environ['DBHOST'], os.environ['DBNAME']
 )
+
+# initialize for a compressed response
+Compress(app)
 
 # initialize the database connection
 DB = SQLAlchemy(app)
@@ -214,4 +218,4 @@ def page_not_found(error):
 
 
 if __name__ == ('__main__'):
-    app.run(debug=False, threaded=True)
+    app.run(threaded=True)
