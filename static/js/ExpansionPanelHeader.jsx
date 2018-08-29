@@ -8,7 +8,8 @@ const ExpansionPanelHeader = ({
   isPanelDescription,
   handleExpansion,
   selectedRowID,
-  selectedGameID
+  selectedGameID,
+  slideChunk
 }) => {
   return (
     <React.Fragment>
@@ -22,7 +23,7 @@ const ExpansionPanelHeader = ({
             }
             timeout={300}
             classNames={
-              isPanelMedia || isPanelDescription
+              slideChunk > 3 && (isPanelMedia || isPanelDescription)
                 ? "titlename"
                 : "titlenamepanel"
             }

@@ -970,7 +970,6 @@ transition-group setting
   .button-playstation-store {
     font-size: 25px;
     width: 100%;
-    color: rgb(221, 221, 221) !important;
   }
   .container-fluid,
   .row-content,
@@ -981,7 +980,9 @@ transition-group setting
     font-size: 3em;
   }
   .container-row-slide .slick-prev,
-  .container-row-slide .slick-next {
+  .container-row-slide .slick-next,
+  .container-row-slide .slick-prev:hover,
+  .container-row-slide .slick-next:hover {
     transition: none;
     transform: none;
     top: -50px;
@@ -997,11 +998,7 @@ transition-group setting
   .container-row-slide .slick-next {
     right: 80px;
   }
-  .container-row-slide .slick-prev:hover,
-  .container-row-slide .slick-next:hover {
-    transition: none;
-    transform: none;
-  }
+
   .tile__discount span {
     font-size: 2em;
   }
@@ -1024,6 +1021,9 @@ transition-group setting
   .col-title-info h4,
   .price-table h4 {
     font-size: 0.8em;
+  }
+  .col-expansion-title h2 {
+    padding-right: 50px;
   }
   .close-button {
     top: -40px;

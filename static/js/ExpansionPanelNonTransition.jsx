@@ -62,7 +62,8 @@ class ExpansionPanel extends React.Component {
       itemPrice,
       isItemPrice,
       selectedRowID,
-      selectedGameID
+      selectedGameID,
+      slideChunk
     } = this.props;
 
     const {
@@ -103,6 +104,7 @@ class ExpansionPanel extends React.Component {
           handleExpansion={handleExpansion}
           selectedRowID={selectedRowID}
           selectedGameID={selectedGameID}
+          slideChunk={slideChunk}
         />
         <Row>
           <Col className="col-title-info" xs={12} md={4} lg={3}>
@@ -111,6 +113,7 @@ class ExpansionPanel extends React.Component {
               selectedGameItem={selectedGameItem}
               isPanelMedia={isPanelMedia}
               isPanelDescription={isPanelDescription}
+              slideChunk={slideChunk}
             />
           </Col>
           {isPanelPriceHistory &&

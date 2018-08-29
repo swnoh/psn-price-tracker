@@ -112,9 +112,9 @@ class TitleRow extends React.Component {
                         ? selectedGameID !== game_id
                           ? handleExpansion(rowid, game_id)
                           : null
-                        : this.handleHoverOn(index);
+                        : slideChunk > 3 && this.handleHoverOn(index);
                     } else {
-                      slideChunk > 3 ? this.handleHoverOn(index) : null;
+                      slideChunk > 3 && this.handleHoverOn(index);
                     }
                   }}
                   onMouseLeave={this.handleHoverOff}

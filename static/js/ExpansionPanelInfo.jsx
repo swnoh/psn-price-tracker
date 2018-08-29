@@ -9,7 +9,8 @@ class ExpansionPanelInfo extends React.Component {
       isPanelMedia,
       isPanelDescription,
       gameItemApiData,
-      selectedGameItem
+      selectedGameItem,
+      slideChunk
     } = this.props;
 
     const regular_price =
@@ -37,7 +38,9 @@ class ExpansionPanelInfo extends React.Component {
           }
           timeout={500}
           classNames={
-            isPanelMedia || isPanelDescription ? "titleinfopanel" : "fade"
+            slideChunk > 3 && (isPanelMedia || isPanelDescription)
+              ? "titleinfopanel"
+              : "fade"
           }
         >
           <Row className="row-expansion-title-info">

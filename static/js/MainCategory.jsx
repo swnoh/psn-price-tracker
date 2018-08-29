@@ -230,6 +230,7 @@ class MainCategory extends React.Component {
                       selectedGameID={selectedGameID}
                       showExpansionPanel={showExpansionPanel}
                       handleExpansion={this.handleExpansion}
+                      slideChunk={slideChunk}
                     />
                   </CSSTransition>
                 ) : (
@@ -250,6 +251,7 @@ class MainCategory extends React.Component {
                       selectedGameID={selectedGameID}
                       showExpansionPanel={showExpansionPanel}
                       handleExpansion={this.handleExpansion}
+                      slideChunk={slideChunk}
                     />
                   )
                 )}
