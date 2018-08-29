@@ -38,7 +38,7 @@ class ExpansionPanelInfo extends React.Component {
           }
           timeout={500}
           classNames={
-            slideChunk > 3 && (isPanelMedia || isPanelDescription)
+            !slideChunk && (isPanelMedia || isPanelDescription)
               ? "titleinfopanel"
               : "fade"
           }

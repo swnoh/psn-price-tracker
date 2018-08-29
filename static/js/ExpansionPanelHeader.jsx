@@ -23,7 +23,7 @@ const ExpansionPanelHeader = ({
             }
             timeout={300}
             classNames={
-              slideChunk > 3 && (isPanelMedia || isPanelDescription)
+              !slideChunk && (isPanelMedia || isPanelDescription)
                 ? "titlename"
                 : "titlenamepanel"
             }
