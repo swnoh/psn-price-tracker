@@ -13,15 +13,20 @@ class MainCategoryQuick extends React.Component {
     fetch(`${SITE_URL}/api/psn/category_quick?limit=${limit}`)
       .then(response => response.json())
       .then(data => {
-        this.setState({ categoryItems: data });
+        if (this._mounted) this.setState({ categoryItems: data });
       })
       .catch(error => console.log(error));
   };
 
   componentDidMount() {
+    this._mounted = true;
     const slideChunk = this.props.slideChunk;
     const limit = slideChunk > 4 ? slideChunk * 2 : slideChunk * 4;
     this.handleFetch(limit);
+  }
+
+  componentWillUnmount() {
+    this._mounted = false;
   }
 
   render() {

@@ -49,7 +49,8 @@ export default class App extends React.Component {
       .then(response => response.json())
       .then(data => {
         this.setState({ backgroundImgUrls: data.bannerBackgroundUrl });
-      });
+      })
+      .catch(error => console.log(error));
   }
 
   render() {

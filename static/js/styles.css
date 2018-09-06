@@ -224,7 +224,7 @@ a:hover {
   color: rgb(233, 233, 233);
   background-color: rgb(75, 75, 75);
   border-color: rgb(75, 75, 75);
-  width: 250px;
+  width: 230px;
   margin-top: 10px;
 }
 
@@ -924,14 +924,6 @@ transition-group setting
 }
 
 @media (max-width: 991px) {
-  .col-title-info {
-    height: auto;
-    padding-left: 20px;
-    padding-bottom: 50px;
-  }
-}
-
-@media (max-width: 991px) {
   .navbar-transparent {
     background-color: #222;
   }
@@ -1009,25 +1001,37 @@ transition-group setting
   .row-expansion-title-info {
     padding-left: 0;
   }
+
+  .col-title-info {
+    height: auto;
+    padding-left: 20px;
+    padding-bottom: 50px;
+  }
+
   .col-title-info .title-info-thumb {
     width: 370px;
     padding-left: 30px;
   }
+
   .col-expansion-title h2,
   .col-title-info h2,
   .price-table h2 {
     font-size: 1.2em;
   }
+
   .col-title-info h4,
   .price-table h4 {
     font-size: 0.8em;
   }
+
   .col-expansion-title h2 {
     padding-right: 50px;
   }
+
   .close-button {
     top: -40px;
   }
+
   .slick-slide img {
     height: 88%;
   }
@@ -1056,9 +1060,9 @@ transition-group setting
   }
 }
 
-@media (min-width: 992px) {
-  .col-title-info {
-    height: 48vh;
+@media (max-width: 991px) {
+  .navbar-transparent {
+    background-color: #222;
   }
 }
 

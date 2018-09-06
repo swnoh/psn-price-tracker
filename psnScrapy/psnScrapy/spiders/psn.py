@@ -5,12 +5,10 @@ from psnScrapy.items import PsnBannerItem, PsnGameItem
 class PsnPriceSpider(scrapy.Spider):
     name = "psn_price_spider"
     start_urls = [
-        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-TOPGAMES/1',
-        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-TOPPSNGAMES/1',
-        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-PSPLUSSPECIALS/1?gameContentType=bundles%2Cgames',
-        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-ALLDEALS/1?gameContentType=bundles%2Cgames'
+        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-TOPGAMES/1',
+        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-TOPPSNGAMES/1',
+        'https://store.playstation.com/en-ca/grid/STORE-MSF77008-ALLDEALS/1?gameContentType=bundles%2Cgames'
         # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-ALLGAMES/1'
-        # 'https://store.playstation.com/en-ca/grid/STORE-MSF77008-PSPLUSDISCOUNTS/1?gameContentType=games%2Cbundles'
     ]
 
     def parse(self, response):
@@ -73,10 +71,10 @@ class PsnPriceSpider(scrapy.Spider):
             )
             yield game_item
 
-        NEXT_PAGE_SELECTOR = '.paginator-control__next ::attr(href)'
-        next_page = response.css(NEXT_PAGE_SELECTOR).extract_first()
-        if next_page is not None:
-            yield response.follow(next_page)
+        # NEXT_PAGE_SELECTOR = '.paginator-control__next ::attr(href)'
+        # next_page = response.css(NEXT_PAGE_SELECTOR).extract_first()
+        # if next_page is not None:
+        #     yield response.follow(next_page)
 
 
 class PsnBannerSpider(scrapy.Spider):
@@ -86,7 +84,6 @@ class PsnBannerSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
-
         BANNER_SELECTOR = '.slideshow-banner .banner-click-event'
 
         banner_items = []

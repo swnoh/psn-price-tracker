@@ -14,15 +14,15 @@ class Header extends React.Component {
     this.props.history.push("/search?q=" + e.target.value);
   };
 
-  listenScrollEvent = e => {
-    e.preventDefault();
-    if (window.scrollY >= 30) {
+  listenScrollEvent = () => {
+    let navbarTransparent;
+
+    if (window.scrollY >= 30) navbarTransparent = false;
+    else navbarTransparent = true;
+
+    if (navbarTransparent !== this.state.navbarTransparent) {
       this.setState({
-        navbarTransparent: false
-      });
-    } else {
-      this.setState({
-        navbarTransparent: true
+        navbarTransparent: navbarTransparent
       });
     }
   };
