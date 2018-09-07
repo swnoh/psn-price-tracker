@@ -249,7 +249,7 @@ a:hover {
 }
 
 .slick-slide img {
-  height: 70%;
+  height: 72%;
   border: 3px solid transparent;
 }
 
@@ -427,7 +427,7 @@ a:hover {
   );
   transition: 0ms opacity;
   outline: none;
-  height: 70%;
+  height: 72%;
 }
 
 .tile__details:after,

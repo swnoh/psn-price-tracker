@@ -53,7 +53,7 @@ class TitleSlide extends React.Component {
       <Grid
         fluid
         className={`container-row-slide ${
-          categoryTitleHover && selectedIndex == currentIdx
+          isCategoryQuick && categoryTitleHover && selectedIndex == currentIdx
             ? "row-slide-hover"
             : ""
         } ${this.state.activeSlide === 0 ? "initial-slide" : ""}`}

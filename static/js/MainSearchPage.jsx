@@ -137,7 +137,7 @@ class MainSearchPage extends React.Component {
                 src={loadingImg}
                 style={{
                   margin: "auto",
-                  marginTop: "150px",
+                  marginTop: "250px",
                   display: "block"
                 }}
               />

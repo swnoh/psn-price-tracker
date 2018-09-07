@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "./Header";
+import { Transition } from "react-transition-group";
 import MainBanner from "./MainBanner";
 import MainCategoryQuick from "./MainCategoryQuick";
 import MainCategoryAll from "./MainCategoryAll";
@@ -13,8 +14,22 @@ import ScrollToTop from "./ScrollToTop";
 
 const SITE_URL = "https://psntracker.azurewebsites.net";
 
+const duration = 300;
+
+const defaultStyle = {
+  transition: `all ${duration}ms ease-in-out`,
+  transform: "scale(1.5)",
+  opacity: 0
+};
+
+const transitionStyles = {
+  entering: { opacity: 0 },
+  entered: { opacity: 1, transform: "scale(1)" }
+};
+
 export default class App extends React.Component {
   state = {
+    showTransition: false,
     backgroundImgUrls: "",
     isImgLoaded: false,
     slideChunk: 10
@@ -43,6 +58,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({ showTransition: true });
     this.handleResize();
     window.addEventListener("resize", this.handleResize);
     fetch(`${SITE_URL}/api/psn/banner`)
@@ -78,7 +94,9 @@ export default class App extends React.Component {
                 !this.state.isImgLoaded ? { opacity: "0" } : backgroundImgStyle
               }
             >
-              <Route exact path="/" component={MainBanner} />
+              {this.state.isImgLoaded && (
+                <Route exact path="/" component={MainBanner} />
+              )}
               <img
                 style={{ display: "none" }}
                 src={backgroundImgUrl}
@@ -102,7 +120,30 @@ export default class App extends React.Component {
                       />
                     )}
                   />
-                ) : null}
+                ) : (
+                  <Transition in={this.state.showTransition} timeout={duration}>
+                    {state => (
+                      <div
+                        style={{
+                          ...defaultStyle,
+                          ...transitionStyles[state]
+                        }}
+                      >
+                        <p
+                          style={{
+                            fontSize: "3em",
+                            fontWeight: "bold",
+                            color: "rgba(255, 255, 255, 0.5)",
+                            paddingTop: "250px",
+                            minWidth: "700px"
+                          }}
+                        >
+                          Playstation Store Price Tracker Loading...
+                        </p>
+                      </div>
+                    )}
+                  </Transition>
+                )}
                 <Route
                   exact
                   path="/category/:name"
