@@ -209,7 +209,7 @@ class MainCategory extends React.Component {
                   isCategoryQuick={isCategoryQuick}
                   categoryTitleHover={this.state.categoryTitleHover}
                   currentIdx={this.state.currentIdx}
-                  index={index}
+                  selectedIndex={index}
                 />
                 {slideChunk > 3 ? (
                   <CSSTransition

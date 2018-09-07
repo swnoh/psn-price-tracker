@@ -22,7 +22,7 @@ class TitleSlide extends React.Component {
       isCategoryQuick,
       categoryTitleHover,
       currentIdx,
-      index
+      selectedIndex
     } = this.props;
 
     const slick_settings = {
@@ -53,7 +53,9 @@ class TitleSlide extends React.Component {
       <Grid
         fluid
         className={`container-row-slide ${
-          categoryTitleHover && index == currentIdx ? "row-slide-hover" : ""
+          categoryTitleHover && selectedIndex == currentIdx
+            ? "row-slide-hover"
+            : ""
         } ${this.state.activeSlide === 0 ? "initial-slide" : ""}`}
         style={defaultStyle}
       >
