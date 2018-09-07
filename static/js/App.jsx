@@ -31,8 +31,8 @@ export default class App extends React.Component {
     else if (window.innerWidth > baseWidth - baseImg * 3) slideChunk = 7;
     else if (window.innerWidth > baseWidth - baseImg * 4) slideChunk = 6;
     else if (window.innerWidth > baseWidth - baseImg * 5) slideChunk = 5;
-    else if (window.innerWidth > baseWidth - baseImg * 6) slideChunk = 3;
-    else slideChunk = 2;
+    else if (window.innerWidth > 991) slideChunk = 4;
+    else slideChunk = 3;
 
     if (this.state.slideChunk !== slideChunk)
       this.setState({ slideChunk: slideChunk });

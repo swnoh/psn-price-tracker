@@ -247,8 +247,6 @@
 .rh5v-PlayPause_icon {
   padding: 5px;
 }
-.rh5v-Fullscreen_component {
-}
 
 .rh5v-Fullscreen_component:hover {
   background-color: #000;
@@ -327,4 +325,10 @@
 
 .carousel-control.right {
   right: -80px;
+}
+
+@media (max-width: 1440px) {
+  .rh5v-DefaultPlayer_video {
+    height: 80%;
+  }
 }

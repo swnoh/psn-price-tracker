@@ -207,6 +207,9 @@ class MainCategory extends React.Component {
                   categoryExpansionPanel={categoryExpansionPanel}
                   slideChunk={slideChunk}
                   isCategoryQuick={isCategoryQuick}
+                  categoryTitleHover={this.state.categoryTitleHover}
+                  currentIdx={this.state.currentIdx}
+                  index={index}
                 />
                 {slideChunk > 3 ? (
                   <CSSTransition

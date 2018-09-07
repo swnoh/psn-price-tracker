@@ -19,7 +19,10 @@ class TitleSlide extends React.Component {
       selectedGameID,
       categoryExpansionPanel,
       slideChunk,
-      isCategoryQuick
+      isCategoryQuick,
+      categoryTitleHover,
+      currentIdx,
+      index
     } = this.props;
 
     const slick_settings = {
@@ -34,7 +37,7 @@ class TitleSlide extends React.Component {
     };
 
     const defaultStyle = {
-      height: slideChunk > 3 ? "270px" : "400px"
+      height: slideChunk > 3 ? (window.innerWidth / slideChunk) * 1.5 : "400px"
     };
 
     let splitGameItem = [];
@@ -50,8 +53,8 @@ class TitleSlide extends React.Component {
       <Grid
         fluid
         className={`container-row-slide ${
-          this.state.activeSlide === 0 ? "initial-slide" : ""
-        }`}
+          categoryTitleHover && index == currentIdx ? "row-slide-hover" : ""
+        } ${this.state.activeSlide === 0 ? "initial-slide" : ""}`}
         style={defaultStyle}
       >
         <Slider {...slick_settings}>
