@@ -249,12 +249,12 @@ a:hover {
 }
 
 .slick-slide img {
-  height: 78%;
+  height: 72%;
   border: 3px solid transparent;
 }
 
 .col-expansion-media .slick-slide img {
-  height: 100%;
+  height: auto;
 }
 
 .col-expansion-media .slick-prev {
@@ -328,6 +328,12 @@ a:hover {
   z-index: 10;
 }
 
+.slick-prev:before,
+.slick-next:before {
+  content: "";
+  opacity: 0;
+}
+
 .container-row-slide .slick-prev {
   left: 32px;
 }
@@ -352,17 +358,55 @@ a:hover {
   top: 42%;
 }
 
-.slick-prev:before {
+.slick-list:before,
+.slick-list:after {
+  content: "";
+  position: absolute;
+  top: 45px;
+  width: 90px;
+  height: 60%;
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+}
+
+.row-slide-hover .slick-list:before,
+.row-slide-hover .slick-list:after {
+  opacity: 1;
+  transition: all 1s;
+}
+
+.row-slide-hover .slick-list:before {
+  left: 0;
+  right: auto;
+  z-index: 10;
+}
+
+.row-slide-hover .slick-list:after {
+  left: auto;
+  right: 0;
+}
+
+.row-slide-hover.initial-slide .slick-list:before {
+  display: none;
+}
+
+.row-slide-hover .slick-prev:before,
+.col-expansion-media .slick-prev:before {
+  opacity: 1;
+  transition: all 1s;
   font-family: "FontAwesome";
   content: "\f053";
-  color: rgb(230, 230, 230);
+  color: rgb(240, 240, 240);
   font-size: 30px;
 }
 
-.slick-next:before {
+.row-slide-hover .slick-next:before,
+.col-expansion-media .slick-next:before {
+  opacity: 1;
+  transition: all 1s;
   font-family: "FontAwesome";
   content: "\f054";
-  color: rgb(230, 230, 230);
+  color: rgb(240, 240, 240);
   font-size: 30px;
 }
 
@@ -383,7 +427,7 @@ a:hover {
   );
   transition: 0ms opacity;
   outline: none;
-  height: 78%;
+  height: 72%;
 }
 
 .tile__details:after,
@@ -556,12 +600,12 @@ img.plus_exclusive_price_icon {
 }
 
 .col-expansion-panel {
-  height: 45vh;
+  height: 50vh;
   padding-left: 50px;
 }
 
 .col-title-info {
-  height: 30vh;
+  height: 50vh;
   padding-left: 50px;
   padding-top: 30px;
 }
@@ -923,10 +967,23 @@ transition-group setting
   opacity: 0.01;
 }
 
+@media (max-width: 1440px) {
+  .button-playstation-store {
+    font-size: 0.9em;
+  }
+  .col-expansion-panel {
+    height: 600px;
+  }
+  .col-expansion-panel.col-expansion-media {
+    width: 60%;
+  }
+}
+
 @media (max-width: 991px) {
   .navbar-transparent {
     background-color: #222;
   }
+
   .navbar-brand {
     height: 100px;
     margin-left: 0 !important;
@@ -971,6 +1028,16 @@ transition-group setting
   .row-category-title {
     font-size: 3em;
   }
+
+  .slick-prev:before {
+    font-family: "FontAwesome";
+    content: "\f053";
+  }
+  .slick-next:before {
+    font-family: "FontAwesome";
+    content: "\f054";
+  }
+
   .container-row-slide .slick-prev,
   .container-row-slide .slick-next,
   .container-row-slide .slick-prev:hover,
@@ -989,6 +1056,11 @@ transition-group setting
   }
   .container-row-slide .slick-next {
     right: 80px;
+  }
+
+  .row-slide-hover .slick-list:before,
+  .row-slide-hover .slick-list:after {
+    opacity: 0;
   }
 
   .tile__discount span {
@@ -1043,7 +1115,8 @@ transition-group setting
   }
 
   .col-expansion-panel {
-    height: 550px;
+    height: 45vh;
+    padding-left: 80px;
   }
 
   .col-expansion-panel.col-expansion-media {
@@ -1057,12 +1130,6 @@ transition-group setting
   .footer p {
     font-size: 2em;
     font-weight: 700;
-  }
-}
-
-@media (max-width: 991px) {
-  .navbar-transparent {
-    background-color: #222;
   }
 }
 

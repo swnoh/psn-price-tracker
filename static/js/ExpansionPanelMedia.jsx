@@ -1,6 +1,4 @@
 import React from "react";
-import { Col } from "react-bootstrap";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { DefaultPlayer as Video } from "react-html5video";
 import "./stylesVideo.css";
 import Slider from "react-slick";
