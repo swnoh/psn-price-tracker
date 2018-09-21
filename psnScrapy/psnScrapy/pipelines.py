@@ -78,7 +78,6 @@ class PsnscrapyPipeline(object):
 
                     if 'rewards' in api_data['default_sku']:
                         if api_data['default_sku']['rewards']:
-                            print("reward!!")
                             display_price = api_data['default_sku']['rewards'][0]['display_price']
                             if api_data['default_sku']['rewards'][0]['discount'] is not 0:
                                 discount_message = 'SAVE {}%'.format(
