@@ -155,14 +155,14 @@ class TitleRow extends React.Component {
                     <LazyLoad offsetVertical={500} offsetHorizontal={1800}>
                       <div
                         className={
-                          plus_exclusive_price
+                          plus_price
                             ? `tile__discount tile__plus_discount ${imgLoaded &&
                                 " loaded"}`
                             : `tile__discount  ${imgLoaded && " loaded"}`
                         }
                       >
                         {discount_message ? (
-                          plus_exclusive_price ? (
+                          plus_price ? (
                             <React.Fragment>
                               <img
                                 className="plus_exclusive_price_icon"

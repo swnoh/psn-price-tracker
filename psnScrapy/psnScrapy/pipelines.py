@@ -85,8 +85,12 @@ class PsnscrapyPipeline(object):
 
                             if 'bonus_display_price' in api_data['default_sku']['rewards'][0]:
                                 plus_price = api_data['default_sku']['rewards'][0]['bonus_display_price']
-                                if api_data['default_sku']['rewards'][0]['isPlus']:
-                                    plus_exclusive_price = api_data['default_sku']['rewards'][0]['bonus_display_price']
+
+                            if api_data['default_sku']['rewards'][0]['isPlus']:
+                                plus_exclusive_price = api_data['default_sku']['rewards'][0]['display_price']
+                                if api_data['default_sku']['rewards'][0]['discount'] is 0:
+                                    discount_message = api_data['default_sku']['rewards'][0]['display_price']
+                                else:
                                     discount_message = 'SAVE {}%'.format(
                                         api_data['default_sku']['rewards'][0]['discount'])
 
