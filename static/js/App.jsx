@@ -1,38 +1,36 @@
-import React from "react";
-import Header from "./Header";
-import { Transition } from "react-transition-group";
-import MainBanner from "./MainBanner";
-import MainCategoryQuick from "./MainCategoryQuick";
-import MainCategoryAll from "./MainCategoryAll";
-import MainSearchPage from "./MainSearchPage";
-import Footer from "./Footer";
-import "./styles.css";
-import { Grid, Row } from "react-bootstrap";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { HashRouter, Switch, Route, BrowserRouter } from "react-router-dom";
-import ScrollToTop from "./ScrollToTop";
+import React from 'react';
+import { Transition } from 'react-transition-group';
+import { Grid, Row } from 'react-bootstrap';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { HashRouter, Switch, Route, BrowserRouter } from 'react-router-dom';
 
-const SITE_URL = "https://psntracker.azurewebsites.net";
+import Header from './Common/components/Header';
+import Footer from './Common/components/Footer';
+import ScrollToTop from './Common/components/ScrollToTop';
+
+import MainBanner from './Main/containers/MainBanner';
+import MainCategoryQuick from './Main/containers/MainCategoryQuick';
+import MainCategoryAll from './Main/containers/MainCategoryAll';
+import MainSearchPage from './Main/containers/MainSearchPage';
+import '../css/styles.css';
 
 const duration = 300;
 
 const defaultStyle = {
   transition: `all ${duration}ms ease-in-out`,
-  transform: "scale(1.5)",
+  transform: 'scale(1.5)',
   opacity: 0
 };
 
 const transitionStyles = {
   entering: { opacity: 0 },
-  entered: { opacity: 1, transform: "scale(1)" }
+  entered: { opacity: 1, transform: 'scale(1)' }
 };
 
 export default class App extends React.Component {
   state = {
     showTransition: false,
-    backgroundImgUrls: "",
-    isImgLoaded: false,
-    slideChunk: 10
+    isImgLoaded: false
   };
 
   handleResize = () => {
@@ -49,28 +47,24 @@ export default class App extends React.Component {
     else if (window.innerWidth > 991) slideChunk = 4;
     else slideChunk = 3;
 
-    if (this.state.slideChunk !== slideChunk)
-      this.setState({ slideChunk: slideChunk });
+    if (this.props.slideChunk !== slideChunk)
+      this.props.setSlideChunk(slideChunk);
   };
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener('resize', this.handleResize);
   }
 
   componentDidMount() {
-    this.setState({ showTransition: true });
     this.handleResize();
-    window.addEventListener("resize", this.handleResize);
-    fetch(`${SITE_URL}/api/psn/banner`)
-      .then(response => response.json())
-      .then(data => {
-        this.setState({ backgroundImgUrls: data.bannerBackgroundUrl });
-      })
-      .catch(error => console.log(error));
+    this.props.fetchBanner();
+
+    this.setState({ showTransition: true });
+    window.addEventListener('resize', this.handleResize);
   }
 
   render() {
-    const { backgroundImgUrls } = this.state;
+    const { backgroundImgUrls } = this.props;
 
     const backgroundImgUrl =
       backgroundImgUrls[Math.floor(Math.random() * backgroundImgUrls.length)];
@@ -91,14 +85,14 @@ export default class App extends React.Component {
             <Row
               className="main-feature"
               style={
-                !this.state.isImgLoaded ? { opacity: "0" } : backgroundImgStyle
+                !this.state.isImgLoaded ? { opacity: '0' } : backgroundImgStyle
               }
             >
               {this.state.isImgLoaded && (
                 <Route exact path="/" component={MainBanner} />
               )}
               <img
-                style={{ display: "none" }}
+                style={{ display: 'none' }}
                 src={backgroundImgUrl}
                 onLoad={() => {
                   this.setState({
@@ -114,10 +108,7 @@ export default class App extends React.Component {
                     exact
                     path="/"
                     component={props => (
-                      <MainCategoryQuick
-                        match={props.match}
-                        slideChunk={this.state.slideChunk}
-                      />
+                      <MainCategoryQuick match={props.match} />
                     )}
                   />
                 ) : (
@@ -131,11 +122,11 @@ export default class App extends React.Component {
                       >
                         <p
                           style={{
-                            fontSize: "3em",
-                            fontWeight: "bold",
-                            color: "rgba(255, 255, 255, 0.5)",
-                            paddingTop: "250px",
-                            minWidth: "700px"
+                            fontSize: '3em',
+                            fontWeight: 'bold',
+                            color: 'rgba(255, 255, 255, 0.5)',
+                            paddingTop: '250px',
+                            minWidth: '700px'
                           }}
                         >
                           Playstation Store Price Tracker Loading...
@@ -147,21 +138,13 @@ export default class App extends React.Component {
                 <Route
                   exact
                   path="/category/:name"
-                  component={props => (
-                    <MainCategoryAll
-                      match={props.match}
-                      slideChunk={this.state.slideChunk}
-                    />
-                  )}
+                  component={props => <MainCategoryAll match={props.match} />}
                 />
                 <Route
                   exact
                   path="/search"
                   component={props => (
-                    <MainSearchPage
-                      location={props.location}
-                      slideChunk={this.state.slideChunk}
-                    />
+                    <MainSearchPage location={props.location} />
                   )}
                 />
               </Switch>

@@ -1,7 +1,7 @@
-import React from "react";
-import { Row } from "react-bootstrap";
-import { Transition } from "react-transition-group";
-import LazyLoad from "react-lazy-load";
+import React from 'react';
+import { Row } from 'react-bootstrap';
+import { Transition } from 'react-transition-group';
+import LazyLoad from 'react-lazy-load';
 
 const duration = 500;
 
@@ -38,18 +38,20 @@ class TitleRow extends React.Component {
   };
 
   handleTransform = (className, index, lastIdx) => {
+    const { slideChunk, selectedRowID, rowid } = this.props;
+
     const { isHoverOn, currentIdx } = this.state;
 
     let classNameTransform = className;
 
-    if (this.state.isHoverOn) {
-      if (index === currentIdx) classNameTransform += " tile_transform";
-      else if (index < currentIdx) classNameTransform += " tile_prev_transform";
-      else if (index > currentIdx) classNameTransform += " tile_next_transform";
+    if (isHoverOn) {
+      if (index === currentIdx) classNameTransform += ' tile_transform';
+      else if (index < currentIdx) classNameTransform += ' tile_prev_transform';
+      else if (index > currentIdx) classNameTransform += ' tile_next_transform';
 
-      if (currentIdx === 0) classNameTransform += " first";
-      else if (currentIdx === lastIdx && this.props.slideChunk - 1 === lastIdx)
-        classNameTransform += " last";
+      if (currentIdx === 0) classNameTransform += ' first';
+      else if (currentIdx === lastIdx && slideChunk - 1 === lastIdx)
+        classNameTransform += ' last';
     }
 
     return classNameTransform;
@@ -62,21 +64,23 @@ class TitleRow extends React.Component {
       showExpansionPanel,
       handleExpansion,
       handleSelectTitle,
+      setShowExpansionPanel,
+      handleHoverOn,
+      handleHoverOff,
       selectedRowID,
       selectedGameID,
-      categoryExpansionPanel,
       slideChunk,
       isCategoryQuick
     } = this.props;
 
-    const { currentIdx, intialTransition, isHoverOn, imgLoaded } = this.state;
+    const { intialTransition, imgLoaded } = this.state;
 
     const lastIdx = gameItem.length - 1;
 
     return (
       <Row
         className={
-          isCategoryQuick ? "row-slide-game" : "row-slide-game no-slide-arrow"
+          isCategoryQuick ? 'row-slide-game' : 'row-slide-game no-slide-arrow'
         }
       >
         {gameItem.map(
@@ -103,25 +107,21 @@ class TitleRow extends React.Component {
                   }}
                   onClick={() => {
                     handleExpansion(rowid, game_id);
-                    handleSelectTitle(rowid, game_id);
+                    setShowExpansionPanel(true);
                     this.handleHoverOff();
                   }}
                   onMouseEnter={() => {
-                    if (showExpansionPanel) {
-                      selectedRowID === rowid
-                        ? selectedGameID !== game_id
-                          ? handleExpansion(rowid, game_id)
-                          : null
-                        : slideChunk > 3 && this.handleHoverOn(index);
-                    } else {
-                      slideChunk > 3 && this.handleHoverOn(index);
+                    if (slideChunk > 3) {
+                      showExpansionPanel
+                        ? selectedRowID !== rowid && this.handleHoverOn(index)
+                        : this.handleHoverOn(index);
                     }
                   }}
-                  onMouseLeave={this.handleHoverOff}
+                  onMouseLeave={() => this.handleHoverOff()}
                 >
                   <div
                     className={this.handleTransform(
-                      "tile__details",
+                      'tile__details',
                       index,
                       lastIdx
                     )}
@@ -131,14 +131,14 @@ class TitleRow extends React.Component {
                   </div>
                   <div
                     className={this.handleTransform(
-                      "tile__media",
+                      'tile__media',
                       index,
                       lastIdx
                     )}
                   >
                     <LazyLoad offsetVertical={500} offsetHorizontal={1800}>
                       <img
-                        className={imgLoaded ? "tile__img loaded" : "tile__img"}
+                        className={imgLoaded ? 'tile__img loaded' : 'tile__img'}
                         src={thumb_img_url}
                         onLoad={() => {
                           this.setState({
@@ -147,7 +147,7 @@ class TitleRow extends React.Component {
                         }}
                         onError={e => {
                           e.target.src =
-                            "https://store.playstation.com/img/default/product-image-game.svg";
+                            'https://store.playstation.com/img/default/product-image-game.svg';
                         }}
                         alt={game_title}
                       />
@@ -157,8 +157,8 @@ class TitleRow extends React.Component {
                         className={
                           plus_price
                             ? `tile__discount tile__plus_discount ${imgLoaded &&
-                                " loaded"}`
-                            : `tile__discount  ${imgLoaded && " loaded"}`
+                                ' loaded'}`
+                            : `tile__discount  ${imgLoaded && ' loaded'}`
                         }
                       >
                         {discount_message ? (
@@ -167,7 +167,7 @@ class TitleRow extends React.Component {
                               <img
                                 className="plus_exclusive_price_icon"
                                 src="https://store.playstation.com/img/pluslogo-16-9dfb3755863c364a2ffcbebf7e19d7e6.png"
-                              />{" "}
+                              />{' '}
                               <span>{discount_message}</span>
                             </React.Fragment>
                           ) : (
@@ -180,10 +180,19 @@ class TitleRow extends React.Component {
                       className={
                         showExpansionPanel && selectedRowID === rowid
                           ? selectedGameID === game_id
-                            ? "tile__focus focus-box"
-                            : "tile__focus overlay"
+                            ? 'tile__focus focus-box'
+                            : 'tile__focus overlay'
                           : null
                       }
+                      onMouseEnter={() => {
+                        if (showExpansionPanel) {
+                          selectedRowID === rowid
+                            ? selectedGameID !== game_id
+                              ? handleExpansion(rowid, game_id)
+                              : null
+                            : slideChunk > 3 && this.handleHoverOn(index);
+                        }
+                      }}
                     />
                   </div>
                 </div>

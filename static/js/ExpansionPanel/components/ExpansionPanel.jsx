@@ -1,87 +1,59 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Grid, Row, Col, Button } from "react-bootstrap";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import PriceChart from "./PriceChart";
-import Rating from "react-rating";
-import ExpansionPanelHeader from "./ExpansionPanelHeader";
-import ExpansionPanelInfo from "./ExpansionPanelInfo";
-import ExpansionPanelPriceHistory from "./ExpansionPanelPriceHistory";
-import ExpansionPanelMedia from "./ExpansionPanelMedia";
-import ExpansionPanelDescription from "./ExpansionPanelDescription";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Grid, Row, Col, Button } from 'react-bootstrap';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import Rating from 'react-rating';
+import ExpansionPanelHeader from '../containers/ExpansionPanelHeader';
+import ExpansionPanelInfo from '../containers/ExpansionPanelInfo';
+import ExpansionPanelPriceHistory from '../containers/ExpansionPanelPriceHistory';
+import ExpansionPanelMedia from '../containers/ExpansionPanelMedia';
+import ExpansionPanelDescription from '../containers/ExpansionPanelDescription';
 
 class ExpansionPanel extends React.Component {
   state = {
-    isPanelPriceHistory: true,
-    isPanelMedia: false,
-    isPanelDescription: false,
     isImgLoaded: false
   };
 
   handlePanel = event => {
-    switch (event.target.text) {
-      case "Price History":
-        this.setState({
-          isPanelPriceHistory: true,
-          isPanelMedia: false,
-          isPanelDescription: false
-        });
-        break;
-      case "Media":
-        this.setState({
-          isPanelPriceHistory: false,
-          isPanelMedia: true,
-          isPanelDescription: false
-        });
-        break;
-      case "Description":
-        this.setState({
-          isPanelPriceHistory: false,
-          isPanelMedia: false,
-          isPanelDescription: true
-        });
-        break;
-    }
+    this.props.selectCurrentPanel(event.target.text);
   };
+
+  componentDidMount() {
+    this.props.selectCurrentGameItem(
+      this.props.categoryItems,
+      this.props.selectedRowID,
+      this.props.selectedGameID
+    );
+    this.props.isExpansionPanelMounted(true);
+  }
 
   componentDidUpdate(prevProps) {
     if (this.props.selectedGameID !== prevProps.selectedGameID) {
-      this.setState({
-        isPanelPriceHistory: true,
-        isPanelMedia: false,
-        isPanelDescription: false,
-        isImgLoaded: false
-      });
+      this.props.selectCurrentPanel('initial');
+      this.props.selectCurrentGameItem(
+        this.props.categoryItems,
+        this.props.selectedRowID,
+        this.props.selectedGameID
+      );
     }
+  }
+
+  componentWillUnmount() {
+    this.props.isExpansionPanelMounted(false);
   }
 
   render() {
     const {
-      handleExpansion,
-      showExpansionPanel,
-      gameItem,
       gameItemApiData,
       isGameItemApiData,
-      itemPrice,
       isItemPrice,
-      selectedRowID,
-      selectedGameID
-    } = this.props;
-
-    const {
+      selectedGameID,
       isPanelPriceHistory,
       isPanelMedia,
-      isPanelDescription,
-      isImgLoaded
-    } = this.state;
+      isPanelDescription
+    } = this.props;
 
-    let selectedGameItem = gameItem.gameItem.filter(
-      item => item.game_id === selectedGameID
-    )[0];
-
-    if (selectedGameItem === undefined) {
-      selectedGameItem = gameItem.gameItem[0];
-    }
+    const { isImgLoaded } = this.state;
 
     const mediaPreview =
       gameItemApiData.mediaList && gameItemApiData.mediaList.previews;
@@ -89,7 +61,7 @@ class ExpansionPanel extends React.Component {
       gameItemApiData.mediaList && gameItemApiData.mediaList.screenshots;
 
     const backgroundImgUrl =
-      mediaScreenshot !== undefined ? mediaScreenshot[0].url : "";
+      mediaScreenshot !== undefined ? mediaScreenshot[0].url : '';
     const backgroundImgStyle = {
       transition: `opacity 1000ms ease-in-out`,
       backgroundImage: `url(${backgroundImgUrl})`
@@ -100,11 +72,11 @@ class ExpansionPanel extends React.Component {
         <div
           className="expansion-background"
           style={
-            !this.state.isImgLoaded ? { opacity: "0" } : backgroundImgStyle
+            !this.state.isImgLoaded ? { opacity: '0' } : backgroundImgStyle
           }
         />
         <img
-          style={{ display: "none" }}
+          style={{ display: 'none' }}
           src={backgroundImgUrl}
           onLoad={() => {
             this.setState({
@@ -119,30 +91,18 @@ class ExpansionPanel extends React.Component {
             classNames="titleinfodetail"
             unmountOnExit
           >
-            <ExpansionPanelHeader
-              game_title={selectedGameItem.game_title}
-              isPanelMedia={isPanelMedia}
-              isPanelDescription={isPanelDescription}
-              handleExpansion={handleExpansion}
-              selectedRowID={selectedRowID}
-              selectedGameID={selectedGameID}
-            />
+            <ExpansionPanelHeader />
           </CSSTransition>
         </TransitionGroup>
         <Row>
-          <Col className="col-title-info" xs={12} md={4} lg={3}>
+          <Col className="col-title-info" xs={12} md={4} lg={4}>
             <CSSTransition
               in={isGameItemApiData}
               timeout={500}
               classNames="fade"
               unmountOnExit
             >
-              <ExpansionPanelInfo
-                gameItemApiData={gameItemApiData}
-                selectedGameItem={selectedGameItem}
-                isPanelMedia={isPanelMedia}
-                isPanelDescription={isPanelDescription}
-              />
+              <ExpansionPanelInfo />
             </CSSTransition>
           </Col>
           <CSSTransition
@@ -157,10 +117,7 @@ class ExpansionPanel extends React.Component {
               lg={8}
               className="col-expansion-panel col-expansion-price"
             >
-              <ExpansionPanelPriceHistory
-                itemPrice={itemPrice}
-                selectedGameID={selectedGameID}
-              />
+              <ExpansionPanelPriceHistory />
             </Col>
           </CSSTransition>
           <CSSTransition
@@ -178,7 +135,7 @@ class ExpansionPanel extends React.Component {
               {isPanelMedia &&
               mediaPreview !== undefined &&
               mediaScreenshot !== undefined ? (
-                <ExpansionPanelMedia gameItemApiData={gameItemApiData} />
+                <ExpansionPanelMedia />
               ) : null}
             </Col>
           </CSSTransition>
@@ -194,7 +151,7 @@ class ExpansionPanel extends React.Component {
               lg={8}
               className="col-expansion-panel col-expansion-description"
             >
-              <ExpansionPanelDescription gameItemApiData={gameItemApiData} />
+              <ExpansionPanelDescription />
             </Col>
           </CSSTransition>
         </Row>
@@ -207,18 +164,18 @@ class ExpansionPanel extends React.Component {
               unmountOnExit
             >
               <ul>
-                <li className={isPanelPriceHistory ? "current" : ""}>
+                <li className={isPanelPriceHistory ? 'current' : ''}>
                   <a onClick={this.handlePanel}>Price History</a>
                   <span />
                 </li>
                 {mediaPreview !== undefined && mediaScreenshot !== undefined ? (
-                  <li className={isPanelMedia ? "current" : ""}>
+                  <li className={isPanelMedia ? 'current' : ''}>
                     <a onClick={this.handlePanel}>Media</a>
                     <span />
                   </li>
                 ) : null}
 
-                <li className={isPanelDescription ? "current" : ""}>
+                <li className={isPanelDescription ? 'current' : ''}>
                   <a onClick={this.handlePanel}>Description</a>
                   <span />
                 </li>

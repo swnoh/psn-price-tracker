@@ -1,15 +1,15 @@
-import React from "react";
-import { Row, Col } from "react-bootstrap";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
+import React from 'react';
+import { Row, Col } from 'react-bootstrap';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 const ExpansionPanelHeader = ({
-  game_title,
   isPanelMedia,
   isPanelDescription,
-  handleExpansion,
+  closeExpansionPanel,
   selectedRowID,
   selectedGameID,
-  slideChunk
+  slideChunk,
+  selectedGameItem
 }) => {
   return (
     <React.Fragment>
@@ -24,13 +24,13 @@ const ExpansionPanelHeader = ({
             timeout={300}
             classNames={
               !slideChunk && (isPanelMedia || isPanelDescription)
-                ? "titlename"
-                : "titlenamepanel"
+                ? 'titlename'
+                : 'titlenamepanel'
             }
             unmountOnExit
           >
             <Col xs={12} className="col-expansion-title">
-              <h2>{game_title}</h2>
+              <h2>{selectedGameItem.game_title}</h2>
             </Col>
           </CSSTransition>
         </TransitionGroup>
@@ -38,7 +38,7 @@ const ExpansionPanelHeader = ({
       <a
         className="close-button icon-close"
         aria-label="close"
-        onClick={() => handleExpansion(selectedRowID, selectedGameID)}
+        onClick={() => closeExpansionPanel()}
       >
         &times;
       </a>

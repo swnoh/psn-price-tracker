@@ -8,9 +8,9 @@ html {
   width: 100%;
   display: flex;
   flex-direction: row;
-  font-family: "Source Sans Pro", sans-serif;
-  font-family: "Oxygen", sans-serif;
-  font-family: "Quicksand", sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'Oxygen', sans-serif;
+  font-family: 'Quicksand', sans-serif;
 }
 
 #content {
@@ -66,7 +66,7 @@ html {
 .row-category-title-name {
   font-weight: 900;
   color: rgb(230, 230, 230);
-  font-family: "Catamaran", sans-serif;
+  font-family: 'Catamaran', sans-serif;
 }
 
 .row-category-title,
@@ -209,7 +209,7 @@ a:hover {
 }
 
 .expansion-background:after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   right: 0;
@@ -330,7 +330,7 @@ a:hover {
 
 .slick-prev:before,
 .slick-next:before {
-  content: "";
+  content: '';
   opacity: 0;
 }
 
@@ -360,7 +360,7 @@ a:hover {
 
 .slick-list:before,
 .slick-list:after {
-  content: "";
+  content: '';
   position: absolute;
   top: 45px;
   width: 90px;
@@ -394,8 +394,8 @@ a:hover {
 .col-expansion-media .slick-prev:before {
   opacity: 1;
   transition: all 1s;
-  font-family: "FontAwesome";
-  content: "\f053";
+  font-family: 'FontAwesome';
+  content: '\f053';
   color: rgb(240, 240, 240);
   font-size: 30px;
 }
@@ -404,8 +404,8 @@ a:hover {
 .col-expansion-media .slick-next:before {
   opacity: 1;
   transition: all 1s;
-  font-family: "FontAwesome";
-  content: "\f054";
+  font-family: 'FontAwesome';
+  content: '\f054';
   color: rgb(240, 240, 240);
   font-size: 30px;
 }
@@ -432,7 +432,7 @@ a:hover {
 
 .tile__details:after,
 .tile__details:before {
-  content: "";
+  content: '';
   position: absolute;
   top: 50%;
   left: 50%;
@@ -536,7 +536,7 @@ img.plus_exclusive_price_icon {
 }
 
 .tile__focus.focus-box::before {
-  content: "";
+  content: '';
   width: 0;
   height: 0;
   position: absolute;
@@ -551,7 +551,7 @@ img.plus_exclusive_price_icon {
 }
 
 .tile__focus.focus-box::after {
-  content: "";
+  content: '';
   width: 0;
   height: 0;
   position: absolute;
@@ -566,7 +566,7 @@ img.plus_exclusive_price_icon {
 }
 
 .tile__focus.overlay::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   right: 0;
@@ -608,6 +608,7 @@ img.plus_exclusive_price_icon {
   height: 50vh;
   padding-left: 50px;
   padding-top: 30px;
+  width: 22%;
 }
 
 .col-title-info .title-info-thumb {
@@ -967,10 +968,24 @@ transition-group setting
   opacity: 0.01;
 }
 
+@media (max-width: 1600px) {
+  .col-title-info {
+    width: 30%;
+  }
+}
 @media (max-width: 1440px) {
   .button-playstation-store {
-    font-size: 0.9em;
+    font-size: 13px;
+    width: 200px;
+    color: rgb(233, 233, 233);
+    background-color: rgb(75, 75, 75);
+    border-color: rgb(75, 75, 75);
+    margin-top: 10px;
   }
+  .row-expansion-title-info h4 {
+    font-size: 16px;
+  }
+
   .col-expansion-panel {
     height: 600px;
   }
@@ -1016,9 +1031,14 @@ transition-group setting
   .container-expansion {
     font-size: 2.5em;
   }
+
   .button-playstation-store {
     font-size: 25px;
     width: 100%;
+    color: rgb(233, 233, 233);
+    background-color: rgb(75, 75, 75);
+    border-color: rgb(75, 75, 75);
+    margin-top: 10px;
   }
   .container-fluid,
   .row-content,
@@ -1030,12 +1050,12 @@ transition-group setting
   }
 
   .slick-prev:before {
-    font-family: "FontAwesome";
-    content: "\f053";
+    font-family: 'FontAwesome';
+    content: '\f053';
   }
   .slick-next:before {
-    font-family: "FontAwesome";
-    content: "\f054";
+    font-family: 'FontAwesome';
+    content: '\f054';
   }
 
   .container-row-slide .slick-prev,
@@ -1073,9 +1093,12 @@ transition-group setting
   .row-expansion-title-info {
     padding-left: 0;
   }
-
+  .row-expansion-title-info h4 {
+    font-size: 1em;
+  }
   .col-title-info {
     height: auto;
+    width: 100%;
     padding-left: 20px;
     padding-bottom: 50px;
   }

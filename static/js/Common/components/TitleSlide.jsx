@@ -1,7 +1,7 @@
-import React from "react";
-import { Grid } from "react-bootstrap";
-import Slider from "react-slick";
-import TitleRow from "./TitleRow";
+import React from 'react';
+import { Grid } from 'react-bootstrap';
+import Slider from 'react-slick';
+import TitleRow from '../containers/TitleRow';
 
 class TitleSlide extends React.Component {
   state = {
@@ -12,11 +12,6 @@ class TitleSlide extends React.Component {
     const {
       gameItem,
       rowid,
-      showExpansionPanel,
-      handleSelectTitle,
-      handleExpansion,
-      selectedRowID,
-      selectedGameID,
       categoryExpansionPanel,
       slideChunk,
       isCategoryQuick,
@@ -37,7 +32,7 @@ class TitleSlide extends React.Component {
     };
 
     const defaultStyle = {
-      height: slideChunk > 3 ? (window.innerWidth / slideChunk) * 1.5 : "400px"
+      height: slideChunk > 3 ? (window.innerWidth / slideChunk) * 1.5 : '400px'
     };
 
     let splitGameItem = [];
@@ -54,26 +49,14 @@ class TitleSlide extends React.Component {
         fluid
         className={`container-row-slide ${
           isCategoryQuick && categoryTitleHover && selectedIndex == currentIdx
-            ? "row-slide-hover"
-            : ""
-        } ${this.state.activeSlide === 0 ? "initial-slide" : ""}`}
+            ? 'row-slide-hover'
+            : ''
+        } ${this.state.activeSlide === 0 ? 'initial-slide' : ''}`}
         style={defaultStyle}
       >
         <Slider {...slick_settings}>
           {splitGameItem.map(({ gameItem }, index) => (
-            <TitleRow
-              key={index}
-              gameItem={gameItem}
-              rowid={rowid}
-              showExpansionPanel={showExpansionPanel}
-              handleSelectTitle={handleSelectTitle}
-              handleExpansion={handleExpansion}
-              selectedRowID={selectedRowID}
-              selectedGameID={selectedGameID}
-              categoryExpansionPanel={categoryExpansionPanel}
-              slideChunk={slideChunk}
-              isCategoryQuick={isCategoryQuick}
-            />
+            <TitleRow key={index} gameItem={gameItem} rowid={rowid} />
           ))}
         </Slider>
       </Grid>

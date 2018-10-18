@@ -1,7 +1,7 @@
-import React from "react";
-import { Row, Col, Button } from "react-bootstrap";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import Rating from "react-rating";
+import React from 'react';
+import { Row, Col, Button } from 'react-bootstrap';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import Rating from 'react-rating';
 
 class ExpansionPanelInfo extends React.Component {
   render() {
@@ -39,8 +39,8 @@ class ExpansionPanelInfo extends React.Component {
           timeout={500}
           classNames={
             !slideChunk && (isPanelMedia || isPanelDescription)
-              ? "titleinfopanel"
-              : "fade"
+              ? 'titleinfopanel'
+              : 'fade'
           }
         >
           <Row className="row-expansion-title-info">
@@ -56,8 +56,8 @@ class ExpansionPanelInfo extends React.Component {
                   style={
                     discount_price && !is_plus_price
                       ? {
-                          textDecoration: "line-through",
-                          color: "grey"
+                          textDecoration: 'line-through',
+                          color: 'grey'
                         }
                       : null
                   }
@@ -65,21 +65,21 @@ class ExpansionPanelInfo extends React.Component {
                   {regular_price}
                 </span>
                 <span>
-                  {discount_price && !is_plus_price && " " + discount_price}
+                  {discount_price && !is_plus_price && ' ' + discount_price}
                 </span>
               </h2>
               <h2
                 style={{
-                  color: "yellow",
-                  marginTop: "0"
+                  color: 'yellow',
+                  marginTop: '0'
                 }}
               >
                 {is_plus_price ? discount_price : plus_price}
                 {is_plus_price || plus_price ? (
                   <img
                     style={{
-                      width: "20px",
-                      marginLeft: "5px"
+                      width: '20px',
+                      marginLeft: '5px'
                     }}
                     src="https://image.ibb.co/jOncz8/playstation_plus_plus_icon.png"
                     alt="playstation_plus_plus_icon"
@@ -99,7 +99,7 @@ class ExpansionPanelInfo extends React.Component {
               <h4> {gameItemApiData.provider_name} </h4>
               <h4>
                 {release_date
-                  ? "Release date: " + release_date.slice(0, 10)
+                  ? 'Release date: ' + release_date.slice(0, 10)
                   : null}
               </h4>
               <Button

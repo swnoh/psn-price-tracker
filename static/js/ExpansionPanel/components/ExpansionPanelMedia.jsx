@@ -1,6 +1,6 @@
 import React from "react";
 import { DefaultPlayer as Video } from "react-html5video";
-import "./stylesVideo.css";
+import "../../../css/stylesVideo.css";
 import Slider from "react-slick";
 
 class ExpansionPanelMedia extends React.Component {
