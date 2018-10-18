@@ -12,10 +12,10 @@ Demo: [https://psntracker.azurewebsites.net](https://psntracker.azurewebsites.ne
 
 - Deployed on Azure with Docker.
 - Backend stack: Flask, SQLAlchemy ORM, Scrapy.
-- Frontend stack: React, Webpack, Babel.
+- Frontend stack: React, Redux, Webpack, Babel.
 - Backend API: RESTful API.
 - Database utilizes a Postgresql with Azure.
-- Libraries for React: React Bootstrap, React Router4, TransitionGroup, React Lazy Load, Slick.js, Chart.js
+- Libraries for React: Redux, React Bootstrap, React Router4, TransitionGroup, React Lazy Load, Slick.js, Chart.js
 
 ## Features
 
