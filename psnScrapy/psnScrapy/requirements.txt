@@ -10,7 +10,7 @@ constantly==15.1.0
 cryptography==2.3.1
 cssselect==1.0.3
 Flask==0.12.3
-Flask-Cors==3.0.6
+Flask-Cors==3.0.9
 Flask-Migrate==2.2.1
 Flask-Script==2.0.5
 Flask-SQLAlchemy==2.3.2
