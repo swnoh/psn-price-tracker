@@ -36,7 +36,7 @@
     "webpack-cli": "^3.0.8"
   },
   "dependencies": {
-    "chart.js": "^2.7.2",
+    "chart.js": "^2.9.4",
     "file-loader": "^1.1.11",
     "query-string": "^6.1.0",
     "react-bootstrap": "^0.32.1",
